@@ -1,0 +1,82 @@
+# IvyReader TODO
+
+## Core Features
+
+- [ ] User authentication and profile setup
+- [x] Dashboard with personalized greeting and date
+- [x] Daily reading goal tracker with progress indicator
+- [x] Current streak counter with comparison metrics
+- [x] Pages read quarterly metric with percentile ranking
+- [x] Focus score calculation and display
+- [x] Total time invested tracker
+- [x] Currently reading book card with cover, progress, and metadata
+- [x] Progress bar visualization for current book
+- [ ] Log reading session functionality
+- [ ] Add note to current reading
+- [x] Up next queue display (3 books)
+- [x] Weekly volume chart (bar chart for 7 days)
+- [x] Resume reading quick action button
+
+## Library Management
+
+- [x] My Library screen with tab navigation
+- [x] Currently Reading tab with active books
+- [x] Queue tab with planned reading
+- [x] Archive tab with completed books
+- [x] Search functionality for library
+- [ ] Add book manually with form
+- [ ] Book detail screen with full metadata
+- [ ] Reading history display per book
+- [ ] Notes display per book
+- [ ] Manage queue with reordering
+- [ ] Mark book as complete
+- [ ] Remove book from library
+
+## Social Features
+
+- [x] Society feed screen
+- [x] Following tab for friend activity
+- [x] Global tab for community activity
+- [x] Publish post with text and optional book reference
+- [x] Like posts
+- [x] Comment on posts
+- [x] Share posts
+- [x] Top readers leaderboard (weekly)
+- [x] Trending books widget
+- [x] User avatars and profiles
+- [ ] Follow/unfollow users
+
+## Data Models and Backend
+
+- [ ] User model with profile and stats
+- [ ] Book model with metadata and cover storage
+- [ ] Reading session model with time and page tracking
+- [ ] Note model with book and page references
+- [ ] Social post model with engagement metrics
+- [ ] User relationship model for follows
+- [ ] Database schema setup
+- [ ] API endpoints for CRUD operations
+- [ ] Leaderboard calculation logic
+- [ ] Statistics aggregation
+
+## UI/UX Polish
+
+- [x] Dark theme with forest green and gold accents
+- [x] Custom color palette implementation
+- [x] Serif typography for headings
+- [x] Card-based layout system
+- [x] Bottom tab navigation
+- [ ] Floating action buttons
+- [ ] Swipe gestures for navigation
+- [ ] Pull-to-refresh on feeds
+- [ ] Loading states and skeletons
+- [ ] Error handling and empty states
+- [ ] Safe area handling for notched devices
+
+## Branding
+
+- [x] Generate custom IvyReader logo
+- [x] Update app icon
+- [x] Update splash screen
+- [x] Update app name in configuration
+- [x] Set brand colors in theme
