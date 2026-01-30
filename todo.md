@@ -141,3 +141,15 @@
 - [x] Update statistics after session logged
 - [x] Create seed sessions with variance for all demo users
 - [x] Test session logging and stat updates
+
+
+## Add Book Feature
+
+- [x] Create Google Books API service module
+- [x] Implement book search with autocomplete
+- [x] Create AddBookModal component with search UI
+- [x] Display search results with covers and metadata
+- [x] Add status selection (Reading/Queue)
+- [x] Connect to database to save books
+- [x] Test book search and addition flow
+- [x] Add "Add Book" button to Library screen

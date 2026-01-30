@@ -3,6 +3,7 @@ import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator } from 
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
+import { AddBookModal } from "@/components/add-book-modal";
 import type { Book } from "@/lib/types";
 
 type TabType = 'reading' | 'queue' | 'archive';
@@ -11,9 +12,11 @@ export default function LibraryScreen() {
   const colors = useColors();
   const [activeTab, setActiveTab] = useState<TabType>('reading');
   const [searchQuery, setSearchQuery] = useState('');
+  const [showAddModal, setShowAddModal] = useState(false);
 
   // Fetch real books from database
-  const { data: allBooks, isLoading } = trpc.books.list.useQuery();
+  const { data: allBooks, isLoading, refetch } = trpc.books.list.useQuery();
+  const createBook = trpc.books.create.useMutation();
 
   if (isLoading) {
     return (
@@ -127,7 +130,21 @@ export default function LibraryScreen() {
       <ScrollView className="flex-1 px-6 pt-6">
         {/* Header */}
         <View className="mb-6">
-          <Text className="text-3xl font-bold text-foreground mb-2">My Library</Text>
+          <View className="flex-row items-center justify-between mb-2">
+            <Text className="text-3xl font-bold text-foreground">My Library</Text>
+            <Pressable
+              onPress={() => setShowAddModal(true)}
+              className="px-4 py-2 rounded-lg"
+              style={({ pressed }) => ({
+                backgroundColor: colors.primary,
+                opacity: pressed ? 0.8 : 1,
+              })}
+            >
+              <Text className="text-sm font-bold" style={{ color: colors.background }}>
+                + Add Book
+              </Text>
+            </Pressable>
+          </View>
           <Text className="text-sm text-muted">
             {allBooks?.length || 0} books total
           </Text>
@@ -210,6 +227,26 @@ export default function LibraryScreen() {
           )}
         </View>
       </ScrollView>
+
+      {/* Add Book Modal */}
+      <AddBookModal
+        visible={showAddModal}
+        onClose={() => setShowAddModal(false)}
+        onBookAdded={async (book) => {
+          // Create book in database
+          await createBook.mutateAsync({
+            title: book.title,
+            author: book.author,
+            category: book.category,
+            totalPages: book.totalPages,
+            coverUrl: book.coverUrl,
+            status: book.status,
+          });
+          
+          // Refresh books list
+          await refetch();
+        }}
+      />
     </ScreenContainer>
   );
 }
