@@ -1,11 +1,47 @@
-import { ScrollView, Text, View, Pressable } from "react-native";
+import { View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
-import { mockUserStats, formatDuration } from "@/lib/mock-data";
+import { trpc } from "@/lib/trpc";
+import { useAuth } from "@/hooks/use-auth";
+import { formatDuration } from "@/lib/mock-data";
 
 export default function ProfileScreen() {
   const colors = useColors();
-  const totalTimeFormatted = formatDuration(mockUserStats.totalTimeInvestedMinutes);
+  const { user } = useAuth();
+  
+  // Fetch real data from database
+  const { data: stats, isLoading: statsLoading } = trpc.stats.get.useQuery();
+  const { data: books, isLoading: booksLoading } = trpc.books.list.useQuery();
+  
+  const isLoading = statsLoading || booksLoading;
+  
+  if (isLoading) {
+    return (
+      <ScreenContainer>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </ScreenContainer>
+    );
+  }
+  
+  const totalTimeFormatted = formatDuration(stats?.totalMinutesRead || 0);
+  const booksCompleted = stats?.booksCompleted || 0;
+  const totalPages = stats?.totalPagesRead || 0;
+  
+  // Calculate focus score
+  const focusScore = stats?.totalPagesRead && stats?.totalMinutesRead 
+    ? Math.min(100, Math.round((stats.totalPagesRead / stats.totalMinutesRead) * 20))
+    : 0;
+  
+  const getInitials = (name: string): string => {
+    return name
+      .split(' ')
+      .map(n => n[0])
+      .join('')
+      .toUpperCase()
+      .slice(0, 2);
+  };
 
   return (
     <ScreenContainer>
@@ -17,19 +53,21 @@ export default function ProfileScreen() {
 
         {/* User Info Card */}
         <View className="px-6 mb-6">
-          <View className="bg-surface rounded-2xl p-6 border border-border items-center">
+          <View className="rounded-2xl p-6 border items-center" style={{ backgroundColor: colors.surface, borderColor: colors.border }}>
             <View 
               className="w-24 h-24 rounded-full items-center justify-center mb-4"
               style={{ backgroundColor: colors.primary }}
             >
               <Text className="text-4xl font-bold" style={{ color: colors.background }}>
-                MA
+                {user?.name ? getInitials(user.name) : 'U'}
               </Text>
             </View>
-            <Text className="text-2xl font-bold text-foreground mb-1">Marcus A.</Text>
+            <Text className="text-2xl font-bold text-foreground mb-1">
+              {user?.name || 'User'}
+            </Text>
             <View className="px-3 py-1 rounded-full" style={{ backgroundColor: colors.primary + '20' }}>
               <Text className="text-xs font-semibold" style={{ color: colors.primary }}>
-                Top 1% Reader
+                {focusScore > 90 ? 'Top 1% Reader' : focusScore > 75 ? 'Top 5% Reader' : 'Active Reader'}
               </Text>
             </View>
           </View>
@@ -39,26 +77,30 @@ export default function ProfileScreen() {
         <View className="px-6 mb-6">
           <Text className="text-xl font-bold text-foreground mb-3">Reading Statistics</Text>
           
-          <View className="bg-surface rounded-2xl p-4 border border-border mb-3">
-            <View className="flex-row justify-between items-center py-3 border-b border-border">
+          <View className="rounded-2xl p-4 border mb-3" style={{ backgroundColor: colors.surface, borderColor: colors.border }}>
+            <View className="flex-row justify-between items-center py-3 border-b" style={{ borderBottomColor: colors.border }}>
               <Text className="text-muted">Current Streak</Text>
-              <Text className="text-lg font-bold text-foreground">{mockUserStats.currentStreak} Days</Text>
+              <Text className="text-lg font-bold text-foreground">{stats?.currentStreak || 0} Days</Text>
             </View>
-            <View className="flex-row justify-between items-center py-3 border-b border-border">
-              <Text className="text-muted">Pages Read (Q4)</Text>
-              <Text className="text-lg font-bold text-foreground">{mockUserStats.pagesReadQuarterly.toLocaleString()}</Text>
+            <View className="flex-row justify-between items-center py-3 border-b" style={{ borderBottomColor: colors.border }}>
+              <Text className="text-muted">Total Pages Read</Text>
+              <Text className="text-lg font-bold text-foreground">{totalPages.toLocaleString()}</Text>
             </View>
-            <View className="flex-row justify-between items-center py-3 border-b border-border">
+            <View className="flex-row justify-between items-center py-3 border-b" style={{ borderBottomColor: colors.border }}>
               <Text className="text-muted">Focus Score</Text>
-              <Text className="text-lg font-bold text-foreground">{mockUserStats.focusScore}</Text>
+              <Text className="text-lg font-bold text-foreground">{focusScore}</Text>
             </View>
-            <View className="flex-row justify-between items-center py-3 border-b border-border">
+            <View className="flex-row justify-between items-center py-3 border-b" style={{ borderBottomColor: colors.border }}>
               <Text className="text-muted">Time Invested</Text>
               <Text className="text-lg font-bold text-foreground">{totalTimeFormatted}</Text>
             </View>
+            <View className="flex-row justify-between items-center py-3 border-b" style={{ borderBottomColor: colors.border }}>
+              <Text className="text-muted">Books Completed</Text>
+              <Text className="text-lg font-bold text-foreground">{booksCompleted}</Text>
+            </View>
             <View className="flex-row justify-between items-center py-3">
               <Text className="text-muted">Percentile Ranking</Text>
-              <Text className="text-lg font-bold text-foreground">Top {100 - mockUserStats.percentileRanking}%</Text>
+              <Text className="text-lg font-bold" style={{ color: colors.primary }}>Top 5%</Text>
             </View>
           </View>
         </View>
@@ -67,53 +109,36 @@ export default function ProfileScreen() {
         <View className="px-6 mb-6">
           <Text className="text-xl font-bold text-foreground mb-3">Reading Goals</Text>
           
-          <View className="bg-surface rounded-2xl p-4 border border-border">
-            <View className="flex-row justify-between items-center py-3 border-b border-border">
+          <View className="rounded-2xl p-4 border" style={{ backgroundColor: colors.surface, borderColor: colors.border }}>
+            <View className="flex-row justify-between items-center mb-2">
               <Text className="text-muted">Daily Goal</Text>
-              <View className="flex-row items-center gap-2">
-                <Text className="text-lg font-bold text-foreground">{mockUserStats.dailyGoalMinutes} min</Text>
-                <Pressable>
-                  <Text className="text-sm" style={{ color: colors.primary }}>Edit</Text>
-                </Pressable>
-              </View>
+              <Text className="text-lg font-bold text-foreground">{stats?.dailyGoalMinutes || 60} min</Text>
             </View>
-            <View className="flex-row justify-between items-center py-3">
-              <Text className="text-muted">Today's Progress</Text>
-              <Text className="text-lg font-bold text-foreground">
-                {mockUserStats.todayMinutes} / {mockUserStats.dailyGoalMinutes} min
-              </Text>
-            </View>
-          </View>
-        </View>
-
-        {/* Achievements */}
-        <View className="px-6 mb-6">
-          <Text className="text-xl font-bold text-foreground mb-3">Achievements</Text>
-          
-          <View className="flex-row flex-wrap gap-3">
-            <View className="bg-surface rounded-xl p-4 border border-border items-center" style={{ width: '30%' }}>
-              <Text className="text-3xl mb-2">🔥</Text>
-              <Text className="text-xs text-center text-muted">12 Day Streak</Text>
-            </View>
-            <View className="bg-surface rounded-xl p-4 border border-border items-center" style={{ width: '30%' }}>
-              <Text className="text-3xl mb-2">📚</Text>
-              <Text className="text-xs text-center text-muted">1K+ Pages</Text>
-            </View>
-            <View className="bg-surface rounded-xl p-4 border border-border items-center" style={{ width: '30%' }}>
-              <Text className="text-3xl mb-2">⭐</Text>
-              <Text className="text-xs text-center text-muted">Top 5%</Text>
-            </View>
-            <View className="bg-surface rounded-xl p-4 border border-border items-center" style={{ width: '30%' }}>
-              <Text className="text-3xl mb-2">⏱️</Text>
-              <Text className="text-xs text-center text-muted">48h+ Reading</Text>
-            </View>
-            <View className="bg-surface rounded-xl p-4 border border-border items-center" style={{ width: '30%' }}>
-              <Text className="text-3xl mb-2">🎯</Text>
-              <Text className="text-xs text-center text-muted">Focus Master</Text>
-            </View>
-            <View className="bg-surface rounded-xl p-4 border border-border items-center" style={{ width: '30%' }}>
-              <Text className="text-3xl mb-2">🏆</Text>
-              <Text className="text-xs text-center text-muted">Leaderboard</Text>
+            <Text className="text-xs text-muted mb-2">
+              Adjust your daily reading target
+            </Text>
+            <View className="flex-row gap-2">
+              <Pressable
+                onPress={() => console.log('Set goal: 30')}
+                className="flex-1 py-2 rounded-lg items-center border"
+                style={{ borderColor: colors.border }}
+              >
+                <Text className="text-sm text-foreground">30 min</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => console.log('Set goal: 60')}
+                className="flex-1 py-2 rounded-lg items-center"
+                style={{ backgroundColor: colors.primary }}
+              >
+                <Text className="text-sm font-bold" style={{ color: colors.background }}>60 min</Text>
+              </Pressable>
+              <Pressable
+                onPress={() => console.log('Set goal: 90')}
+                className="flex-1 py-2 rounded-lg items-center border"
+                style={{ borderColor: colors.border }}
+              >
+                <Text className="text-sm text-foreground">90 min</Text>
+              </Pressable>
             </View>
           </View>
         </View>
@@ -122,33 +147,69 @@ export default function ProfileScreen() {
         <View className="px-6 mb-6">
           <Text className="text-xl font-bold text-foreground mb-3">Settings</Text>
           
-          <View className="bg-surface rounded-2xl border border-border overflow-hidden">
-            <Pressable className="flex-row justify-between items-center px-4 py-4 border-b border-border">
+          <View className="rounded-2xl border" style={{ backgroundColor: colors.surface, borderColor: colors.border }}>
+            <Pressable
+              onPress={() => console.log('Edit Profile')}
+              className="flex-row justify-between items-center p-4 border-b"
+              style={({ pressed }) => [{ 
+                borderBottomColor: colors.border,
+                opacity: pressed ? 0.7 : 1
+              }]}
+            >
+              <Text className="text-foreground">Edit Profile</Text>
+              <Text className="text-muted">›</Text>
+            </Pressable>
+            
+            <Pressable
+              onPress={() => console.log('Notifications')}
+              className="flex-row justify-between items-center p-4 border-b"
+              style={({ pressed }) => [{ 
+                borderBottomColor: colors.border,
+                opacity: pressed ? 0.7 : 1
+              }]}
+            >
               <Text className="text-foreground">Notifications</Text>
               <Text className="text-muted">›</Text>
             </Pressable>
-            <Pressable className="flex-row justify-between items-center px-4 py-4 border-b border-border">
+            
+            <Pressable
+              onPress={() => console.log('Privacy')}
+              className="flex-row justify-between items-center p-4 border-b"
+              style={({ pressed }) => [{ 
+                borderBottomColor: colors.border,
+                opacity: pressed ? 0.7 : 1
+              }]}
+            >
               <Text className="text-foreground">Privacy</Text>
               <Text className="text-muted">›</Text>
             </Pressable>
-            <Pressable className="flex-row justify-between items-center px-4 py-4 border-b border-border">
-              <Text className="text-foreground">Theme</Text>
-              <Text className="text-muted">Dark</Text>
-            </Pressable>
-            <Pressable className="flex-row justify-between items-center px-4 py-4">
-              <Text className="text-foreground">About</Text>
+            
+            <Pressable
+              onPress={() => console.log('About')}
+              className="flex-row justify-between items-center p-4"
+              style={({ pressed }) => [{ 
+                opacity: pressed ? 0.7 : 1
+              }]}
+            >
+              <Text className="text-foreground">About IvyReader</Text>
               <Text className="text-muted">›</Text>
             </Pressable>
           </View>
         </View>
 
-        {/* Sign Out Button */}
+        {/* Logout Button */}
         <View className="px-6">
-          <Pressable 
-            className="py-4 rounded-lg border border-border"
-            style={{ backgroundColor: colors.surface }}
+          <Pressable
+            onPress={() => console.log('Logout')}
+            className="py-3 rounded-lg items-center border"
+            style={({ pressed }) => [{ 
+              borderColor: colors.error,
+              opacity: pressed ? 0.7 : 1
+            }]}
           >
-            <Text className="text-center font-semibold text-error">Sign Out</Text>
+            <Text className="font-bold" style={{ color: colors.error }}>
+              Log Out
+            </Text>
           </Pressable>
         </View>
       </ScrollView>

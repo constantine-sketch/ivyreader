@@ -101,3 +101,25 @@
 - [ ] Implement Google Books API for book metadata
 - [ ] Add book cover image fetching
 - [ ] Test all features end-to-end
+
+## Seed Data
+
+- [x] Create seed script with finance/philosophy books
+- [x] Generate demo users (80% male, finance bro demographic)
+- [x] Add realistic reading sessions and stats
+- [x] Create social posts with insights
+- [x] Populate leaderboard data
+
+- [x] Create demo user records in users table
+
+
+## Frontend Integration
+
+- [x] Connect dashboard to real user stats and books
+- [x] Connect library screen to real books data
+- [x] Connect society screen to real social posts
+- [x] Connect profile screen to real user data
+- [ ] Implement log session functionality
+- [ ] Implement add book functionality
+- [ ] Implement create post functionality
+- [ ] Add authentication wrapper with login screen

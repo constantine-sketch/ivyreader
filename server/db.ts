@@ -129,7 +129,9 @@ export async function createBook(data: InsertBook) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const result: any = await db.insert(books).values(data);
-  return Number(result.insertId);
+  // mysql2 returns insertId in different ways depending on the driver
+  const insertId = result.insertId ?? result[0]?.insertId ?? result;
+  return Number(insertId);
 }
 
 export async function updateBook(bookId: number, data: Partial<InsertBook>) {

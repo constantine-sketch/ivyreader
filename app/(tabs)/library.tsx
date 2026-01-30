@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { ScrollView, Text, View, Pressable, TextInput } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
-import { mockCurrentBook, mockQueueBooks } from "@/lib/mock-data";
+import { trpc } from "@/lib/trpc";
 import type { Book } from "@/lib/types";
 
 type TabType = 'reading' | 'queue' | 'archive';
@@ -12,11 +12,43 @@ export default function LibraryScreen() {
   const [activeTab, setActiveTab] = useState<TabType>('reading');
   const [searchQuery, setSearchQuery] = useState('');
 
-  const currentlyReading: Book[] = [mockCurrentBook];
-  const queueBooks: Book[] = mockQueueBooks;
-  const archiveBooks: Book[] = [];
+  // Fetch real books from database
+  const { data: allBooks, isLoading } = trpc.books.list.useQuery();
 
-  const renderBookCard = (book: Book) => {
+  if (isLoading) {
+    return (
+      <ScreenContainer>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </ScreenContainer>
+    );
+  }
+
+  // Filter books by status
+  const currentlyReading = allBooks?.filter(b => b.status === 'reading') || [];
+  const queueBooks = allBooks?.filter(b => b.status === 'queue') || [];
+  const archiveBooks = allBooks?.filter(b => b.status === 'completed') || [];
+
+  const getActiveBooks = () => {
+    switch (activeTab) {
+      case 'reading':
+        return currentlyReading;
+      case 'queue':
+        return queueBooks;
+      case 'archive':
+        return archiveBooks;
+      default:
+        return [];
+    }
+  };
+
+  const filteredBooks = getActiveBooks().filter(book =>
+    book.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    book.author.toLowerCase().includes(searchQuery.toLowerCase())
+  );
+
+  const renderBookCard = (book: any) => {
     const progressPercentage = book.totalPages > 0 
       ? Math.round((book.currentPage / book.totalPages) * 100) 
       : 0;
@@ -37,7 +69,7 @@ export default function LibraryScreen() {
       >
         <View className="flex-row">
           {/* Book Cover Placeholder */}
-          <View className="w-20 h-30 bg-border rounded-lg mr-4" />
+          <View className="w-20 h-30 rounded-lg mr-4" style={{ backgroundColor: colors.border }} />
           
           <View className="flex-1">
             <View className="px-2 py-1 rounded mb-2 self-start" style={{ backgroundColor: colors.primary + '20' }}>
@@ -53,16 +85,29 @@ export default function LibraryScreen() {
             
             {book.status === 'reading' && (
               <View>
-                <Text className="text-xs text-success mb-1">{progressPercentage}% Complete</Text>
-                <View className="h-1.5 bg-border rounded-full overflow-hidden">
+                <Text className="text-xs mb-1" style={{ color: colors.primary }}>
+                  {progressPercentage}% Complete
+                </Text>
+                <View className="h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: colors.border }}>
                   <View 
                     className="h-full rounded-full" 
                     style={{ 
-                      width: `${progressPercentage}%`,
-                      backgroundColor: colors.primary 
+                      backgroundColor: colors.primary,
+                      width: `${progressPercentage}%`
                     }} 
                   />
                 </View>
+                <Text className="text-xs text-muted mt-1">
+                  Page {book.currentPage} of {book.totalPages}
+                </Text>
+              </View>
+            )}
+            
+            {book.status === 'completed' && book.rating && (
+              <View className="flex-row items-center">
+                <Text className="text-sm" style={{ color: colors.primary }}>
+                  {'★'.repeat(book.rating)}{'☆'.repeat(5 - book.rating)}
+                </Text>
               </View>
             )}
             
@@ -79,126 +124,92 @@ export default function LibraryScreen() {
 
   return (
     <ScreenContainer>
-      <View className="flex-1">
+      <ScrollView className="flex-1 px-6 pt-6">
         {/* Header */}
-        <View className="px-6 pt-6 pb-4">
-          <View className="flex-row items-center justify-between mb-4">
-            <View>
-              <Text className="text-3xl font-bold text-foreground">My Library</Text>
-              <Text className="text-xs text-muted mt-1">
-                {currentlyReading.length + queueBooks.length + archiveBooks.length} VOLUMES COLLECTED
-              </Text>
-            </View>
-            <Pressable 
-              onPress={() => console.log('Add Book pressed')}
-              style={({ pressed }) => [{
-                backgroundColor: colors.primary,
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-                borderRadius: 8,
-                opacity: pressed ? 0.8 : 1,
-              }]}
-            >
-              <Text className="font-semibold text-sm" style={{ color: colors.background }}>
-                Add Book
-              </Text>
-            </Pressable>
-          </View>
+        <View className="mb-6">
+          <Text className="text-3xl font-bold text-foreground mb-2">My Library</Text>
+          <Text className="text-sm text-muted">
+            {allBooks?.length || 0} books total
+          </Text>
+        </View>
 
-          {/* Search Bar */}
-          <View 
-            className="flex-row items-center px-4 py-3 rounded-lg border border-border"
-            style={{ backgroundColor: colors.surface }}
-          >
-            <TextInput
-              placeholder="Search collection..."
-              placeholderTextColor={colors.muted}
-              value={searchQuery}
-              onChangeText={setSearchQuery}
-              className="flex-1 text-foreground"
-              style={{ color: colors.foreground }}
-            />
-          </View>
+        {/* Search Bar */}
+        <View className="mb-4 px-4 py-3 rounded-xl flex-row items-center" style={{ backgroundColor: colors.surface }}>
+          <Text className="text-muted mr-2">🔍</Text>
+          <TextInput
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+            placeholder="Search books..."
+            placeholderTextColor={colors.muted}
+            className="flex-1 text-foreground"
+            style={{ color: colors.foreground }}
+          />
         </View>
 
         {/* Tabs */}
-        <View className="px-6 mb-4">
-          <View className="flex-row gap-2">
-            <Pressable
-              onPress={() => setActiveTab('reading')}
-              style={({ pressed }) => [{ 
-                backgroundColor: activeTab === 'reading' ? colors.primary : colors.surface,
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: colors.border,
-                opacity: pressed ? 0.8 : 1,
-              }]}
+        <View className="flex-row mb-4 p-1 rounded-xl" style={{ backgroundColor: colors.surface }}>
+          <Pressable
+            onPress={() => setActiveTab('reading')}
+            className="flex-1 py-2 rounded-lg items-center"
+            style={{
+              backgroundColor: activeTab === 'reading' ? colors.primary : 'transparent',
+            }}
+          >
+            <Text 
+              className="text-sm font-semibold"
+              style={{ color: activeTab === 'reading' ? colors.background : colors.muted }}
             >
-              <Text 
-                className="font-semibold text-sm"
-                style={{ color: activeTab === 'reading' ? colors.background : colors.foreground }}
-              >
-                Currently Reading
-              </Text>
-            </Pressable>
+              Reading ({currentlyReading.length})
+            </Text>
+          </Pressable>
 
-            <Pressable
-              onPress={() => setActiveTab('queue')}
-              style={({ pressed }) => [{ 
-                backgroundColor: activeTab === 'queue' ? colors.primary : colors.surface,
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: colors.border,
-                opacity: pressed ? 0.8 : 1,
-              }]}
+          <Pressable
+            onPress={() => setActiveTab('queue')}
+            className="flex-1 py-2 rounded-lg items-center"
+            style={{
+              backgroundColor: activeTab === 'queue' ? colors.primary : 'transparent',
+            }}
+          >
+            <Text 
+              className="text-sm font-semibold"
+              style={{ color: activeTab === 'queue' ? colors.background : colors.muted }}
             >
-              <Text 
-                className="font-semibold text-sm"
-                style={{ color: activeTab === 'queue' ? colors.background : colors.foreground }}
-              >
-                Queue
-              </Text>
-            </Pressable>
+              Queue ({queueBooks.length})
+            </Text>
+          </Pressable>
 
-            <Pressable
-              onPress={() => setActiveTab('archive')}
-              style={({ pressed }) => [{ 
-                backgroundColor: activeTab === 'archive' ? colors.primary : colors.surface,
-                paddingHorizontal: 16,
-                paddingVertical: 8,
-                borderRadius: 8,
-                borderWidth: 1,
-                borderColor: colors.border,
-                opacity: pressed ? 0.8 : 1,
-              }]}
+          <Pressable
+            onPress={() => setActiveTab('archive')}
+            className="flex-1 py-2 rounded-lg items-center"
+            style={{
+              backgroundColor: activeTab === 'archive' ? colors.primary : 'transparent',
+            }}
+          >
+            <Text 
+              className="text-sm font-semibold"
+              style={{ color: activeTab === 'archive' ? colors.background : colors.muted }}
             >
-              <Text 
-                className="font-semibold text-sm"
-                style={{ color: activeTab === 'archive' ? colors.background : colors.foreground }}
-              >
-                Archive
-              </Text>
-            </Pressable>
-          </View>
+              Archive ({archiveBooks.length})
+            </Text>
+          </Pressable>
         </View>
 
-        {/* Book List */}
-        <ScrollView className="flex-1 px-6" contentContainerStyle={{ paddingBottom: 32 }}>
-          {activeTab === 'reading' && currentlyReading.map(renderBookCard)}
-          {activeTab === 'queue' && queueBooks.map(renderBookCard)}
-          {activeTab === 'archive' && archiveBooks.length === 0 && (
-            <View className="items-center justify-center py-12">
-              <Text className="text-muted text-center">
-                No completed books yet.{'\n'}Keep reading to fill your archive!
+        {/* Books List */}
+        <View className="pb-8">
+          {filteredBooks.length === 0 ? (
+            <View className="items-center py-12">
+              <Text className="text-lg text-muted mb-2">
+                {searchQuery ? 'No books found' : 'No books in this section'}
+              </Text>
+              <Text className="text-sm text-muted">
+                {searchQuery ? 'Try a different search' : 'Add books to get started'}
               </Text>
             </View>
+          ) : (
+            filteredBooks.map(renderBookCard)
           )}
-        </ScrollView>
-      </View>
+        </View>
+      </ScrollView>
     </ScreenContainer>
   );
 }

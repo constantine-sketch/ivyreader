@@ -1,8 +1,9 @@
 import { useState } from "react";
-import { ScrollView, Text, View, Pressable, TextInput } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
-import { mockSocialPosts, mockLeaderboard, mockTrendingBooks, formatTimeAgo } from "@/lib/mock-data";
+import { trpc } from "@/lib/trpc";
+import { formatTimeAgo } from "@/lib/mock-data";
 
 type FeedTab = 'following' | 'global';
 
@@ -11,6 +12,12 @@ export default function SocietyScreen() {
   const [activeTab, setActiveTab] = useState<FeedTab>('global');
   const [postContent, setPostContent] = useState('');
 
+  // Fetch real data from database
+  const { data: posts, isLoading: postsLoading } = trpc.social.posts.useQuery({ limit: 20 });
+  const { data: leaderboard, isLoading: leaderboardLoading } = trpc.social.leaderboard.useQuery({ limit: 10 });
+  
+  const isLoading = postsLoading || leaderboardLoading;
+
   const getInitials = (name: string): string => {
     return name
       .split(' ')
@@ -18,6 +25,16 @@ export default function SocietyScreen() {
       .join('')
       .toUpperCase();
   };
+
+  if (isLoading) {
+    return (
+      <ScreenContainer>
+        <View className="flex-1 items-center justify-center">
+          <ActivityIndicator size="large" color={colors.primary} />
+        </View>
+      </ScreenContainer>
+    );
+  }
 
   return (
     <ScreenContainer>
@@ -64,7 +81,7 @@ export default function SocietyScreen() {
           </View>
 
           {/* Post Input */}
-          <View className="bg-surface rounded-2xl p-4 border border-border">
+          <View className="rounded-2xl p-4 border" style={{ backgroundColor: colors.surface, borderColor: colors.border }}>
             <TextInput
               placeholder="Share an insight or observation..."
               placeholderTextColor={colors.muted}
@@ -72,137 +89,142 @@ export default function SocietyScreen() {
               onChangeText={setPostContent}
               multiline
               numberOfLines={3}
-              className="text-foreground mb-3"
+              className="mb-3"
               style={{ 
                 color: colors.foreground,
                 minHeight: 60,
                 textAlignVertical: 'top'
               }}
             />
-            <Pressable 
-              className="px-4 py-2 rounded-lg self-end"
-              style={{ backgroundColor: colors.primary }}
+            <Pressable
+              onPress={() => {
+                console.log('Publish post:', postContent);
+                setPostContent('');
+              }}
+              className="py-2 px-4 rounded-lg self-end"
+              style={({ pressed }) => [{ 
+                backgroundColor: colors.primary,
+                opacity: pressed ? 0.8 : 1
+              }]}
             >
-              <Text className="font-semibold text-sm" style={{ color: colors.background }}>
-                Publish
+              <Text className="font-bold text-sm" style={{ color: colors.background }}>
+                PUBLISH
               </Text>
             </Pressable>
           </View>
         </View>
 
-        <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 32 }}>
-          <View className="px-6">
-            {/* Social Feed */}
-            <View className="mb-6">
-              {mockSocialPosts.map((post) => (
-                <View key={post.id} className="bg-surface rounded-2xl p-4 border border-border mb-3">
-                  {/* User Info */}
-                  <View className="flex-row items-center mb-3">
+        <ScrollView className="flex-1">
+          {/* Leaderboard Widget */}
+          <View className="px-6 mb-6">
+            <View className="rounded-2xl p-4" style={{ backgroundColor: colors.surface }}>
+              <Text className="text-lg font-bold text-foreground mb-3">
+                🏆 Top Readers This Week
+              </Text>
+              {leaderboard?.map((entry, index) => (
+                <View key={entry.userId} className="flex-row items-center justify-between py-2">
+                  <View className="flex-row items-center flex-1">
+                    <Text className="text-lg font-bold mr-3" style={{ color: colors.muted }}>
+                      #{index + 1}
+                    </Text>
                     <View 
-                      className="w-10 h-10 rounded-full items-center justify-center mr-3"
+                      className="w-8 h-8 rounded-full items-center justify-center mr-3"
                       style={{ backgroundColor: colors.primary }}
                     >
-                      <Text className="font-bold" style={{ color: colors.background }}>
-                        {getInitials(post.userName)}
+                      <Text className="text-xs font-bold" style={{ color: colors.background }}>
+                        {getInitials(`User ${entry.userId}`)}
                       </Text>
                     </View>
-                    <View className="flex-1">
-                      <Text className="font-semibold text-foreground">{post.userName}</Text>
-                      <Text className="text-xs text-muted">{formatTimeAgo(post.createdAt)}</Text>
-                    </View>
+                    <Text className="text-sm font-semibold text-foreground">
+                      User {entry.userId}
+                    </Text>
                   </View>
-
-                  {/* Post Content */}
-                  <Text className="text-foreground mb-3 leading-relaxed">{post.content}</Text>
-
-                  {/* Book Reference */}
-                  {post.bookTitle && (
-                    <View 
-                      className="bg-background rounded-lg p-3 mb-3"
-                      style={{ borderLeftWidth: 3, borderLeftColor: colors.primary }}
-                    >
-                      <Text className="font-bold text-foreground mb-1">{post.bookTitle}</Text>
-                      <Text className="text-sm text-muted">{post.bookAuthor}</Text>
-                      {post.rating && (
-                        <Text className="text-xs text-muted mt-1">
-                          Rated {post.rating}/5
-                        </Text>
-                      )}
-                    </View>
-                  )}
-
-                  {/* Engagement */}
-                  <View className="flex-row gap-4">
-                    <Pressable className="flex-row items-center gap-2">
-                      <Text className="text-muted">♥</Text>
-                      <Text className="text-sm text-muted">{post.likes}</Text>
-                    </Pressable>
-                    <Pressable className="flex-row items-center gap-2">
-                      <Text className="text-muted">💬</Text>
-                      <Text className="text-sm text-muted">{post.comments}</Text>
-                    </Pressable>
-                    <Pressable>
-                      <Text className="text-sm font-semibold" style={{ color: colors.primary }}>
-                        Share
-                      </Text>
-                    </Pressable>
-                  </View>
+                  <Text className="text-sm font-bold" style={{ color: colors.primary }}>
+                    {entry.pagesRead} pages
+                  </Text>
                 </View>
               ))}
             </View>
+          </View>
 
-            {/* Top Readers Leaderboard */}
-            <View className="mb-6">
-              <View className="flex-row items-center justify-between mb-3">
-                <Text className="text-xl font-bold text-foreground">Top Readers (This Week)</Text>
-              </View>
-              <View className="bg-surface rounded-2xl p-4 border border-border">
-                {mockLeaderboard.map((entry) => (
+          {/* Social Feed */}
+          <View className="px-6 pb-8">
+            <Text className="text-lg font-bold text-foreground mb-3">Feed</Text>
+            {posts?.map((item) => (
+              <View 
+                key={item.post.id} 
+                className="rounded-2xl p-4 mb-4"
+                style={{ backgroundColor: colors.surface }}
+              >
+                {/* User Info */}
+                <View className="flex-row items-center mb-3">
                   <View 
-                    key={entry.userId} 
-                    className="flex-row items-center justify-between py-3"
-                    style={{ 
-                      borderBottomWidth: entry.rank < mockLeaderboard.length ? 1 : 0,
-                      borderBottomColor: colors.border
-                    }}
+                    className="w-10 h-10 rounded-full items-center justify-center mr-3"
+                    style={{ backgroundColor: colors.primary }}
                   >
-                    <View className="flex-row items-center flex-1">
-                      <Text 
-                        className="font-bold mr-3"
-                        style={{ 
-                          color: entry.rank <= 3 ? colors.primary : colors.muted,
-                          fontSize: 16
-                        }}
-                      >
-                        #{entry.rank}
-                      </Text>
-                      <Text className="text-foreground font-medium">{entry.userName}</Text>
-                    </View>
-                    <Text className="text-sm text-muted">{entry.pagesRead} pgs</Text>
+                    <Text className="text-sm font-bold" style={{ color: colors.background }}>
+                      {getInitials(`User ${item.post.userId}`)}
+                    </Text>
                   </View>
-                ))}
-                <Pressable className="mt-3">
-                  <Text className="text-center text-xs font-semibold tracking-wider" style={{ color: colors.primary }}>
-                    VIEW FULL LEADERBOARD
-                  </Text>
-                </Pressable>
-              </View>
-            </View>
+                  <View className="flex-1">
+                    <Text className="text-sm font-bold text-foreground">
+                      User {item.post.userId}
+                    </Text>
+                    <Text className="text-xs text-muted">
+                      {formatTimeAgo(new Date(item.post.createdAt))}
+                    </Text>
+                  </View>
+                </View>
 
-            {/* Trending Books */}
-            <View className="mb-6">
-              <Text className="text-xl font-bold text-foreground mb-3">Trending in Society</Text>
-              {mockTrendingBooks.map((book) => (
-                <Pressable 
-                  key={book.bookId}
-                  className="bg-surface rounded-xl p-4 border border-border mb-3"
-                >
-                  <Text className="text-base font-bold text-foreground mb-1">{book.title}</Text>
-                  <Text className="text-sm text-muted mb-2">{book.author}</Text>
-                  <Text className="text-xs text-muted">{book.activeReaders} active readers</Text>
-                </Pressable>
-              ))}
-            </View>
+                {/* Book Reference */}
+                {item.book && (
+                  <View className="px-3 py-2 rounded-lg mb-3" style={{ backgroundColor: colors.border }}>
+                    <Text className="text-xs font-semibold mb-1" style={{ color: colors.primary }}>
+                      {item.book.category.toUpperCase()}
+                    </Text>
+                    <Text className="text-sm font-bold text-foreground">
+                      {item.book.title}
+                    </Text>
+                    <Text className="text-xs text-muted">{item.book.author}</Text>
+                  </View>
+                )}
+
+                {/* Post Content */}
+                <Text className="text-sm text-foreground mb-3">
+                  {item.post.content}
+                </Text>
+
+                {/* Actions */}
+                <View className="flex-row gap-4 pt-2 border-t" style={{ borderTopColor: colors.border }}>
+                  <Pressable
+                    onPress={() => console.log('Like post:', item.post.id)}
+                    className="flex-row items-center"
+                    style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+                  >
+                    <Text className="text-base mr-1">👍</Text>
+                    <Text className="text-sm text-muted">{item.post.likes}</Text>
+                  </Pressable>
+
+                  <Pressable
+                    onPress={() => console.log('Comment on post:', item.post.id)}
+                    className="flex-row items-center"
+                    style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+                  >
+                    <Text className="text-base mr-1">💬</Text>
+                    <Text className="text-sm text-muted">0</Text>
+                  </Pressable>
+
+                  <Pressable
+                    onPress={() => console.log('Share post:', item.post.id)}
+                    className="flex-row items-center"
+                    style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+                  >
+                    <Text className="text-base mr-1">🔗</Text>
+                    <Text className="text-sm text-muted">Share</Text>
+                  </Pressable>
+                </View>
+              </View>
+            ))}
           </View>
         </ScrollView>
       </View>
