@@ -4,6 +4,7 @@ import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
 import { Platform } from "react-native";
 import { useColors } from "@/hooks/use-colors";
+import { AuthWrapper } from "@/components/auth-wrapper";
 
 export default function TabLayout() {
   const colors = useColors();
@@ -12,7 +13,8 @@ export default function TabLayout() {
   const tabBarHeight = 56 + bottomPadding;
 
   return (
-    <Tabs
+    <AuthWrapper>
+      <Tabs
       screenOptions={{
         tabBarActiveTintColor: colors.tint,
         headerShown: false,
@@ -55,6 +57,7 @@ export default function TabLayout() {
           tabBarIcon: ({ color }) => <IconSymbol size={28} name="person.fill" color={color} />,
         }}
       />
-    </Tabs>
+      </Tabs>
+    </AuthWrapper>
   );
 }

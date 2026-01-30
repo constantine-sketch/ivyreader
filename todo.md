@@ -123,3 +123,11 @@
 - [ ] Implement add book functionality
 - [ ] Implement create post functionality
 - [ ] Add authentication wrapper with login screen
+
+
+## Authentication Flow
+
+- [x] Create authentication wrapper component
+- [x] Update root layout to check auth status
+- [x] Show login screen for unauthenticated users
+- [x] Test OAuth login flow
