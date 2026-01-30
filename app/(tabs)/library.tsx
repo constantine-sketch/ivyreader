@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, Text, View, TouchableOpacity, TextInput } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { mockCurrentBook, mockQueueBooks } from "@/lib/mock-data";
@@ -22,9 +22,18 @@ export default function LibraryScreen() {
       : 0;
 
     return (
-      <TouchableOpacity 
+      <Pressable 
         key={book.id}
-        className="bg-surface rounded-2xl p-4 border border-border mb-3"
+        onPress={() => console.log('Book pressed:', book.title)}
+        style={({ pressed }) => [{
+          backgroundColor: colors.surface,
+          borderRadius: 16,
+          padding: 16,
+          borderWidth: 1,
+          borderColor: colors.border,
+          marginBottom: 12,
+          opacity: pressed ? 0.7 : 1,
+        }]}
       >
         <View className="flex-row">
           {/* Book Cover Placeholder */}
@@ -64,7 +73,7 @@ export default function LibraryScreen() {
             )}
           </View>
         </View>
-      </TouchableOpacity>
+      </Pressable>
     );
   };
 
@@ -80,14 +89,20 @@ export default function LibraryScreen() {
                 {currentlyReading.length + queueBooks.length + archiveBooks.length} VOLUMES COLLECTED
               </Text>
             </View>
-            <TouchableOpacity 
-              className="px-4 py-2 rounded-lg"
-              style={{ backgroundColor: colors.primary }}
+            <Pressable 
+              onPress={() => console.log('Add Book pressed')}
+              style={({ pressed }) => [{
+                backgroundColor: colors.primary,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 8,
+                opacity: pressed ? 0.8 : 1,
+              }]}
             >
               <Text className="font-semibold text-sm" style={{ color: colors.background }}>
                 Add Book
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {/* Search Bar */}
@@ -109,14 +124,17 @@ export default function LibraryScreen() {
         {/* Tabs */}
         <View className="px-6 mb-4">
           <View className="flex-row gap-2">
-            <TouchableOpacity
+            <Pressable
               onPress={() => setActiveTab('reading')}
-              className="px-4 py-2 rounded-lg"
-              style={{ 
+              style={({ pressed }) => [{ 
                 backgroundColor: activeTab === 'reading' ? colors.primary : colors.surface,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 8,
                 borderWidth: 1,
-                borderColor: colors.border
-              }}
+                borderColor: colors.border,
+                opacity: pressed ? 0.8 : 1,
+              }]}
             >
               <Text 
                 className="font-semibold text-sm"
@@ -124,16 +142,19 @@ export default function LibraryScreen() {
               >
                 Currently Reading
               </Text>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
+            <Pressable
               onPress={() => setActiveTab('queue')}
-              className="px-4 py-2 rounded-lg"
-              style={{ 
+              style={({ pressed }) => [{ 
                 backgroundColor: activeTab === 'queue' ? colors.primary : colors.surface,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 8,
                 borderWidth: 1,
-                borderColor: colors.border
-              }}
+                borderColor: colors.border,
+                opacity: pressed ? 0.8 : 1,
+              }]}
             >
               <Text 
                 className="font-semibold text-sm"
@@ -141,16 +162,19 @@ export default function LibraryScreen() {
               >
                 Queue
               </Text>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
+            <Pressable
               onPress={() => setActiveTab('archive')}
-              className="px-4 py-2 rounded-lg"
-              style={{ 
+              style={({ pressed }) => [{ 
                 backgroundColor: activeTab === 'archive' ? colors.primary : colors.surface,
+                paddingHorizontal: 16,
+                paddingVertical: 8,
+                borderRadius: 8,
                 borderWidth: 1,
-                borderColor: colors.border
-              }}
+                borderColor: colors.border,
+                opacity: pressed ? 0.8 : 1,
+              }]}
             >
               <Text 
                 className="font-semibold text-sm"
@@ -158,7 +182,7 @@ export default function LibraryScreen() {
               >
                 Archive
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
 

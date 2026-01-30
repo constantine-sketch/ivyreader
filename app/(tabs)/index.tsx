@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, TouchableOpacity, Dimensions } from "react-native";
+import { ScrollView, Text, View, Pressable, Dimensions } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { 
@@ -41,14 +41,20 @@ export default function DashboardScreen() {
               {mockUserStats.todayMinutes} / {mockUserStats.dailyGoalMinutes} min
             </Text>
           </View>
-          <TouchableOpacity 
-            className="px-6 py-3 rounded-lg"
-            style={{ backgroundColor: colors.primary }}
+          <Pressable 
+            onPress={() => console.log('Resume Reading pressed')}
+            style={({ pressed }) => [{
+              backgroundColor: colors.primary,
+              opacity: pressed ? 0.8 : 1,
+              paddingHorizontal: 24,
+              paddingVertical: 12,
+              borderRadius: 8,
+            }]}
           >
             <Text className="font-semibold" style={{ color: colors.background }}>
               Resume Reading
             </Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
 
         {/* Stats Cards Grid */}
@@ -106,11 +112,11 @@ export default function DashboardScreen() {
         <View className="px-6 mb-6">
           <View className="flex-row items-center justify-between mb-3">
             <Text className="text-xl font-bold text-foreground">Currently Reading</Text>
-            <TouchableOpacity>
+            <Pressable onPress={() => console.log('View Library pressed')}>
               <Text className="text-xs font-semibold tracking-wider" style={{ color: colors.primary }}>
                 VIEW LIBRARY
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           <View className="bg-surface rounded-2xl p-4 border border-border">
@@ -156,18 +162,34 @@ export default function DashboardScreen() {
 
             {/* Action Buttons */}
             <View className="flex-row gap-3">
-              <TouchableOpacity 
-                className="flex-1 py-3 rounded-lg border border-border"
-                style={{ backgroundColor: colors.surface }}
+              <Pressable 
+                onPress={() => console.log('Log Session pressed')}
+                style={({ pressed }) => [{
+                  flex: 1,
+                  paddingVertical: 12,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  backgroundColor: colors.surface,
+                  opacity: pressed ? 0.7 : 1,
+                }]}
               >
                 <Text className="text-center font-semibold text-foreground">Log Session</Text>
-              </TouchableOpacity>
-              <TouchableOpacity 
-                className="flex-1 py-3 rounded-lg border border-border"
-                style={{ backgroundColor: colors.surface }}
+              </Pressable>
+              <Pressable 
+                onPress={() => console.log('Add Note pressed')}
+                style={({ pressed }) => [{
+                  flex: 1,
+                  paddingVertical: 12,
+                  borderRadius: 8,
+                  borderWidth: 1,
+                  borderColor: colors.border,
+                  backgroundColor: colors.surface,
+                  opacity: pressed ? 0.7 : 1,
+                }]}
               >
                 <Text className="text-center font-semibold text-foreground">Add Note</Text>
-              </TouchableOpacity>
+              </Pressable>
             </View>
           </View>
         </View>
@@ -176,11 +198,11 @@ export default function DashboardScreen() {
         <View className="px-6 mb-6">
           <View className="flex-row items-center justify-between mb-3">
             <Text className="text-xl font-bold text-foreground">Up Next</Text>
-            <TouchableOpacity>
+            <Pressable onPress={() => console.log('Manage Queue pressed')}>
               <Text className="text-xs font-semibold tracking-wider" style={{ color: colors.primary }}>
                 MANAGE QUEUE
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {mockQueueBooks.map((book) => (

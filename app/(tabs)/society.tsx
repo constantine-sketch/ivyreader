@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, Text, View, TouchableOpacity, TextInput } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { mockSocialPosts, mockLeaderboard, mockTrendingBooks, formatTimeAgo } from "@/lib/mock-data";
@@ -28,7 +28,7 @@ export default function SocietyScreen() {
 
           {/* Tabs */}
           <View className="flex-row gap-2 mb-4">
-            <TouchableOpacity
+            <Pressable
               onPress={() => setActiveTab('following')}
               className="px-4 py-2 rounded-lg"
               style={{ 
@@ -43,9 +43,9 @@ export default function SocietyScreen() {
               >
                 FOLLOWING
               </Text>
-            </TouchableOpacity>
+            </Pressable>
 
-            <TouchableOpacity
+            <Pressable
               onPress={() => setActiveTab('global')}
               className="px-4 py-2 rounded-lg"
               style={{ 
@@ -60,7 +60,7 @@ export default function SocietyScreen() {
               >
                 GLOBAL
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
 
           {/* Post Input */}
@@ -79,14 +79,14 @@ export default function SocietyScreen() {
                 textAlignVertical: 'top'
               }}
             />
-            <TouchableOpacity 
+            <Pressable 
               className="px-4 py-2 rounded-lg self-end"
               style={{ backgroundColor: colors.primary }}
             >
               <Text className="font-semibold text-sm" style={{ color: colors.background }}>
                 Publish
               </Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
 
@@ -133,19 +133,19 @@ export default function SocietyScreen() {
 
                   {/* Engagement */}
                   <View className="flex-row gap-4">
-                    <TouchableOpacity className="flex-row items-center gap-2">
+                    <Pressable className="flex-row items-center gap-2">
                       <Text className="text-muted">♥</Text>
                       <Text className="text-sm text-muted">{post.likes}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity className="flex-row items-center gap-2">
+                    </Pressable>
+                    <Pressable className="flex-row items-center gap-2">
                       <Text className="text-muted">💬</Text>
                       <Text className="text-sm text-muted">{post.comments}</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity>
+                    </Pressable>
+                    <Pressable>
                       <Text className="text-sm font-semibold" style={{ color: colors.primary }}>
                         Share
                       </Text>
-                    </TouchableOpacity>
+                    </Pressable>
                   </View>
                 </View>
               ))}
@@ -181,11 +181,11 @@ export default function SocietyScreen() {
                     <Text className="text-sm text-muted">{entry.pagesRead} pgs</Text>
                   </View>
                 ))}
-                <TouchableOpacity className="mt-3">
+                <Pressable className="mt-3">
                   <Text className="text-center text-xs font-semibold tracking-wider" style={{ color: colors.primary }}>
                     VIEW FULL LEADERBOARD
                   </Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
 
@@ -193,14 +193,14 @@ export default function SocietyScreen() {
             <View className="mb-6">
               <Text className="text-xl font-bold text-foreground mb-3">Trending in Society</Text>
               {mockTrendingBooks.map((book) => (
-                <TouchableOpacity 
+                <Pressable 
                   key={book.bookId}
                   className="bg-surface rounded-xl p-4 border border-border mb-3"
                 >
                   <Text className="text-base font-bold text-foreground mb-1">{book.title}</Text>
                   <Text className="text-sm text-muted mb-2">{book.author}</Text>
                   <Text className="text-xs text-muted">{book.activeReaders} active readers</Text>
-                </TouchableOpacity>
+                </Pressable>
               ))}
             </View>
           </View>

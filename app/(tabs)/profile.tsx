@@ -1,4 +1,4 @@
-import { ScrollView, Text, View, TouchableOpacity } from "react-native";
+import { ScrollView, Text, View, Pressable } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { mockUserStats, formatDuration } from "@/lib/mock-data";
@@ -72,9 +72,9 @@ export default function ProfileScreen() {
               <Text className="text-muted">Daily Goal</Text>
               <View className="flex-row items-center gap-2">
                 <Text className="text-lg font-bold text-foreground">{mockUserStats.dailyGoalMinutes} min</Text>
-                <TouchableOpacity>
+                <Pressable>
                   <Text className="text-sm" style={{ color: colors.primary }}>Edit</Text>
-                </TouchableOpacity>
+                </Pressable>
               </View>
             </View>
             <View className="flex-row justify-between items-center py-3">
@@ -123,33 +123,33 @@ export default function ProfileScreen() {
           <Text className="text-xl font-bold text-foreground mb-3">Settings</Text>
           
           <View className="bg-surface rounded-2xl border border-border overflow-hidden">
-            <TouchableOpacity className="flex-row justify-between items-center px-4 py-4 border-b border-border">
+            <Pressable className="flex-row justify-between items-center px-4 py-4 border-b border-border">
               <Text className="text-foreground">Notifications</Text>
               <Text className="text-muted">›</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="flex-row justify-between items-center px-4 py-4 border-b border-border">
+            </Pressable>
+            <Pressable className="flex-row justify-between items-center px-4 py-4 border-b border-border">
               <Text className="text-foreground">Privacy</Text>
               <Text className="text-muted">›</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="flex-row justify-between items-center px-4 py-4 border-b border-border">
+            </Pressable>
+            <Pressable className="flex-row justify-between items-center px-4 py-4 border-b border-border">
               <Text className="text-foreground">Theme</Text>
               <Text className="text-muted">Dark</Text>
-            </TouchableOpacity>
-            <TouchableOpacity className="flex-row justify-between items-center px-4 py-4">
+            </Pressable>
+            <Pressable className="flex-row justify-between items-center px-4 py-4">
               <Text className="text-foreground">About</Text>
               <Text className="text-muted">›</Text>
-            </TouchableOpacity>
+            </Pressable>
           </View>
         </View>
 
         {/* Sign Out Button */}
         <View className="px-6">
-          <TouchableOpacity 
+          <Pressable 
             className="py-4 rounded-lg border border-border"
             style={{ backgroundColor: colors.surface }}
           >
             <Text className="text-center font-semibold text-error">Sign Out</Text>
-          </TouchableOpacity>
+          </Pressable>
         </View>
       </ScrollView>
     </ScreenContainer>

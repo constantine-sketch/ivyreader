@@ -80,3 +80,24 @@
 - [x] Update splash screen
 - [x] Update app name in configuration
 - [x] Set brand colors in theme
+
+
+## Bug Fixes
+
+- [x] Fix button press handlers not responding to clicks
+- [ ] Add proper navigation between screens
+- [ ] Implement tab switching functionality
+
+
+## Production Features (For Sunday Launch)
+
+- [x] Create database schema for books, sessions, notes, and stats
+- [x] Implement user authentication with Manus OAuth
+- [x] Create API endpoints for CRUD operations
+- [ ] Connect Log Session to save real data
+- [ ] Connect Add Book to database
+- [ ] Connect Add Note functionality
+- [ ] Update statistics from real session data
+- [ ] Implement Google Books API for book metadata
+- [ ] Add book cover image fetching
+- [ ] Test all features end-to-end
