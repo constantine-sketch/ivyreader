@@ -131,3 +131,13 @@
 - [x] Update root layout to check auth status
 - [x] Show login screen for unauthenticated users
 - [x] Test OAuth login flow
+
+
+## Log Session Feature
+
+- [x] Create LogSessionModal component with form inputs
+- [x] Add modal state management to dashboard
+- [x] Connect form to trpc.sessions.create mutation
+- [x] Update statistics after session logged
+- [x] Create seed sessions with variance for all demo users
+- [x] Test session logging and stat updates

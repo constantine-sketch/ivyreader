@@ -125,16 +125,38 @@ async function seedDatabase() {
         
         // Create reading sessions for completed and in-progress books
         if (status === "reading" || status === "completed") {
-          const sessionCount = 3 + Math.floor(Math.random() * 7);
+          // Variance: different users have different reading patterns
+          const userReadingProfile = {
+            avgPagesPerSession: i === 0 ? 35 : i === 1 ? 25 : 20, // Marcus reads more
+            avgDuration: i === 0 ? 45 : i === 1 ? 35 : 30, // Marcus reads longer
+            consistency: i === 0 ? 0.9 : i === 1 ? 0.7 : 0.6, // Marcus more consistent
+          };
+          
+          const sessionCount = 5 + Math.floor(Math.random() * 10);
           let sessionPage = 0;
           
           for (let k = 0; k < sessionCount; k++) {
-            const pagesRead = 15 + Math.floor(Math.random() * 35);
+            // Add variance to pages read (±40% from average)
+            const variance = 0.6 + Math.random() * 0.8;
+            const pagesRead = Math.floor(userReadingProfile.avgPagesPerSession * variance);
             const endPage = Math.min(sessionPage + pagesRead, currentPage);
-            const duration = 20 + Math.floor(Math.random() * 40);
             
-            const daysAgo = sessionCount - k;
-            const sessionDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+            // Add variance to duration
+            const durationVariance = 0.7 + Math.random() * 0.6;
+            const duration = Math.floor(userReadingProfile.avgDuration * durationVariance);
+            
+            // Variance in session timing - some users skip days
+            let daysAgo;
+            if (Math.random() < userReadingProfile.consistency) {
+              daysAgo = sessionCount - k; // Regular daily reading
+            } else {
+              daysAgo = sessionCount - k + Math.floor(Math.random() * 3); // Skip 1-3 days
+            }
+            
+            // Add time of day variance (morning/evening readers)
+            const baseDate = new Date(Date.now() - daysAgo * 24 * 60 * 60 * 1000);
+            const hourOffset = i === 0 ? 6 : i === 1 ? 20 : 14; // Marcus morning, Alex evening, James afternoon
+            baseDate.setHours(hourOffset + Math.floor(Math.random() * 3));
             
             const { readingSessions } = await import("../drizzle/schema");
             await database.insert(readingSessions).values({
@@ -143,10 +165,11 @@ async function seedDatabase() {
               startPage: sessionPage,
               endPage,
               durationMinutes: duration,
-              createdAt: sessionDate,
+              createdAt: baseDate,
             });
             
             sessionPage = endPage;
+            if (sessionPage >= currentPage) break;
           }
         }
       }

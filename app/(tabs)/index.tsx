@@ -1,7 +1,9 @@
+import { useState } from "react";
 import { View, Text, ScrollView, Pressable, Dimensions, ActivityIndicator } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
+import { LogSessionModal } from "@/components/log-session-modal";
 import { 
   getGreeting,
   formatDate,
@@ -11,11 +13,16 @@ import {
 export default function DashboardScreen() {
   const colors = useColors();
   const screenWidth = Dimensions.get('window').width;
+  const [showLogModal, setShowLogModal] = useState(false);
   
   // Fetch real data from API
-  const { data: stats, isLoading: statsLoading } = trpc.stats.get.useQuery();
-  const { data: books, isLoading: booksLoading } = trpc.books.list.useQuery();
-  const { data: sessions } = trpc.sessions.listByUser.useQuery({ limit: 7 });
+  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = trpc.stats.get.useQuery();
+  const { data: books, isLoading: booksLoading, refetch: refetchBooks } = trpc.books.list.useQuery();
+  const { data: sessions, refetch: refetchSessions } = trpc.sessions.listByUser.useQuery({ limit: 7 });
+  
+  // Mutation for creating sessions
+  const createSession = trpc.sessions.create.useMutation();
+  const updateBook = trpc.books.update.useMutation();
   
   const isLoading = statsLoading || booksLoading;
   
@@ -198,7 +205,7 @@ export default function DashboardScreen() {
               {/* Action Buttons */}
               <View className="flex-row gap-2">
                 <Pressable 
-                  onPress={() => console.log('Log Session')}
+                  onPress={() => setShowLogModal(true)}
                   className="flex-1 py-3 rounded-lg items-center"
                   style={({ pressed }) => [{ 
                     backgroundColor: colors.primary,
@@ -279,6 +286,38 @@ export default function DashboardScreen() {
           </View>
         </View>
       </ScrollView>
+
+      {/* Log Session Modal */}
+      {currentBook && (
+        <LogSessionModal
+          visible={showLogModal}
+          onClose={() => setShowLogModal(false)}
+          bookId={currentBook.id}
+          bookTitle={currentBook.title}
+          currentPage={currentBook.currentPage}
+          totalPages={currentBook.totalPages}
+          onSessionLogged={async (startPage: number, endPage: number, duration: number) => {
+            // Create the session in database
+            await createSession.mutateAsync({
+              bookId: currentBook.id,
+              startPage,
+              endPage,
+              durationMinutes: duration,
+            });
+            
+            // Update book's current page
+            await updateBook.mutateAsync({
+              id: currentBook.id,
+              currentPage: endPage,
+            });
+            
+            // Refresh all data to show updated stats
+            await refetchStats();
+            await refetchBooks();
+            await refetchSessions();
+          }}
+        />
+      )}
     </ScreenContainer>
   );
 }
