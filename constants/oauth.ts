@@ -115,7 +115,9 @@ export async function startOAuthLogin(): Promise<string | null> {
 
   try {
     // Use expo-web-browser for in-app authentication on native platforms
-    const result = await WebBrowser.openAuthSessionAsync(loginUrl, env.deepLinkScheme);
+    const redirectUri = getRedirectUri();
+    console.log("[OAuth] Starting auth session with redirect:", redirectUri);
+    const result = await WebBrowser.openAuthSessionAsync(loginUrl, redirectUri);
     console.log("[OAuth] Auth session result:", result);
     
     if (result.type === "success" && result.url) {

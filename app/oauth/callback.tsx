@@ -4,7 +4,7 @@ import * as Auth from "@/lib/_core/auth";
 import * as Linking from "expo-linking";
 import { useLocalSearchParams, useRouter } from "expo-router";
 import { useEffect, useState } from "react";
-import { ActivityIndicator, Text } from "react-native";
+import { ActivityIndicator, Text, Pressable } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function OAuthCallback() {
@@ -18,6 +18,7 @@ export default function OAuthCallback() {
   }>();
   const [status, setStatus] = useState<"processing" | "success" | "error">("processing");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [timeoutReached, setTimeoutReached] = useState(false);
 
   useEffect(() => {
     const handleCallback = async () => {
@@ -232,7 +233,19 @@ export default function OAuthCallback() {
     };
 
     handleCallback();
-  }, [params.code, params.state, params.error, params.sessionToken, params.user, router]);
+
+    // Set a timeout to show error if callback takes too long
+    const timeout = setTimeout(() => {
+      if (status === "processing") {
+        console.log("[OAuth] Callback timeout reached");
+        setTimeoutReached(true);
+        setStatus("error");
+        setErrorMessage("Authentication timed out. Please try again.");
+      }
+    }, 10000); // 10 second timeout
+
+    return () => clearTimeout(timeout);
+  }, [params.code, params.state, params.error, params.sessionToken, params.user, router, status]);
 
   return (
     <SafeAreaView className="flex-1" edges={["top", "bottom", "left", "right"]}>
@@ -260,9 +273,18 @@ export default function OAuthCallback() {
             <Text className="mb-2 text-xl font-bold leading-7 text-error">
               Authentication failed
             </Text>
-            <Text className="text-base leading-6 text-center text-foreground">
+            <Text className="text-base leading-6 text-center text-foreground mb-4">
               {errorMessage}
             </Text>
+            <Pressable
+              onPress={() => router.replace("/")}
+              className="px-6 py-3 rounded-lg"
+              style={{ backgroundColor: "#0a7ea4" }}
+            >
+              <Text className="text-base font-bold" style={{ color: "#fff" }}>
+                Try Again
+              </Text>
+            </Pressable>
           </>
         )}
       </ThemedView>

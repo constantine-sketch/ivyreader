@@ -274,3 +274,9 @@
 ## Authentication UX
 
 - [x] Change OAuth login to use in-app browser (expo-web-browser) instead of external browser
+
+
+## OAuth Bug Fix
+
+- [x] Fix OAuth callback handling - users get stuck in loading after authentication on iOS
+- [x] Ensure callback URL properly redirects back to app after successful login
