@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { View, Text, Pressable, ScrollView, TextInput, ActivityIndicator } from "react-native";
+import { View, Text, Pressable, ScrollView, TextInput, ActivityIndicator, Keyboard, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -95,7 +95,12 @@ export default function PostSessionNoteScreen() {
   
   return (
     <ScreenContainer className="p-6">
-      <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false}>
+      <KeyboardAvoidingView 
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <ScrollView contentContainerStyle={{ flexGrow: 1 }} showsVerticalScrollIndicator={false} keyboardShouldPersistTaps="handled">
         <View className="flex-1">
           {/* Header */}
           <View className="mb-6">
@@ -128,6 +133,8 @@ export default function PostSessionNoteScreen() {
                   value={startPage}
                   onChangeText={setStartPage}
                   keyboardType="number-pad"
+                  returnKeyType="done"
+                  onSubmitEditing={Keyboard.dismiss}
                   className="p-4 rounded-lg text-foreground text-center text-xl font-bold"
                   style={{
                     backgroundColor: colors.surface,
@@ -152,6 +159,8 @@ export default function PostSessionNoteScreen() {
                   value={endPage}
                   onChangeText={setEndPage}
                   keyboardType="number-pad"
+                  returnKeyType="done"
+                  onSubmitEditing={Keyboard.dismiss}
                   className="p-4 rounded-lg text-foreground text-center text-xl font-bold"
                   style={{
                     backgroundColor: colors.surface,
@@ -188,6 +197,8 @@ export default function PostSessionNoteScreen() {
               onChangeText={setTakeaways}
               multiline
               numberOfLines={6}
+              returnKeyType="done"
+              blurOnSubmit={true}
               className="p-4 rounded-lg text-foreground"
               style={{
                 backgroundColor: colors.surface,
@@ -241,7 +252,9 @@ export default function PostSessionNoteScreen() {
             </Pressable>
           </View>
         </View>
-      </ScrollView>
+          </ScrollView>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
     </ScreenContainer>
   );
 }

@@ -291,3 +291,9 @@
 
 - [x] Fix OAuth callback - app returns to login screen after account selection instead of completing authentication
 - [x] Ensure deep link callback is captured and session token is stored properly
+
+
+## Post-Session Page Bugs
+
+- [x] Fix Save Session button not working on post-session page
+- [x] Fix keyboard not dismissing after text input on post-session page
