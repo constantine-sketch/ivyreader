@@ -184,10 +184,46 @@ export function AddBookModal({ visible, onClose, onBookAdded }: AddBookModalProp
             )}
 
             {searchQuery.trim().length > 0 && searchResults.length === 0 && !isSearching && (
-              <View className="items-center justify-center py-12">
-                <Text className="text-base text-muted text-center">
+              <View className="py-6">
+                <Text className="text-base text-muted text-center mb-4">
                   No books found. Try a different search term.
                 </Text>
+                <Text className="text-sm text-muted text-center mb-4">
+                  Or add it manually:
+                </Text>
+                <Pressable
+                  onPress={async () => {
+                    const title = searchQuery.trim();
+                    if (!title) return;
+                    
+                    setIsAdding(true);
+                    try {
+                      await onBookAdded({
+                        title,
+                        author: "Unknown Author",
+                        category: "General",
+                        totalPages: 300,
+                        coverUrl: undefined,
+                        status: selectedStatus,
+                      });
+                      handleClose();
+                    } catch (error) {
+                      console.error("Failed to add book:", error);
+                    } finally {
+                      setIsAdding(false);
+                    }
+                  }}
+                  className="mx-auto px-6 py-3 rounded-lg"
+                  style={({ pressed }) => ({
+                    backgroundColor: colors.primary,
+                    opacity: pressed || isAdding ? 0.7 : 1,
+                  })}
+                  disabled={isAdding}
+                >
+                  <Text className="text-sm font-bold" style={{ color: colors.background }}>
+                    {isAdding ? "Adding..." : `Add "${searchQuery.trim()}" Manually`}
+                  </Text>
+                </Pressable>
               </View>
             )}
 

@@ -195,3 +195,10 @@
 
 - [x] Fix Google Books API search not returning results
 - [x] Debug AddBookModal search functionality
+
+
+## New Features
+
+- [x] Display book covers in Library (replace gray boxes)
+- [x] Expand curated books to ~100 Huberman bro themed titles
+- [x] Add manual book entry option in Add Book modal

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, Image } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
@@ -78,8 +78,19 @@ export default function LibraryScreen() {
         }]}
       >
         <View className="flex-row">
-          {/* Book Cover Placeholder */}
-          <View className="w-20 h-30 rounded-lg mr-4" style={{ backgroundColor: colors.border }} />
+          {/* Book Cover */}
+          {book.coverUrl ? (
+            <Image 
+              source={{ uri: book.coverUrl }}
+              className="w-20 h-30 rounded-lg mr-4"
+              style={{ backgroundColor: colors.border }}
+              resizeMode="cover"
+            />
+          ) : (
+            <View className="w-20 h-30 rounded-lg mr-4 items-center justify-center" style={{ backgroundColor: colors.border }}>
+              <Text className="text-4xl">📚</Text>
+            </View>
+          )}
           
           <View className="flex-1">
             <View className="px-2 py-1 rounded mb-2 self-start" style={{ backgroundColor: colors.primary + '20' }}>
