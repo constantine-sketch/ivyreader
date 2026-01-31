@@ -285,3 +285,9 @@
 ## OAuth Redirect URI Fix
 
 - [x] Fix redirect URI to use custom app scheme (manus*) instead of Expo dev scheme (exp://)
+
+
+## OAuth Callback Issue
+
+- [x] Fix OAuth callback - app returns to login screen after account selection instead of completing authentication
+- [x] Ensure deep link callback is captured and session token is stored properly

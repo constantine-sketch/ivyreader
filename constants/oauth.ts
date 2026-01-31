@@ -100,7 +100,7 @@ export const getLoginUrl = () => {
  *
  * On web, this simply redirects to the login URL.
  *
- * @returns Always null, the callback is handled via deep link.
+ * @returns The callback URL if successful, null otherwise.
  */
 export async function startOAuthLogin(): Promise<string | null> {
   const loginUrl = getLoginUrl();
@@ -121,15 +121,16 @@ export async function startOAuthLogin(): Promise<string | null> {
     console.log("[OAuth] Auth session result:", result);
     
     if (result.type === "success" && result.url) {
-      // Handle the callback URL
+      // Return the callback URL so the caller can handle it
       console.log("[OAuth] Auth success, callback URL:", result.url);
+      return result.url;
     } else if (result.type === "cancel") {
       console.log("[OAuth] User cancelled authentication");
+      return null;
     }
   } catch (error) {
     console.error("[OAuth] Failed to open auth session:", error);
   }
 
-  // The OAuth callback will reopen the app via deep link.
   return null;
 }
