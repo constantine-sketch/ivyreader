@@ -176,3 +176,9 @@
 - [x] Add seed data for post likes
 - [x] Add seed data for post comments
 - [x] Update social feed UI to display like/comment counts
+
+
+## Bug Fixes
+
+- [x] Fix logout button not working
+- [x] Ensure logout clears session and returns to login screen

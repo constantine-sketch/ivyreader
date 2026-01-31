@@ -1,4 +1,4 @@
-import { View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import { Text, View, ScrollView, Pressable, ActivityIndicator, Platform } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
@@ -203,6 +203,10 @@ export default function ProfileScreen() {
             onPress={async () => {
               await logout();
               console.log('User logged out');
+              // On web, reload the page to trigger auth check
+              if (Platform.OS === 'web') {
+                window.location.reload();
+              }
             }}
             className="py-3 rounded-lg items-center border"
             style={({ pressed }) => [{ 
