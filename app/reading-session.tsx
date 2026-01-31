@@ -30,24 +30,17 @@ export default function ReadingSessionScreen() {
   const { bookId } = useLocalSearchParams();
   const [seconds, setSeconds] = useState(0);
   const [isRunning, setIsRunning] = useState(true);
-  const [startPage, setStartPage] = useState<number | null>(null);
-  const [currentPage, setCurrentPage] = useState<number | null>(null);
   const [quote, setQuote] = useState(MOTIVATIONAL_QUOTES[0]);
-  const [isSaving, setIsSaving] = useState(false);
 
   // Fetch book details
   const { data: books } = trpc.books.list.useQuery();
   const book = books?.find((b) => b.id === Number(bookId));
 
-  // Mutation for creating session
-  const createSession = trpc.sessions.create.useMutation();
-  const updateBook = trpc.books.update.useMutation();
 
-  // Set initial page and random quote
+
+  // Set random quote on mount
   useEffect(() => {
     if (book) {
-      setStartPage(book.currentPage);
-      setCurrentPage(book.currentPage);
       setQuote(MOTIVATIONAL_QUOTES[Math.floor(Math.random() * MOTIVATIONAL_QUOTES.length)]);
     }
   }, [book]);
@@ -73,17 +66,17 @@ export default function ReadingSessionScreen() {
   };
 
   const handleEndSession = () => {
-    if (!book || startPage === null || currentPage === null) return;
+    if (!book) return;
 
-    // Navigate to post-session page where user enters takeaways and confirms pages
+    // Navigate to post-session page where user enters takeaways and page numbers
     router.push({
       pathname: '/post-session-note',
       params: {
         bookId: book.id.toString(),
         bookTitle: book.title,
         bookAuthor: book.author,
-        startPage: startPage.toString(),
-        endPage: currentPage.toString(),
+        startPage: book.currentPage.toString(),
+        endPage: book.currentPage.toString(),
         durationMinutes: Math.round(seconds / 60).toString(),
       },
     });
@@ -123,39 +116,6 @@ export default function ReadingSessionScreen() {
               {formatTime(seconds)}
             </Text>
             <Text className="text-sm text-muted">Reading Time</Text>
-          </View>
-
-          {/* Page Counter */}
-          <View className="bg-surface rounded-2xl p-6 mb-8">
-            <View className="flex-row justify-between items-center mb-4">
-              <View>
-                <Text className="text-xs text-muted mb-1">START PAGE</Text>
-                <Text className="text-2xl font-bold text-foreground">{startPage}</Text>
-              </View>
-              <Text className="text-2xl text-muted">→</Text>
-              <View>
-                <Text className="text-xs text-muted mb-1">CURRENT PAGE</Text>
-                <Text className="text-2xl font-bold text-foreground">{currentPage}</Text>
-              </View>
-            </View>
-
-            {/* Page Input */}
-            <View className="flex-row gap-2">
-              <Pressable
-                onPress={() => setCurrentPage(Math.max(startPage || 0, (currentPage || 0) - 1))}
-                className="flex-1 py-3 rounded-lg bg-muted/20 items-center"
-              >
-                <Text className="text-lg font-bold text-foreground">−</Text>
-              </Pressable>
-              <Pressable
-                onPress={() => setCurrentPage((currentPage || 0) + 1)}
-                className="flex-1 py-3 rounded-lg bg-primary items-center"
-              >
-                <Text className="text-lg font-bold" style={{ color: colors.background }}>
-                  +
-                </Text>
-              </Pressable>
-            </View>
           </View>
 
           {/* Controls */}

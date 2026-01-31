@@ -238,3 +238,8 @@
 - [x] Add "Personal Takeaways" text area on post-session page
 - [x] Save session with user-entered page numbers
 - [ ] Test complete reading flow with new UX
+
+
+## Timer Screen Cleanup
+
+- [x] Remove start page and end page counter from reading session timer
