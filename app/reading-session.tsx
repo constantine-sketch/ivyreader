@@ -68,6 +68,9 @@ export default function ReadingSessionScreen() {
   const handleEndSession = () => {
     if (!book) return;
 
+    // Ensure at least 1 minute duration (backend requires positive int)
+    const durationMinutes = Math.max(1, Math.round(seconds / 60));
+
     // Navigate to post-session page where user enters takeaways and page numbers
     router.push({
       pathname: '/post-session-note',
@@ -77,7 +80,7 @@ export default function ReadingSessionScreen() {
         bookAuthor: book.author,
         startPage: book.currentPage.toString(),
         endPage: book.currentPage.toString(),
-        durationMinutes: Math.round(seconds / 60).toString(),
+        durationMinutes: durationMinutes.toString(),
       },
     });
   };

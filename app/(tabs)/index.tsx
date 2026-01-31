@@ -185,27 +185,33 @@ export default function DashboardScreen() {
               </Pressable>
             </View>
 
-            <View className="p-4 rounded-xl" style={{ backgroundColor: colors.surface }}>
-              <View className="flex-row mb-4">
-                {/* Book Cover Placeholder */}
-                <View 
-                  className="w-20 h-28 rounded-lg mr-4" 
-                  style={{ backgroundColor: colors.border }}
-                />
-                
-                <View className="flex-1">
-                  <Text className="text-xs mb-1 tracking-wider" style={{ color: colors.primary }}>
-                    {currentBook.category?.toUpperCase()}
-                  </Text>
-                  <Text className="text-xs mb-1" style={{ color: colors.primary }}>
-                    {progressPercentage}% Complete
-                  </Text>
-                  <Text className="text-lg font-bold text-foreground mb-1" numberOfLines={2}>
-                    {currentBook.title}
-                  </Text>
-                  <Text className="text-sm text-muted">{currentBook.author}</Text>
+            <Pressable
+              onPress={() => router.push(`/book-detail?bookId=${currentBook.id}`)}
+              style={({ pressed }) => [{
+                opacity: pressed ? 0.7 : 1,
+              }]}
+            >
+              <View className="p-4 rounded-xl" style={{ backgroundColor: colors.surface }}>
+                <View className="flex-row mb-4">
+                  {/* Book Cover Placeholder */}
+                  <View 
+                    className="w-20 h-28 rounded-lg mr-4" 
+                    style={{ backgroundColor: colors.border }}
+                  />
+                  
+                  <View className="flex-1">
+                    <Text className="text-xs mb-1 tracking-wider" style={{ color: colors.primary }}>
+                      {currentBook.category?.toUpperCase()}
+                    </Text>
+                    <Text className="text-xs mb-1" style={{ color: colors.primary }}>
+                      {progressPercentage}% Complete
+                    </Text>
+                    <Text className="text-lg font-bold text-foreground mb-1" numberOfLines={2}>
+                      {currentBook.title}
+                    </Text>
+                    <Text className="text-sm text-muted">{currentBook.author}</Text>
+                  </View>
                 </View>
-              </View>
 
               {/* Progress Info */}
               <View className="mb-3">
@@ -251,7 +257,8 @@ export default function DashboardScreen() {
                   </Text>
                 </Pressable>
               </View>
-            </View>
+              </View>
+            </Pressable>
           </View>
         )}
 

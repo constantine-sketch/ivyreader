@@ -248,3 +248,11 @@
 ## UI Polish
 
 - [x] Change End Session button color to more appealing option
+
+
+## Session & Notes Management
+
+- [x] Fix Save Session button not working on post-session page
+- [x] Create session history view for each book
+- [x] Add notes/takeaways view for each book
+- [x] Integrate session and notes views into book detail page

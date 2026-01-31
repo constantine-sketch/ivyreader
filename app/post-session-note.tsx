@@ -40,16 +40,26 @@ export default function PostSessionNoteScreen() {
       alert("End page must be greater than or equal to start page");
       return;
     }
+
+    if (isNaN(bookId) || bookId <= 0) {
+      alert("Invalid book ID");
+      return;
+    }
+
+    // Ensure duration is at least 1 minute
+    const validDuration = Math.max(1, durationMinutes || 1);
     
     try {
       setIsSaving(true);
+      
+      console.log('Saving session:', { bookId, startPageNum, endPageNum, validDuration });
       
       // Create reading session
       await createSession.mutateAsync({
         bookId,
         startPage: startPageNum,
         endPage: endPageNum,
-        durationMinutes,
+        durationMinutes: validDuration,
       });
       
       // Update book's current page
@@ -67,11 +77,13 @@ export default function PostSessionNoteScreen() {
         });
       }
       
+      console.log('Session saved successfully, navigating to dashboard');
       // Navigate back to dashboard
       router.replace("/(tabs)");
-    } catch (error) {
+    } catch (error: any) {
       console.error("Failed to save session:", error);
-      alert("Failed to save session. Please try again.");
+      const errorMessage = error?.message || "Unknown error";
+      alert(`Failed to save session: ${errorMessage}`);
     } finally {
       setIsSaving(false);
     }
