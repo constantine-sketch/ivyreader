@@ -243,3 +243,8 @@
 ## Timer Screen Cleanup
 
 - [x] Remove start page and end page counter from reading session timer
+
+
+## UI Polish
+
+- [x] Change End Session button color to more appealing option

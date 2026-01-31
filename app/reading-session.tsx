@@ -138,7 +138,7 @@ export default function ReadingSessionScreen() {
             <Pressable
               onPress={handleEndSession}
               className="py-4 rounded-lg items-center"
-              style={{ backgroundColor: colors.error }}
+              style={{ backgroundColor: colors.primary }}
             >
               <Text className="text-lg font-bold" style={{ color: colors.background }}>
                 ✓ End Session & Add Takeaways
