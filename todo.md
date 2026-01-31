@@ -263,3 +263,9 @@
 - [x] Create book picker modal component
 - [x] Add book picker to Resume Reading button on dashboard
 - [x] Allow users to select any book from library to start reading
+
+
+## UX Correction
+
+- [x] Move book picker to general Resume Reading button at top of dashboard
+- [x] Restore direct navigation for book card's Resume Reading button

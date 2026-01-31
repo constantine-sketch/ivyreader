@@ -103,23 +103,7 @@ export default function DashboardScreen() {
             </Text>
           </View>
           <Pressable 
-            onPress={() => {
-              console.log('Resume Reading pressed', currentBook);
-              if (currentBook) {
-                console.log('Navigating to reading-session with bookId:', currentBook.id);
-                router.push({
-                  pathname: '/reading-session',
-                  params: {
-                    bookId: currentBook.id.toString(),
-                    bookTitle: currentBook.title,
-                    bookAuthor: currentBook.author,
-                    currentPage: currentBook.currentPage.toString(),
-                  },
-                });
-              } else {
-                console.log('No current book found');
-              }
-            }}
+            onPress={() => setShowBookPicker(true)}
             style={({ pressed }) => [{
               backgroundColor: colors.primary,
               opacity: pressed ? 0.8 : 1,
@@ -234,7 +218,7 @@ export default function DashboardScreen() {
               {/* Action Buttons */}
               <View className="flex-row gap-2">
                 <Pressable 
-                  onPress={() => setShowBookPicker(true)}
+                  onPress={() => router.push(`/reading-session?bookId=${currentBook.id}`)}
                   className="flex-1 py-3 rounded-lg items-center"
                   style={({ pressed }) => [{ 
                     backgroundColor: colors.primary,
