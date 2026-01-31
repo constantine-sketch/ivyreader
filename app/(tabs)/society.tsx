@@ -4,6 +4,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { formatTimeAgo } from "@/lib/mock-data";
+import { CreatePostModal } from "@/components/create-post-modal";
 
 type FeedTab = 'following' | 'global';
 
@@ -11,10 +12,15 @@ export default function SocietyScreen() {
   const colors = useColors();
   const [activeTab, setActiveTab] = useState<FeedTab>('global');
   const [postContent, setPostContent] = useState('');
+  const [showCreatePost, setShowCreatePost] = useState(false);
 
   // Fetch real data from database
-  const { data: posts, isLoading: postsLoading } = trpc.social.posts.useQuery({ limit: 20 });
+  const { data: posts, isLoading: postsLoading, refetch: refetchPosts } = trpc.social.posts.useQuery({ limit: 20 });
   const { data: leaderboard, isLoading: leaderboardLoading } = trpc.social.leaderboard.useQuery({ limit: 10 });
+  const { data: books } = trpc.books.list.useQuery();
+  
+  // Mutation for creating posts
+  const createPost = trpc.social.createPost.useMutation();
   
   const isLoading = postsLoading || leaderboardLoading;
 
@@ -211,7 +217,7 @@ export default function SocietyScreen() {
                     style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
                   >
                     <Text className="text-base mr-1">💬</Text>
-                    <Text className="text-sm text-muted">0</Text>
+                    <Text className="text-sm text-muted">{(item as any).comments || 0}</Text>
                   </Pressable>
 
                   <Pressable
@@ -228,6 +234,33 @@ export default function SocietyScreen() {
           </View>
         </ScrollView>
       </View>
+      
+      {/* Floating Create Post Button */}
+      <Pressable
+        onPress={() => setShowCreatePost(true)}
+        className="absolute bottom-6 right-6 w-14 h-14 rounded-full items-center justify-center"
+        style={({ pressed }) => [{
+          backgroundColor: colors.primary,
+          opacity: pressed ? 0.8 : 1,
+        }]}
+      >
+        <Text className="text-2xl">+</Text>
+      </Pressable>
+      
+      {/* Create Post Modal */}
+      <CreatePostModal
+        visible={showCreatePost}
+        onClose={() => setShowCreatePost(false)}
+        onPostCreated={async (content, bookId) => {
+          await createPost.mutateAsync({
+            content,
+            bookId: bookId || undefined,
+            rating: undefined,
+          });
+          await refetchPosts();
+        }}
+        books={books?.filter(b => b.status === 'reading') || []}
+      />
     </ScreenContainer>
   );
 }

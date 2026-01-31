@@ -40,6 +40,9 @@ export default function DashboardScreen() {
   const currentBook = books?.find(b => b.status === 'reading');
   const queueBooks = books?.filter(b => b.status === 'queue').slice(0, 3) || [];
   
+  // Fetch notes for current book
+  const { data: notes } = currentBook ? trpc.notes.listByBook.useQuery({ bookId: currentBook.id }) : { data: [] };
+  
   // Calculate today's minutes from sessions
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -230,6 +233,21 @@ export default function DashboardScreen() {
                   </Text>
                 </Pressable>
               </View>
+            </View>
+          </View>
+        )}
+
+        {/* Reading Notes */}
+        {currentBook && notes && notes.length > 0 && (
+          <View className="px-6 mb-6">
+            <Text className="text-xl font-bold text-foreground mb-3">Notes</Text>
+            <View className="gap-2">
+              {notes.slice(0, 3).map((note) => (
+                <View key={note.id} className="p-3 rounded-lg" style={{ backgroundColor: colors.surface }}>
+                  <Text className="text-xs text-muted mb-1">Page {note.pageNumber}</Text>
+                  <Text className="text-sm text-foreground leading-relaxed">{note.content}</Text>
+                </View>
+              ))}
             </View>
           </View>
         )}

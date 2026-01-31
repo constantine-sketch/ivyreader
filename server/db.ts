@@ -260,14 +260,32 @@ export async function calculateUserStats(userId: number) {
 export async function getSocialPosts(userId?: number, limit: number = 20) {
   const db = await getDb();
   if (!db) return [];
-  let query = db.select({ post: socialPosts, book: books, user: users })
+  
+  const postsResult = await db.select({ post: socialPosts, book: books, user: users })
     .from(socialPosts)
     .leftJoin(books, eq(socialPosts.bookId, books.id))
     .leftJoin(users, eq(socialPosts.userId, users.id))
     .orderBy(desc(socialPosts.createdAt))
     .limit(limit);
-  if (userId) query = query.where(eq(socialPosts.userId, userId)) as any;
-  return query;
+  
+  if (userId) {
+    return postsResult.filter(item => item.post.userId === userId);
+  }
+  
+  // Add comment counts to each post
+  const postsWithComments = await Promise.all(
+    postsResult.map(async (item) => {
+      const commentCount = await db.select({ count: sql`COUNT(*)` })
+        .from(postComments)
+        .where(eq(postComments.postId, item.post.id));
+      return {
+        ...item,
+        comments: Number(commentCount[0]?.count || 0),
+      };
+    })
+  );
+  
+  return postsWithComments;
 }
 
 export async function createSocialPost(data: InsertSocialPost) {

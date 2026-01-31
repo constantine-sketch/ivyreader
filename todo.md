@@ -202,3 +202,12 @@
 - [x] Display book covers in Library (replace gray boxes)
 - [x] Expand curated books to ~100 Huberman bro themed titles
 - [x] Add manual book entry option in Add Book modal
+
+
+## Essential Production Flows (1 Hour Sprint)
+
+- [x] Display like/comment counts on posts
+- [x] Make Log Session fully functional with database save
+- [x] Auto-update statistics after session logged
+- [x] Add Create Post button and modal
+- [x] Display reading notes on dashboard
