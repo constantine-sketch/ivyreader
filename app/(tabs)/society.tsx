@@ -132,11 +132,11 @@ export default function SocietyScreen() {
                       style={{ backgroundColor: colors.primary }}
                     >
                       <Text className="text-xs font-bold" style={{ color: colors.background }}>
-                        {getInitials(`User ${entry.userId}`)}
+                        {getInitials(entry.name || `User ${entry.userId}`)}
                       </Text>
                     </View>
                     <Text className="text-sm font-semibold text-foreground">
-                      User {entry.userId}
+                      {entry.name || `User ${entry.userId}`}
                     </Text>
                   </View>
                   <Text className="text-sm font-bold" style={{ color: colors.primary }}>
@@ -163,12 +163,12 @@ export default function SocietyScreen() {
                     style={{ backgroundColor: colors.primary }}
                   >
                     <Text className="text-sm font-bold" style={{ color: colors.background }}>
-                      {getInitials(`User ${item.post.userId}`)}
+                      {getInitials(item.user?.name || `User ${item.post.userId}`)}
                     </Text>
                   </View>
                   <View className="flex-1">
                     <Text className="text-sm font-bold text-foreground">
-                      User {item.post.userId}
+                      {item.user?.name || `User ${item.post.userId}`}
                     </Text>
                     <Text className="text-xs text-muted">
                       {formatTimeAgo(new Date(item.post.createdAt))}

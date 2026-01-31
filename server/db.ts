@@ -253,9 +253,10 @@ export async function calculateUserStats(userId: number) {
 export async function getSocialPosts(userId?: number, limit: number = 20) {
   const db = await getDb();
   if (!db) return [];
-  let query = db.select({ post: socialPosts, book: books })
+  let query = db.select({ post: socialPosts, book: books, user: users })
     .from(socialPosts)
     .leftJoin(books, eq(socialPosts.bookId, books.id))
+    .leftJoin(users, eq(socialPosts.userId, users.id))
     .orderBy(desc(socialPosts.createdAt))
     .limit(limit);
   if (userId) query = query.where(eq(socialPosts.userId, userId)) as any;
@@ -308,11 +309,13 @@ export async function getWeeklyLeaderboard(limit: number = 10) {
   oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
   return db.select({
     userId: readingSessions.userId,
+    name: users.name,
     pagesRead: sql<number>`SUM(${readingSessions.endPage} - ${readingSessions.startPage})`,
   })
   .from(readingSessions)
+  .leftJoin(users, eq(readingSessions.userId, users.id))
   .where(gte(readingSessions.createdAt, oneWeekAgo))
-  .groupBy(readingSessions.userId)
+  .groupBy(readingSessions.userId, users.name)
   .orderBy(desc(sql`SUM(${readingSessions.endPage} - ${readingSessions.startPage})`))
   .limit(limit);
 }

@@ -168,3 +168,11 @@
 - [x] Modify Society screen to show all users' posts (not just following)
 - [x] Update leaderboard to show all demo users
 - [x] Make social feed display global activity for social proof
+
+
+## Social Feed Fixes
+
+- [x] Fix getSocialPosts to join users table and return actual names
+- [x] Add seed data for post likes
+- [x] Add seed data for post comments
+- [x] Update social feed UI to display like/comment counts
