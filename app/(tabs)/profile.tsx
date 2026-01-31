@@ -7,7 +7,7 @@ import { formatDuration } from "@/lib/mock-data";
 
 export default function ProfileScreen() {
   const colors = useColors();
-  const { user } = useAuth();
+  const { user, logout } = useAuth();
   
   // Fetch real data from database
   const { data: stats, isLoading: statsLoading } = trpc.stats.get.useQuery();
@@ -200,7 +200,10 @@ export default function ProfileScreen() {
         {/* Logout Button */}
         <View className="px-6">
           <Pressable
-            onPress={() => console.log('Logout')}
+            onPress={async () => {
+              await logout();
+              console.log('User logged out');
+            }}
             className="py-3 rounded-lg items-center border"
             style={({ pressed }) => [{ 
               borderColor: colors.error,

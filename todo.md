@@ -153,3 +153,11 @@
 - [x] Connect to database to save books
 - [x] Test book search and addition flow
 - [x] Add "Add Book" button to Library screen
+
+
+## Auth Flow
+
+- [x] Add logout button to Profile screen
+- [x] Implement logout functionality
+- [x] Test login/logout cycle
+- [x] Verify user data persists after logout/login
