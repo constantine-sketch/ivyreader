@@ -161,3 +161,10 @@
 - [x] Implement logout functionality
 - [x] Test login/logout cycle
 - [x] Verify user data persists after logout/login
+
+
+## Social Proof
+
+- [x] Modify Society screen to show all users' posts (not just following)
+- [x] Update leaderboard to show all demo users
+- [x] Make social feed display global activity for social proof

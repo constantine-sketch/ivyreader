@@ -117,7 +117,7 @@ export const appRouter = router({
   }),
   
   social: router({
-    posts: protectedProcedure
+    posts: publicProcedure
       .input(z.object({ limit: z.number().default(20) }))
       .query(({ input }) => db.getSocialPosts(undefined, input.limit)),
     
@@ -148,7 +148,7 @@ export const appRouter = router({
         db.createComment({ ...input, userId: ctx.user.id })
       ),
     
-    leaderboard: protectedProcedure
+    leaderboard: publicProcedure
       .input(z.object({ limit: z.number().default(10) }))
       .query(({ input }) => db.getWeeklyLeaderboard(input.limit)),
     
