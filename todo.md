@@ -307,3 +307,8 @@
 - [x] Auto-fill book details when user selects from search results
 - [x] Update book database schema to store cover image URLs
 - [x] Add fallback to manual entry if book not found
+
+
+## Add Book Page Bug
+
+- [x] Fix text inputs not allowing typing on Add Book screen
