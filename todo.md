@@ -211,3 +211,13 @@
 - [x] Auto-update statistics after session logged
 - [x] Add Create Post button and modal
 - [x] Display reading notes on dashboard
+
+
+## Resume Reading Flow
+
+- [x] Create Reading Session screen with timer
+- [x] Add motivational quotes (Huberman/stoicism themed)
+- [x] Implement pause/resume functionality
+- [x] Implement end session button
+- [x] Connect to database to save session
+- [x] Test end-to-end flow
