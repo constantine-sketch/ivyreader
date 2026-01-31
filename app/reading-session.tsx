@@ -72,44 +72,21 @@ export default function ReadingSessionScreen() {
     return `${hours.toString().padStart(2, "0")}:${minutes.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
-  const handleEndSession = async () => {
+  const handleEndSession = () => {
     if (!book || startPage === null || currentPage === null) return;
 
-    setIsSaving(true);
-    try {
-      const durationMinutes = Math.round(seconds / 60);
-      const pagesRead = currentPage - startPage;
-
-      // Create session
-      await createSession.mutateAsync({
-        bookId: book.id,
-        startPage,
-        endPage: currentPage,
-        durationMinutes,
-      });
-
-      // Update book's current page
-      await updateBook.mutateAsync({
-        id: book.id,
-        currentPage,
-      });
-
-      // Navigate to post-session note page
-      router.push({
-        pathname: '/post-session-note',
-        params: {
-          bookId: book.id.toString(),
-          pagesRead: (currentPage - startPage).toString(),
-          bookTitle: book.title,
-          bookAuthor: book.author,
-          endPage: currentPage.toString(),
-        },
-      });
-    } catch (error) {
-      console.error("Failed to save session:", error);
-    } finally {
-      setIsSaving(false);
-    }
+    // Navigate to post-session page where user enters takeaways and confirms pages
+    router.push({
+      pathname: '/post-session-note',
+      params: {
+        bookId: book.id.toString(),
+        bookTitle: book.title,
+        bookAuthor: book.author,
+        startPage: startPage.toString(),
+        endPage: currentPage.toString(),
+        durationMinutes: Math.round(seconds / 60).toString(),
+      },
+    });
   };
 
   if (!book) {
@@ -183,28 +160,29 @@ export default function ReadingSessionScreen() {
 
           {/* Controls */}
           <View className="gap-3">
+            {/* Pause/Resume Button */}
             <Pressable
               onPress={() => setIsRunning(!isRunning)}
-              className="py-4 rounded-lg items-center"
-              style={{ backgroundColor: isRunning ? colors.muted : colors.primary }}
+              className="py-4 rounded-lg items-center border-2"
+              style={{ 
+                backgroundColor: isRunning ? 'transparent' : colors.primary,
+                borderColor: colors.primary,
+              }}
             >
-              <Text className="text-lg font-bold" style={{ color: colors.background }}>
-                {isRunning ? "⏸ Pause" : "▶ Resume"}
+              <Text className="text-lg font-bold" style={{ color: isRunning ? colors.primary : colors.background }}>
+                {isRunning ? "⏸ Pause Timer" : "▶ Resume Timer"}
               </Text>
             </Pressable>
 
+            {/* End Session Button */}
             <Pressable
               onPress={handleEndSession}
-              disabled={isSaving}
-              className="py-4 rounded-lg items-center bg-error"
+              className="py-4 rounded-lg items-center"
+              style={{ backgroundColor: colors.error }}
             >
-              {isSaving ? (
-                <ActivityIndicator size="small" color={colors.background} />
-              ) : (
-                <Text className="text-lg font-bold" style={{ color: colors.background }}>
-                  End Session
-                </Text>
-              )}
+              <Text className="text-lg font-bold" style={{ color: colors.background }}>
+                ✓ End Session & Add Takeaways
+              </Text>
             </Pressable>
           </View>
         </View>

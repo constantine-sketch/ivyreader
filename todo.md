@@ -229,3 +229,12 @@
 - [x] Create post-session note page
 - [x] Show pages read and book details on note page
 - [x] Connect note saving to database
+
+
+## Reading Session UX Improvements
+
+- [x] Differentiate pause button (temporary) from end session button (final)
+- [x] Update post-session page to show start page and end page inputs
+- [x] Add "Personal Takeaways" text area on post-session page
+- [x] Save session with user-entered page numbers
+- [ ] Test complete reading flow with new UX
