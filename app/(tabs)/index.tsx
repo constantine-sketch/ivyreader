@@ -42,11 +42,8 @@ export default function DashboardScreen() {
   const currentBook = books?.find(b => b.status === 'reading');
   const queueBooks = books?.filter(b => b.status === 'queue').slice(0, 3) || [];
   
-  // Fetch notes for current book (always call, gate with enabled)
-  const { data: notes = [] } = trpc.notes.listByBook.useQuery(
-    { bookId: currentBook?.id ?? 0 },
-    { enabled: !!currentBook }
-  );
+  // Skip fetching notes on dashboard to avoid hook count issues
+  const notes: any[] = [];
   
   // Calculate today's minutes from sessions
   const today = new Date();
