@@ -280,3 +280,8 @@
 
 - [x] Fix OAuth callback handling - users get stuck in loading after authentication on iOS
 - [x] Ensure callback URL properly redirects back to app after successful login
+
+
+## OAuth Redirect URI Fix
+
+- [x] Fix redirect URI to use custom app scheme (manus*) instead of Expo dev scheme (exp://)

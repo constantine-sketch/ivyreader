@@ -67,15 +67,15 @@ const encodeState = (value: string) => {
 /**
  * Get the redirect URI for OAuth callback.
  * - Web: uses API server callback endpoint
- * - Native: uses deep link scheme
+ * - Native: uses deep link scheme (manually constructed to avoid Expo dev scheme)
  */
 export const getRedirectUri = () => {
   if (ReactNative.Platform.OS === "web") {
     return `${getApiBaseUrl()}/api/oauth/callback`;
   } else {
-    return Linking.createURL("/oauth/callback", {
-      scheme: env.deepLinkScheme,
-    });
+    // Manually construct the redirect URI to ensure we use the custom scheme
+    // instead of Expo's dev scheme (exp://)
+    return `${env.deepLinkScheme}://oauth/callback`;
   }
 };
 
