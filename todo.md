@@ -329,3 +329,11 @@
 - [x] Add pull-to-refresh in Library tab
 - [x] Implement book editing functionality in Book Detail page
 - [x] Add edit button to Book Detail page
+
+
+## Add Book Page Redesign
+
+- [x] Change search to show dropdown results as user types
+- [x] Update placeholder to "Search our database"
+- [x] Keep manual entry section intact below search
+- [x] Remove search button, make it automatic dropdown

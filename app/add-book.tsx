@@ -16,95 +16,68 @@ import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 
-interface BookSearchResult {
-  id: string;
-  title: string;
-  author: string;
-  pageCount: number;
-  category: string;
-  coverUrl?: string;
-  description?: string;
-}
-
 export default function AddBookScreen() {
   const colors = useColors();
   const router = useRouter();
+  
   const [searchQuery, setSearchQuery] = useState("");
-  const [searchResults, setSearchResults] = useState<BookSearchResult[]>([]);
-  const [isSearching, setIsSearching] = useState(false);
-  const [selectedBook, setSelectedBook] = useState<BookSearchResult | null>(null);
+  const [showResults, setShowResults] = useState(false);
+  const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
+  const [totalPages, setTotalPages] = useState("");
+  const [category, setCategory] = useState("");
+  const [coverUrl, setCoverUrl] = useState("");
   const [isCreating, setIsCreating] = useState(false);
 
-  // Manual entry fields
-  const [manualTitle, setManualTitle] = useState("");
-  const [manualAuthor, setManualAuthor] = useState("");
-  const [manualPages, setManualPages] = useState("");
-  const [manualCategory, setManualCategory] = useState("");
+  // Search books with automatic query when user types
+  const { data: searchResults, isLoading: isSearching } = trpc.books.search.useQuery(
+    { query: searchQuery, maxResults: 10 },
+    { enabled: searchQuery.length >= 2 }
+  );
 
   const createBook = trpc.books.create.useMutation();
   const utils = trpc.useUtils();
 
-  const handleSearch = async () => {
-    if (!searchQuery.trim()) return;
-
-    Keyboard.dismiss();
-    setIsSearching(true);
-    setSelectedBook(null);
-
-    try {
-      const results = await utils.books.search.fetch({ query: searchQuery });
-      setSearchResults(results);
-    } catch (error) {
-      console.error("Search failed:", error);
-      alert("Failed to search books. Please try again.");
-    } finally {
-      setIsSearching(false);
-    }
+  const handleSearchChange = (text: string) => {
+    setSearchQuery(text);
+    setShowResults(text.length >= 2);
   };
 
-  const handleSelectBook = (book: BookSearchResult) => {
-    setSelectedBook(book);
-    setSearchResults([]);
+  const handleSelectBook = (book: any) => {
+    setTitle(book.title);
+    setAuthor(book.author);
+    setTotalPages(book.pageCount?.toString() || "");
+    setCategory(book.category || "");
+    setCoverUrl(book.coverUrl || "");
     setSearchQuery("");
+    setShowResults(false);
+    Keyboard.dismiss();
   };
 
-  const handleAddBook = async () => {
-    const bookData = selectedBook
-      ? {
-          title: selectedBook.title,
-          author: selectedBook.author,
-          totalPages: selectedBook.pageCount || 100,
-          category: selectedBook.category || "Uncategorized",
-          coverUrl: selectedBook.coverUrl,
-          status: "queue" as const,
-        }
-      : {
-          title: manualTitle,
-          author: manualAuthor,
-          totalPages: parseInt(manualPages) || 100,
-          category: manualCategory || "Uncategorized",
-          status: "queue" as const,
-        };
-
-    if (!bookData.title || !bookData.author) {
+  const handleCreate = async () => {
+    if (!title || !author) {
       alert("Please provide at least a title and author");
       return;
     }
 
     try {
       setIsCreating(true);
-      await createBook.mutateAsync(bookData);
-      
-      // Invalidate books list cache to trigger refresh
+      await createBook.mutateAsync({
+        title,
+        author,
+        totalPages: parseInt(totalPages) || 100,
+        category: category || "Uncategorized",
+        coverUrl: coverUrl || undefined,
+        status: "queue",
+      });
+
+      // Invalidate cache to trigger refresh
       await utils.books.list.invalidate();
-      
-      // Show success message
-      alert(`"${bookData.title}" added to your library!`);
-      
-      // Navigate back to Library
+
+      alert(`"${title}" added to your library!`);
       router.back();
     } catch (error) {
-      console.error("Failed to add book:", error);
+      console.error("Failed to create book:", error);
       alert("Failed to add book. Please try again.");
     } finally {
       setIsCreating(false);
@@ -123,299 +96,278 @@ export default function AddBookScreen() {
           keyboardShouldPersistTaps="handled"
         >
           <View className="flex-1">
-              {/* Header */}
-              <View className="mb-6">
-                <Text className="text-3xl font-bold text-foreground mb-2">Add a Book</Text>
-                <Text className="text-base text-muted">
-                  Search by title, author, or ISBN
-                </Text>
-              </View>
+            {/* Header */}
+            <View className="mb-6">
+              <Pressable
+                onPress={() => router.back()}
+                className="mb-4"
+                style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+              >
+                <Text className="text-sm" style={{ color: colors.primary }}>← Back</Text>
+              </Pressable>
+              
+              <Text className="text-3xl font-bold text-foreground mb-2">Add a Book</Text>
+              <Text className="text-base text-muted">
+                Search our database or add manually
+              </Text>
+            </View>
 
-              {/* Search Bar */}
-              <View className="mb-4">
-                <View className="flex-row gap-2">
-                  <TextInput
-                    placeholder="Search for a book..."
-                    placeholderTextColor={colors.muted}
-                    value={searchQuery}
-                    onChangeText={setSearchQuery}
-                    onSubmitEditing={handleSearch}
-                    returnKeyType="search"
-                    className="flex-1 p-4 rounded-lg text-foreground"
+            {/* Search Section */}
+            <View className="mb-6">
+              <Text className="text-sm font-semibold text-foreground mb-2">
+                Search Books
+              </Text>
+              <View className="relative">
+                <TextInput
+                  value={searchQuery}
+                  onChangeText={handleSearchChange}
+                  placeholder="Search our database"
+                  placeholderTextColor={colors.muted}
+                  returnKeyType="search"
+                  className="p-4 rounded-lg text-foreground"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    color: colors.foreground,
+                  }}
+                />
+                
+                {/* Search Results Dropdown */}
+                {showResults && (
+                  <View
+                    className="absolute top-full left-0 right-0 mt-2 rounded-lg overflow-hidden"
                     style={{
                       backgroundColor: colors.surface,
                       borderColor: colors.border,
                       borderWidth: 1,
-                      color: colors.foreground,
+                      maxHeight: 300,
+                      zIndex: 1000,
                     }}
-                  />
-                  <Pressable
-                    onPress={handleSearch}
-                    disabled={isSearching || !searchQuery.trim()}
-                    style={({ pressed }) => [
-                      {
-                        backgroundColor: colors.primary,
-                        paddingHorizontal: 20,
-                        borderRadius: 8,
-                        justifyContent: "center",
-                        opacity: pressed || isSearching || !searchQuery.trim() ? 0.7 : 1,
-                      },
-                    ]}
                   >
                     {isSearching ? (
-                      <ActivityIndicator color={colors.background} size="small" />
-                    ) : (
-                      <Text className="text-sm font-bold" style={{ color: colors.background }}>
-                        Search
-                      </Text>
-                    )}
-                  </Pressable>
-                </View>
-              </View>
-
-              {/* Search Results */}
-              {searchResults.length > 0 && (
-                <View className="mb-6">
-                  <Text className="text-sm font-semibold text-foreground mb-3">
-                    Search Results
-                  </Text>
-                  {searchResults.map((book) => (
-                    <Pressable
-                      key={book.id}
-                      onPress={() => handleSelectBook(book)}
-                      style={({ pressed }) => [
-                        {
-                          backgroundColor: colors.surface,
-                          borderColor: colors.border,
-                          borderWidth: 1,
-                          borderRadius: 12,
-                          padding: 12,
-                          marginBottom: 12,
-                          opacity: pressed ? 0.7 : 1,
-                        },
-                      ]}
-                    >
-                      <View className="flex-row gap-3">
-                        {book.coverUrl ? (
-                          <Image
-                            source={{ uri: book.coverUrl }}
-                            style={{
-                              width: 60,
-                              height: 90,
-                              borderRadius: 6,
-                              backgroundColor: colors.border,
-                            }}
-                            resizeMode="cover"
-                          />
-                        ) : (
-                          <View
-                            style={{
-                              width: 60,
-                              height: 90,
-                              borderRadius: 6,
-                              backgroundColor: colors.border,
-                              justifyContent: "center",
-                              alignItems: "center",
-                            }}
+                      <View className="p-4 items-center">
+                        <ActivityIndicator size="small" color={colors.primary} />
+                        <Text className="text-sm text-muted mt-2">Searching...</Text>
+                      </View>
+                    ) : searchResults && searchResults.length > 0 ? (
+                      <ScrollView showsVerticalScrollIndicator={false}>
+                        {searchResults.map((book, index) => (
+                          <Pressable
+                            key={index}
+                            onPress={() => handleSelectBook(book)}
+                            className="p-3 flex-row items-center"
+                            style={({ pressed }) => ({
+                              backgroundColor: pressed ? colors.border : 'transparent',
+                              borderBottomWidth: index < searchResults.length - 1 ? 1 : 0,
+                              borderBottomColor: colors.border,
+                            })}
                           >
-                            <Text className="text-2xl">📚</Text>
-                          </View>
-                        )}
-                        <View className="flex-1">
-                          <Text className="text-base font-bold text-foreground mb-1">
-                            {book.title}
-                          </Text>
-                          <Text className="text-sm text-muted mb-1">{book.author}</Text>
-                          <View className="flex-row gap-2">
-                            <Text className="text-xs text-muted">
-                              {book.pageCount} pages
-                            </Text>
-                            <Text className="text-xs text-muted">•</Text>
-                            <Text className="text-xs text-muted">{book.category}</Text>
-                          </View>
-                        </View>
-                      </View>
-                    </Pressable>
-                  ))}
-                </View>
-              )}
-
-              {/* Selected Book Preview */}
-              {selectedBook && (
-                <View className="mb-6">
-                  <Text className="text-sm font-semibold text-foreground mb-3">
-                    Selected Book
-                  </Text>
-                  <View
-                    className="p-4 rounded-xl"
-                    style={{ backgroundColor: colors.surface }}
-                  >
-                    <View className="flex-row gap-3 mb-3">
-                      {selectedBook.coverUrl ? (
-                        <Image
-                          source={{ uri: selectedBook.coverUrl }}
-                          style={{
-                            width: 80,
-                            height: 120,
-                            borderRadius: 8,
-                            backgroundColor: colors.border,
-                          }}
-                          resizeMode="cover"
-                        />
-                      ) : (
-                        <View
-                          style={{
-                            width: 80,
-                            height: 120,
-                            borderRadius: 8,
-                            backgroundColor: colors.border,
-                            justifyContent: "center",
-                            alignItems: "center",
-                          }}
-                        >
-                          <Text className="text-4xl">📚</Text>
-                        </View>
-                      )}
-                      <View className="flex-1">
-                        <Text className="text-lg font-bold text-foreground mb-1">
-                          {selectedBook.title}
+                            {book.coverUrl ? (
+                              <Image
+                                source={{ uri: book.coverUrl }}
+                                style={{
+                                  width: 40,
+                                  height: 60,
+                                  borderRadius: 4,
+                                  marginRight: 12,
+                                  backgroundColor: colors.border,
+                                }}
+                                resizeMode="cover"
+                              />
+                            ) : (
+                              <View
+                                style={{
+                                  width: 40,
+                                  height: 60,
+                                  borderRadius: 4,
+                                  marginRight: 12,
+                                  backgroundColor: colors.border,
+                                  alignItems: 'center',
+                                  justifyContent: 'center',
+                                }}
+                              >
+                                <Text style={{ fontSize: 20 }}>📚</Text>
+                              </View>
+                            )}
+                            <View className="flex-1">
+                              <Text className="text-sm font-bold text-foreground" numberOfLines={2}>
+                                {book.title}
+                              </Text>
+                              <Text className="text-xs text-muted" numberOfLines={1}>
+                                {book.author}
+                              </Text>
+                              {book.pageCount && (
+                                <Text className="text-xs text-muted">
+                                  {book.pageCount} pages
+                                </Text>
+                              )}
+                            </View>
+                          </Pressable>
+                        ))}
+                      </ScrollView>
+                    ) : (
+                      <View className="p-4">
+                        <Text className="text-sm text-muted text-center">
+                          No results found. Try a different search or add manually below.
                         </Text>
-                        <Text className="text-sm text-muted mb-2">
-                          {selectedBook.author}
-                        </Text>
-                        <View className="flex-row gap-2">
-                          <Text className="text-xs text-muted">
-                            {selectedBook.pageCount} pages
-                          </Text>
-                          <Text className="text-xs text-muted">•</Text>
-                          <Text className="text-xs text-muted">{selectedBook.category}</Text>
-                        </View>
                       </View>
-                    </View>
-                    {selectedBook.description && (
-                      <Text
-                        className="text-xs text-muted"
-                        numberOfLines={3}
-                        ellipsizeMode="tail"
-                      >
-                        {selectedBook.description}
-                      </Text>
                     )}
                   </View>
-                </View>
-              )}
-
-              {/* Manual Entry Fallback */}
-              {!selectedBook && searchResults.length === 0 && (
-                <View className="mb-6">
-                  <Text className="text-sm font-semibold text-foreground mb-3">
-                    Or Add Manually
-                  </Text>
-                  <View className="gap-3">
-                    <TextInput
-                      placeholder="Book Title"
-                      placeholderTextColor={colors.muted}
-                      value={manualTitle}
-                      onChangeText={setManualTitle}
-                      returnKeyType="next"
-                      className="p-4 rounded-lg text-foreground"
-                      style={{
-                        backgroundColor: colors.surface,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        color: colors.foreground,
-                      }}
-                    />
-                    <TextInput
-                      placeholder="Author"
-                      placeholderTextColor={colors.muted}
-                      value={manualAuthor}
-                      onChangeText={setManualAuthor}
-                      returnKeyType="next"
-                      className="p-4 rounded-lg text-foreground"
-                      style={{
-                        backgroundColor: colors.surface,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        color: colors.foreground,
-                      }}
-                    />
-                    <TextInput
-                      placeholder="Total Pages"
-                      placeholderTextColor={colors.muted}
-                      value={manualPages}
-                      onChangeText={setManualPages}
-                      keyboardType="number-pad"
-                      returnKeyType="next"
-                      className="p-4 rounded-lg text-foreground"
-                      style={{
-                        backgroundColor: colors.surface,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        color: colors.foreground,
-                      }}
-                    />
-                    <TextInput
-                      placeholder="Category (e.g., Fiction, Business)"
-                      placeholderTextColor={colors.muted}
-                      value={manualCategory}
-                      onChangeText={setManualCategory}
-                      returnKeyType="done"
-                      onSubmitEditing={Keyboard.dismiss}
-                      className="p-4 rounded-lg text-foreground"
-                      style={{
-                        backgroundColor: colors.surface,
-                        borderColor: colors.border,
-                        borderWidth: 1,
-                        color: colors.foreground,
-                      }}
-                    />
-                  </View>
-                </View>
-              )}
-
-              {/* Action Buttons */}
-              <View className="flex-row gap-3 mt-auto">
-                <Pressable
-                  onPress={() => router.back()}
-                  disabled={isCreating}
-                  className="flex-1 py-4 rounded-lg items-center"
-                  style={({ pressed }) => [
-                    {
-                      backgroundColor: colors.border,
-                      opacity: pressed ? 0.7 : 1,
-                    },
-                  ]}
-                >
-                  <Text className="text-sm font-bold text-foreground">Cancel</Text>
-                </Pressable>
-
-                <Pressable
-                  onPress={handleAddBook}
-                  disabled={isCreating || (!selectedBook && !manualTitle)}
-                  className="flex-1 py-4 rounded-lg items-center"
-                  style={({ pressed }) => [
-                    {
-                      backgroundColor: colors.primary,
-                      opacity:
-                        pressed || isCreating || (!selectedBook && !manualTitle)
-                          ? 0.7
-                          : 1,
-                    },
-                  ]}
-                >
-                  {isCreating ? (
-                    <ActivityIndicator color={colors.background} size="small" />
-                  ) : (
-                    <Text
-                      className="text-sm font-bold"
-                      style={{ color: colors.background }}
-                    >
-                      Add Book
-                    </Text>
-                  )}
-                </Pressable>
+                )}
               </View>
+            </View>
+
+            {/* Divider */}
+            <View className="flex-row items-center mb-6">
+              <View className="flex-1 h-px" style={{ backgroundColor: colors.border }} />
+              <Text className="text-xs text-muted mx-4">OR ADD MANUALLY</Text>
+              <View className="flex-1 h-px" style={{ backgroundColor: colors.border }} />
+            </View>
+
+            {/* Manual Entry Form */}
+            <View className="gap-4">
+              <View>
+                <Text className="text-sm font-semibold text-foreground mb-2">
+                  Title *
+                </Text>
+                <TextInput
+                  value={title}
+                  onChangeText={setTitle}
+                  placeholder="Enter book title"
+                  placeholderTextColor={colors.muted}
+                  returnKeyType="next"
+                  className="p-4 rounded-lg text-foreground"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    color: colors.foreground,
+                  }}
+                />
+              </View>
+
+              <View>
+                <Text className="text-sm font-semibold text-foreground mb-2">
+                  Author *
+                </Text>
+                <TextInput
+                  value={author}
+                  onChangeText={setAuthor}
+                  placeholder="Enter author name"
+                  placeholderTextColor={colors.muted}
+                  returnKeyType="next"
+                  className="p-4 rounded-lg text-foreground"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    color: colors.foreground,
+                  }}
+                />
+              </View>
+
+              <View>
+                <Text className="text-sm font-semibold text-foreground mb-2">
+                  Total Pages
+                </Text>
+                <TextInput
+                  value={totalPages}
+                  onChangeText={setTotalPages}
+                  placeholder="Enter total pages"
+                  placeholderTextColor={colors.muted}
+                  keyboardType="number-pad"
+                  returnKeyType="next"
+                  className="p-4 rounded-lg text-foreground"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    color: colors.foreground,
+                  }}
+                />
+              </View>
+
+              <View>
+                <Text className="text-sm font-semibold text-foreground mb-2">
+                  Category
+                </Text>
+                <TextInput
+                  value={category}
+                  onChangeText={setCategory}
+                  placeholder="e.g., Fiction, Business, Self-Help"
+                  placeholderTextColor={colors.muted}
+                  returnKeyType="next"
+                  className="p-4 rounded-lg text-foreground"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    color: colors.foreground,
+                  }}
+                />
+              </View>
+
+              <View>
+                <Text className="text-sm font-semibold text-foreground mb-2">
+                  Cover URL (Optional)
+                </Text>
+                <TextInput
+                  value={coverUrl}
+                  onChangeText={setCoverUrl}
+                  placeholder="Enter image URL"
+                  placeholderTextColor={colors.muted}
+                  returnKeyType="done"
+                  autoCapitalize="none"
+                  className="p-4 rounded-lg text-foreground"
+                  style={{
+                    backgroundColor: colors.surface,
+                    borderColor: colors.border,
+                    borderWidth: 1,
+                    color: colors.foreground,
+                  }}
+                />
+              </View>
+            </View>
+
+            {/* Action Buttons */}
+            <View className="flex-row gap-3 mt-8">
+              <Pressable
+                onPress={() => router.back()}
+                className="flex-1 py-4 rounded-lg items-center"
+                style={({ pressed }) => [
+                  {
+                    backgroundColor: colors.border,
+                    opacity: pressed ? 0.7 : 1,
+                  },
+                ]}
+              >
+                <Text className="text-sm font-bold text-foreground">Cancel</Text>
+              </Pressable>
+
+              <Pressable
+                onPress={handleCreate}
+                disabled={isCreating || !title || !author}
+                className="flex-1 py-4 rounded-lg items-center"
+                style={({ pressed }) => [
+                  {
+                    backgroundColor: colors.primary,
+                    opacity: pressed || isCreating || !title || !author ? 0.7 : 1,
+                  },
+                ]}
+              >
+                {isCreating ? (
+                  <ActivityIndicator color={colors.background} size="small" />
+                ) : (
+                  <Text
+                    className="text-sm font-bold"
+                    style={{ color: colors.background }}
+                  >
+                    Add to Library
+                  </Text>
+                )}
+              </Pressable>
+            </View>
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
