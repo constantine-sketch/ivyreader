@@ -182,3 +182,10 @@
 
 - [x] Fix logout button not working
 - [x] Ensure logout clears session and returns to login screen
+
+
+## Library Visibility
+
+- [x] Show demo books in Library when user has no books
+- [x] Test Add Book flow with Google Books API
+- [x] Verify books display with covers

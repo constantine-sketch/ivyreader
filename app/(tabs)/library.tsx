@@ -16,7 +16,14 @@ export default function LibraryScreen() {
 
   // Fetch real books from database
   const { data: allBooks, isLoading, refetch } = trpc.books.list.useQuery();
+  // Fetch demo books to show when user has no books
+  const { data: demoBooks } = trpc.books.demo.useQuery(undefined, {
+    enabled: !isLoading && (!allBooks || allBooks.length === 0)
+  });
   const createBook = trpc.books.create.useMutation();
+  
+  // Use demo books if user has no books
+  const booksToDisplay = (allBooks && allBooks.length > 0) ? allBooks : (demoBooks || []);
 
   if (isLoading) {
     return (
@@ -29,9 +36,9 @@ export default function LibraryScreen() {
   }
 
   // Filter books by status
-  const currentlyReading = allBooks?.filter(b => b.status === 'reading') || [];
-  const queueBooks = allBooks?.filter(b => b.status === 'queue') || [];
-  const archiveBooks = allBooks?.filter(b => b.status === 'completed') || [];
+  const currentlyReading = booksToDisplay?.filter(b => b.status === 'reading') || [];
+  const queueBooks = booksToDisplay?.filter(b => b.status === 'queue') || [];
+  const archiveBooks = booksToDisplay?.filter(b => b.status === 'completed') || [];
 
   const getActiveBooks = () => {
     switch (activeTab) {

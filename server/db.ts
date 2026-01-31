@@ -118,6 +118,13 @@ export async function getUserBooks(userId: number) {
   return db.select().from(books).where(eq(books.userId, userId)).orderBy(desc(books.updatedAt));
 }
 
+export async function getDemoBooks() {
+  const db = await getDb();
+  if (!db) return [];
+  // Get books from demo users (IDs 1-10) to show as examples
+  return db.select().from(books).where(sql`${books.userId} <= 10`).orderBy(desc(books.updatedAt)).limit(20);
+}
+
 export async function getBookById(bookId: number) {
   const db = await getDb();
   if (!db) return null;

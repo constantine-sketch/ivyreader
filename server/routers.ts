@@ -23,6 +23,9 @@ export const appRouter = router({
   books: router({
     list: protectedProcedure.query(({ ctx }) => db.getUserBooks(ctx.user.id)),
     
+    // Get demo books for users with no books (public for social proof)
+    demo: publicProcedure.query(() => db.getDemoBooks()),
+    
     get: protectedProcedure
       .input(z.object({ id: z.number() }))
       .query(({ input }) => db.getBookById(input.id)),
