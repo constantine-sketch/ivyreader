@@ -319,3 +319,13 @@
 - [x] Fix Add Book flow - books don't appear in Library after creation
 - [x] Ensure proper data refresh after adding a book
 - [x] Add success feedback when book is added
+
+
+## Book Covers & UI Enhancements
+
+- [x] Display book covers in Library tab
+- [x] Display book cover in dashboard current book card
+- [x] Display book covers in book picker modal
+- [x] Add pull-to-refresh in Library tab
+- [x] Implement book editing functionality in Book Detail page
+- [x] Add edit button to Book Detail page

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, ScrollView, Pressable, Dimensions, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, Pressable, Dimensions, ActivityIndicator, Image } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -179,11 +179,22 @@ export default function DashboardScreen() {
             >
               <View className="p-4 rounded-xl" style={{ backgroundColor: colors.surface }}>
                 <View className="flex-row mb-4">
-                  {/* Book Cover Placeholder */}
-                  <View 
-                    className="w-20 h-28 rounded-lg mr-4" 
-                    style={{ backgroundColor: colors.border }}
-                  />
+                  {/* Book Cover */}
+                  {currentBook.coverUrl ? (
+                    <Image
+                      source={{ uri: currentBook.coverUrl }}
+                      className="w-20 h-28 rounded-lg mr-4"
+                      style={{ backgroundColor: colors.border }}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View 
+                      className="w-20 h-28 rounded-lg mr-4 items-center justify-center" 
+                      style={{ backgroundColor: colors.border }}
+                    >
+                      <Text className="text-4xl">📚</Text>
+                    </View>
+                  )}
                   
                   <View className="flex-1">
                     <Text className="text-xs mb-1 tracking-wider" style={{ color: colors.primary }}>

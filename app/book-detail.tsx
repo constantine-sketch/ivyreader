@@ -55,13 +55,25 @@ export default function BookDetailScreen() {
     <ScreenContainer className="p-6">
       <ScrollView showsVerticalScrollIndicator={false}>
         {/* Header */}
-        <Pressable
-          onPress={() => router.back()}
-          className="mb-4"
-          style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
-        >
-          <Text className="text-sm" style={{ color: colors.primary }}>← Back</Text>
-        </Pressable>
+        <View className="flex-row items-center justify-between mb-4">
+          <Pressable
+            onPress={() => router.back()}
+            style={({ pressed }) => ({ opacity: pressed ? 0.6 : 1 })}
+          >
+            <Text className="text-sm" style={{ color: colors.primary }}>← Back</Text>
+          </Pressable>
+          
+          <Pressable
+            onPress={() => router.push(`/edit-book?bookId=${bookId}`)}
+            className="px-4 py-2 rounded-lg"
+            style={({ pressed }) => ({
+              backgroundColor: colors.primary,
+              opacity: pressed ? 0.8 : 1,
+            })}
+          >
+            <Text className="text-sm font-bold" style={{ color: colors.background }}>Edit</Text>
+          </Pressable>
+        </View>
         
         {/* Book Info */}
         <View className="mb-6">

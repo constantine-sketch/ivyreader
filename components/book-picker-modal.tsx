@@ -1,4 +1,4 @@
-import { Modal, View, Text, Pressable, ScrollView } from "react-native";
+import { Modal, View, Text, Pressable, ScrollView, Image } from "react-native";
 import { useColors } from "@/hooks/use-colors";
 
 interface Book {
@@ -8,6 +8,7 @@ interface Book {
   currentPage: number;
   totalPages: number;
   category?: string;
+  coverUrl?: string | null;
 }
 
 interface BookPickerModalProps {
@@ -79,6 +80,23 @@ export function BookPickerModal({ visible, books, onClose, onSelectBook }: BookP
                       ]}
                     >
                       <View className="flex-row items-start mb-2">
+                        {/* Book Cover */}
+                        {book.coverUrl ? (
+                          <Image
+                            source={{ uri: book.coverUrl }}
+                            className="w-16 h-24 rounded-lg mr-3"
+                            style={{ backgroundColor: colors.border }}
+                            resizeMode="cover"
+                          />
+                        ) : (
+                          <View 
+                            className="w-16 h-24 rounded-lg mr-3 items-center justify-center"
+                            style={{ backgroundColor: colors.border }}
+                          >
+                            <Text className="text-2xl">📚</Text>
+                          </View>
+                        )}
+                        
                         <View className="flex-1">
                           <Text className="text-sm font-bold text-foreground mb-1" numberOfLines={2}>
                             {book.title}

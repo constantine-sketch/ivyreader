@@ -92,6 +92,7 @@ export default function RootLayout() {
             <Stack.Screen name="post-session-note" />
             <Stack.Screen name="book-detail" />
             <Stack.Screen name="add-book" />
+            <Stack.Screen name="edit-book" />
           </Stack>
           <StatusBar style="auto" />
         </QueryClientProvider>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, Image } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, Image, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -13,9 +13,16 @@ export default function LibraryScreen() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('reading');
   const [searchQuery, setSearchQuery] = useState('');
+  const [refreshing, setRefreshing] = useState(false);
 
   // Fetch real books from database
   const { data: allBooks, isLoading, refetch } = trpc.books.list.useQuery();
+  
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetch();
+    setRefreshing(false);
+  };
   // Fetch demo books to show when user has no books
   const { data: demoBooks } = trpc.books.demo.useQuery(undefined, {
     enabled: !isLoading && (!allBooks || allBooks.length === 0)
@@ -145,7 +152,17 @@ export default function LibraryScreen() {
 
   return (
     <ScreenContainer>
-      <ScrollView className="flex-1 px-6 pt-6">
+      <ScrollView 
+        className="flex-1 px-6 pt-6"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+          />
+        }
+      >
         {/* Header */}
         <View className="mb-6">
           <View className="flex-row items-center justify-between mb-2">
