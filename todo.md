@@ -256,3 +256,10 @@
 - [x] Create session history view for each book
 - [x] Add notes/takeaways view for each book
 - [x] Integrate session and notes views into book detail page
+
+
+## Book Selection UX
+
+- [x] Create book picker modal component
+- [x] Add book picker to Resume Reading button on dashboard
+- [x] Allow users to select any book from library to start reading

@@ -5,6 +5,7 @@ import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { LogSessionModal } from "@/components/log-session-modal";
+import { BookPickerModal } from "@/components/book-picker-modal";
 import { 
   getGreeting,
   formatDate,
@@ -16,6 +17,7 @@ export default function DashboardScreen() {
   const screenWidth = Dimensions.get('window').width;
   const router = useRouter();
   const [showLogModal, setShowLogModal] = useState(false);
+  const [showBookPicker, setShowBookPicker] = useState(false);
   
   // Fetch real data from API
   const { data: stats, isLoading: statsLoading, refetch: refetchStats } = trpc.stats.get.useQuery();
@@ -232,7 +234,7 @@ export default function DashboardScreen() {
               {/* Action Buttons */}
               <View className="flex-row gap-2">
                 <Pressable 
-                  onPress={() => router.push(`/reading-session?bookId=${currentBook.id}`)}
+                  onPress={() => setShowBookPicker(true)}
                   className="flex-1 py-3 rounded-lg items-center"
                   style={({ pressed }) => [{ 
                     backgroundColor: colors.primary,
@@ -361,6 +363,16 @@ export default function DashboardScreen() {
           }}
         />
       )}
+
+      {/* Book Picker Modal */}
+      <BookPickerModal
+        visible={showBookPicker}
+        books={books || []}
+        onClose={() => setShowBookPicker(false)}
+        onSelectBook={(book) => {
+          router.push(`/reading-session?bookId=${book.id}`);
+        }}
+      />
     </ScreenContainer>
   );
 }
