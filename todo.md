@@ -189,3 +189,9 @@
 - [x] Show demo books in Library when user has no books
 - [x] Test Add Book flow with Google Books API
 - [x] Verify books display with covers
+
+
+## Bug Fixes
+
+- [x] Fix Google Books API search not returning results
+- [x] Debug AddBookModal search functionality

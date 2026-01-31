@@ -2,8 +2,10 @@
  * Google Books API Integration
  * 
  * Provides book search functionality using Google Books API.
- * No API key required for basic search (up to 1000 requests/day).
+ * Falls back to curated books database when API is unavailable.
  */
+
+import { searchCuratedBooks, type CuratedBook } from './curated-books';
 
 export interface GoogleBook {
   id: string;
@@ -62,15 +64,23 @@ export async function searchBooks(
 
     const response = await fetch(url);
     
+    // If API fails or quota exceeded, use curated books
     if (!response.ok) {
-      console.error("Google Books API error:", response.status, response.statusText);
-      return [];
+      console.log("Google Books API unavailable, using curated books");
+      return convertCuratedToGoogleBooks(searchCuratedBooks(query));
     }
 
     const data: GoogleBooksResponse = await response.json();
 
+    // Check if response has error (quota exceeded)
+    if ('error' in data) {
+      console.log("Google Books API quota exceeded, using curated books");
+      return convertCuratedToGoogleBooks(searchCuratedBooks(query));
+    }
+
     if (!data.items || data.items.length === 0) {
-      return [];
+      // No results from API, try curated books
+      return convertCuratedToGoogleBooks(searchCuratedBooks(query));
     }
 
     // Transform Google Books API response to our format
@@ -86,9 +96,29 @@ export async function searchBooks(
       publisher: item.volumeInfo.publisher,
     }));
   } catch (error) {
-    console.error("Error searching books:", error);
-    return [];
+    console.log("Error searching books, using curated books:", error);
+    return convertCuratedToGoogleBooks(searchCuratedBooks(query));
   }
+}
+
+/**
+ * Convert curated books to Google Books format
+ */
+function convertCuratedToGoogleBooks(curatedBooks: CuratedBook[]): GoogleBook[] {
+  return curatedBooks.map(book => ({
+    id: book.id,
+    title: book.title,
+    authors: [book.author],
+    description: book.description,
+    pageCount: book.totalPages,
+    categories: [book.category],
+    imageLinks: {
+      thumbnail: book.coverUrl,
+      smallThumbnail: book.coverUrl
+    },
+    publishedDate: undefined,
+    publisher: undefined
+  }));
 }
 
 /**
