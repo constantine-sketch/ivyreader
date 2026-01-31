@@ -221,3 +221,11 @@
 - [x] Implement end session button
 - [x] Connect to database to save session
 - [x] Test end-to-end flow
+
+
+## Bug Fixes & Enhancements
+
+- [x] Fix Resume Reading button not navigating
+- [x] Create post-session note page
+- [x] Show pages read and book details on note page
+- [x] Connect note saving to database

@@ -101,7 +101,19 @@ export default function DashboardScreen() {
             </Text>
           </View>
           <Pressable 
-            onPress={() => console.log('Resume Reading pressed')}
+            onPress={() => {
+              if (currentBook) {
+                router.push({
+                  pathname: '/reading-session',
+                  params: {
+                    bookId: currentBook.id.toString(),
+                    bookTitle: currentBook.title,
+                    bookAuthor: currentBook.author,
+                    currentPage: currentBook.currentPage.toString(),
+                  },
+                });
+              }
+            }}
             style={({ pressed }) => [{
               backgroundColor: colors.primary,
               opacity: pressed ? 0.8 : 1,

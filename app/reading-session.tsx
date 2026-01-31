@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { View, Text, Pressable, ScrollView, ActivityIndicator } from "react-native";
 import { useRouter, useLocalSearchParams } from "expo-router";
+import { useKeepAwake } from "expo-keep-awake";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
@@ -93,8 +94,17 @@ export default function ReadingSessionScreen() {
         currentPage,
       });
 
-      // Return to dashboard
-      router.back();
+      // Navigate to post-session note page
+      router.push({
+        pathname: '/post-session-note',
+        params: {
+          bookId: book.id.toString(),
+          pagesRead: (currentPage - startPage).toString(),
+          bookTitle: book.title,
+          bookAuthor: book.author,
+          endPage: currentPage.toString(),
+        },
+      });
     } catch (error) {
       console.error("Failed to save session:", error);
     } finally {
