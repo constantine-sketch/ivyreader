@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { View, Text, ScrollView, Pressable, Dimensions, ActivityIndicator } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
@@ -42,8 +42,11 @@ export default function DashboardScreen() {
   const currentBook = books?.find(b => b.status === 'reading');
   const queueBooks = books?.filter(b => b.status === 'queue').slice(0, 3) || [];
   
-  // Fetch notes for current book
-  const { data: notes } = currentBook ? trpc.notes.listByBook.useQuery({ bookId: currentBook.id }) : { data: [] };
+  // Fetch notes for current book (always call, gate with enabled)
+  const { data: notes = [] } = trpc.notes.listByBook.useQuery(
+    { bookId: currentBook?.id ?? 0 },
+    { enabled: !!currentBook }
+  );
   
   // Calculate today's minutes from sessions
   const today = new Date();
@@ -102,7 +105,9 @@ export default function DashboardScreen() {
           </View>
           <Pressable 
             onPress={() => {
+              console.log('Resume Reading pressed', currentBook);
               if (currentBook) {
+                console.log('Navigating to reading-session with bookId:', currentBook.id);
                 router.push({
                   pathname: '/reading-session',
                   params: {
@@ -112,6 +117,8 @@ export default function DashboardScreen() {
                     currentPage: currentBook.currentPage.toString(),
                   },
                 });
+              } else {
+                console.log('No current book found');
               }
             }}
             style={({ pressed }) => [{
