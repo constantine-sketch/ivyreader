@@ -312,3 +312,10 @@
 ## Add Book Page Bug
 
 - [x] Fix text inputs not allowing typing on Add Book screen
+
+
+## Add Book Flow Issue
+
+- [x] Fix Add Book flow - books don't appear in Library after creation
+- [x] Ensure proper data refresh after adding a book
+- [x] Add success feedback when book is added

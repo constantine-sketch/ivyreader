@@ -94,6 +94,14 @@ export default function AddBookScreen() {
     try {
       setIsCreating(true);
       await createBook.mutateAsync(bookData);
+      
+      // Invalidate books list cache to trigger refresh
+      await utils.books.list.invalidate();
+      
+      // Show success message
+      alert(`"${bookData.title}" added to your library!`);
+      
+      // Navigate back to Library
       router.back();
     } catch (error) {
       console.error("Failed to add book:", error);
