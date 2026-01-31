@@ -297,3 +297,13 @@
 
 - [x] Fix Save Session button not working on post-session page
 - [x] Fix keyboard not dismissing after text input on post-session page
+
+
+## Google Books API Integration
+
+- [x] Set up Google Books API backend endpoint for book search
+- [x] Create Add Book screen with search bar
+- [x] Display search results with book covers and metadata
+- [x] Auto-fill book details when user selects from search results
+- [x] Update book database schema to store cover image URLs
+- [x] Add fallback to manual entry if book not found

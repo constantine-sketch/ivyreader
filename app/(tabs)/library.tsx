@@ -1,18 +1,18 @@
 import { useState } from "react";
 import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, Image } from "react-native";
+import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
-import { AddBookModal } from "@/components/add-book-modal";
 import type { Book } from "@/lib/types";
 
 type TabType = 'reading' | 'queue' | 'archive';
 
 export default function LibraryScreen() {
   const colors = useColors();
+  const router = useRouter();
   const [activeTab, setActiveTab] = useState<TabType>('reading');
   const [searchQuery, setSearchQuery] = useState('');
-  const [showAddModal, setShowAddModal] = useState(false);
 
   // Fetch real books from database
   const { data: allBooks, isLoading, refetch } = trpc.books.list.useQuery();
@@ -151,7 +151,7 @@ export default function LibraryScreen() {
           <View className="flex-row items-center justify-between mb-2">
             <Text className="text-3xl font-bold text-foreground">My Library</Text>
             <Pressable
-              onPress={() => setShowAddModal(true)}
+              onPress={() => router.push("/add-book")}
               className="px-4 py-2 rounded-lg"
               style={({ pressed }) => ({
                 backgroundColor: colors.primary,
@@ -245,26 +245,6 @@ export default function LibraryScreen() {
           )}
         </View>
       </ScrollView>
-
-      {/* Add Book Modal */}
-      <AddBookModal
-        visible={showAddModal}
-        onClose={() => setShowAddModal(false)}
-        onBookAdded={async (book) => {
-          // Create book in database
-          await createBook.mutateAsync({
-            title: book.title,
-            author: book.author,
-            category: book.category,
-            totalPages: book.totalPages,
-            coverUrl: book.coverUrl,
-            status: book.status,
-          });
-          
-          // Refresh books list
-          await refetch();
-        }}
-      />
     </ScreenContainer>
   );
 }
