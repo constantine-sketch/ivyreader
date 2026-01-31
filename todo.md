@@ -269,3 +269,8 @@
 
 - [x] Move book picker to general Resume Reading button at top of dashboard
 - [x] Restore direct navigation for book card's Resume Reading button
+
+
+## Authentication UX
+
+- [x] Change OAuth login to use in-app browser (expo-web-browser) instead of external browser
