@@ -4,10 +4,12 @@ import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { useAuth } from "@/hooks/use-auth";
 import { formatDuration } from "@/lib/mock-data";
+import { router } from "expo-router";
 
 export default function ProfileScreen() {
   const colors = useColors();
-  const { user, logout } = useAuth();
+  const { logout } = useAuth();
+  const { data: user } = trpc.auth.me.useQuery();
   
   // Fetch real data from database
   const { data: stats, isLoading: statsLoading } = trpc.stats.get.useQuery();
@@ -148,6 +150,25 @@ export default function ProfileScreen() {
           <Text className="text-xl font-bold text-foreground mb-3">Settings</Text>
           
           <View className="rounded-2xl border" style={{ backgroundColor: colors.surface, borderColor: colors.border }}>
+            <Pressable
+              onPress={() => router.push('/subscription')}
+              className="flex-row justify-between items-center p-4 border-b"
+              style={({ pressed }) => [{ 
+                borderBottomColor: colors.border,
+                opacity: pressed ? 0.7 : 1
+              }]}
+            >
+              <View className="flex-row items-center gap-2">
+                <Text className="text-foreground">Subscription</Text>
+                <View className="px-2 py-0.5 rounded" style={{ backgroundColor: colors.primary + '20' }}>
+                  <Text className="text-xs font-semibold" style={{ color: colors.primary }}>
+                    {(user?.subscriptionTier || 'free').toUpperCase()}
+                  </Text>
+                </View>
+              </View>
+              <Text className="text-muted">›</Text>
+            </Pressable>
+            
             <Pressable
               onPress={() => console.log('Edit Profile')}
               className="flex-row justify-between items-center p-4 border-b"

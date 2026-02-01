@@ -15,6 +15,13 @@
       "when": 1769810948240,
       "tag": "0001_public_iron_lad",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1769989506744,
+      "tag": "0002_lucky_saracen",
+      "breakpoints": true
     }
   ]
 }

@@ -337,3 +337,17 @@
 - [x] Update placeholder to "Search our database"
 - [x] Keep manual entry section intact below search
 - [x] Remove search button, make it automatic dropdown
+
+
+## Subscription Tiers & Monetization
+
+- [x] Create subscription tier data model (Free, Premium, Elite)
+- [x] Add user subscription status to database schema
+- [x] Build subscription selection/upgrade screen
+- [x] Create feature comparison table UI
+- [ ] Add upgrade prompts/paywalls for premium features
+- [ ] Integrate Stripe Checkout for subscriptions
+- [ ] Set up Stripe webhook handlers for payment events
+- [ ] Add subscription management (upgrade/downgrade/cancel)
+- [ ] Implement feature gating based on tier
+- [x] Add subscription status to user profile
