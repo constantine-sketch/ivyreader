@@ -351,3 +351,10 @@
 - [ ] Add subscription management (upgrade/downgrade/cancel)
 - [ ] Implement feature gating based on tier
 - [x] Add subscription status to user profile
+
+
+## Subscription Page UX Fixes
+
+- [x] Add back button to subscription page header
+- [x] Add prominent "Upgrade to Premium" button to Profile page
+- [x] Ensure default subscription tier is 'free' for new users

@@ -75,6 +75,27 @@ export default function ProfileScreen() {
           </View>
         </View>
 
+        {/* Upgrade Button (only show if not on Elite tier) */}
+        {user?.subscriptionTier !== 'elite' && (
+          <View className="px-6 mb-6">
+            <Pressable
+              onPress={() => router.push('/subscription')}
+              className="py-4 rounded-2xl items-center"
+              style={({ pressed }) => [{
+                backgroundColor: colors.primary,
+                opacity: pressed ? 0.8 : 1
+              }]}
+            >
+              <Text className="text-lg font-bold" style={{ color: colors.background }}>
+                {user?.subscriptionTier === 'premium' ? 'Upgrade to Elite' : 'Upgrade to Premium'}
+              </Text>
+              <Text className="text-sm mt-1" style={{ color: colors.background, opacity: 0.9 }}>
+                Unlock all features and coaching
+              </Text>
+            </Pressable>
+          </View>
+        )}
+
         {/* Reading Statistics */}
         <View className="px-6 mb-6">
           <Text className="text-xl font-bold text-foreground mb-3">Reading Statistics</Text>

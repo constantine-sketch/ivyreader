@@ -1,8 +1,9 @@
-import { View, Text, ScrollView, Pressable, Alert } from "react-native";
+import { Text, View, ScrollView, Pressable, ActivityIndicator, TouchableOpacity, Alert } from "react-native";
 import { router } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 
 type SubscriptionTier = "free" | "premium" | "elite";
 
@@ -96,6 +97,18 @@ export default function SubscriptionScreen() {
   return (
     <ScreenContainer>
       <ScrollView className="flex-1 p-6">
+        {/* Back Button */}
+        <TouchableOpacity
+          onPress={() => router.back()}
+          className="mb-4 flex-row items-center"
+          style={{ opacity: 0.8 }}
+        >
+          <IconSymbol name="chevron.left" size={24} color={colors.foreground} />
+          <Text className="text-base ml-1" style={{ color: colors.foreground }}>
+            Back
+          </Text>
+        </TouchableOpacity>
+
         <View className="mb-6">
           <Text className="text-3xl font-bold text-foreground mb-2">
             Choose Your Plan
