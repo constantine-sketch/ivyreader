@@ -399,3 +399,20 @@
 - [x] Verify Google Books API integration is working correctly
 - [x] Test book search functionality
 - [x] Fix any issues with book data retrieval
+
+
+## Comment Flow Implementation
+
+- [x] Create CommentModal component for writing comments
+- [x] Create CommentThreadView component for displaying all comments on a post
+- [x] Connect comment button to open CommentModal
+- [x] Implement comment submission with database save
+- [x] Display user names and timestamps in comment threads
+- [x] Add pull-to-refresh for comment threads
+
+## Book Search API Issues
+
+- [x] Debug Google Books API rate limiting issues (confirmed 429 errors)
+- [ ] Research Amazon Product Advertising API as alternative (requires approval)
+- [x] Consider Open Library API as free alternative
+- [x] Implement Open Library API as primary book search (no rate limits)

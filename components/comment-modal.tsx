@@ -1,0 +1,192 @@
+import React, { useState } from "react";
+import {
+  View,
+  Text,
+  Modal,
+  Pressable,
+  TextInput,
+  ScrollView,
+  KeyboardAvoidingView,
+  Platform,
+  ActivityIndicator,
+} from "react-native";
+import { useColors } from "@/hooks/use-colors";
+import { trpc } from "@/lib/trpc";
+import { formatTimeAgo } from "@/lib/mock-data";
+
+interface CommentModalProps {
+  visible: boolean;
+  postId: number;
+  onClose: () => void;
+}
+
+export function CommentModal({ visible, postId, onClose }: CommentModalProps) {
+  const colors = useColors();
+  const [commentText, setCommentText] = useState("");
+
+  // Fetch comments for this post
+  const { data: comments, isLoading, refetch } = trpc.social.comments.useQuery(
+    { postId },
+    { enabled: visible }
+  );
+
+  // Mutation for creating comment
+  const createComment = trpc.social.createComment.useMutation();
+
+  const getInitials = (name: string): string => {
+    return name
+      .split(" ")
+      .map((n) => n[0])
+      .join("")
+      .toUpperCase()
+      .slice(0, 2);
+  };
+
+  const handleSubmitComment = async () => {
+    if (!commentText.trim()) return;
+
+    try {
+      await createComment.mutateAsync({
+        postId,
+        content: commentText.trim(),
+      });
+      setCommentText("");
+      await refetch();
+    } catch (error) {
+      console.error("Failed to create comment:", error);
+    }
+  };
+
+  return (
+    <Modal
+      visible={visible}
+      animationType="slide"
+      transparent={true}
+      onRequestClose={onClose}
+    >
+      <KeyboardAvoidingView
+        behavior={Platform.OS === "ios" ? "padding" : "height"}
+        className="flex-1"
+      >
+        <View
+          className="flex-1 justify-end"
+          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        >
+          <Pressable className="flex-1" onPress={onClose} />
+
+          <View
+            className="rounded-t-3xl"
+            style={{
+              backgroundColor: colors.background,
+              maxHeight: "80%",
+            }}
+          >
+            {/* Header */}
+            <View
+              className="flex-row justify-between items-center p-4 border-b"
+              style={{ borderBottomColor: colors.border }}
+            >
+              <Text className="text-xl font-bold text-foreground">Comments</Text>
+              <Pressable onPress={onClose}>
+                <Text className="text-lg" style={{ color: colors.primary }}>
+                  Done
+                </Text>
+              </Pressable>
+            </View>
+
+            {/* Comments List */}
+            <ScrollView className="flex-1 p-4">
+              {isLoading ? (
+                <View className="items-center justify-center py-8">
+                  <ActivityIndicator size="large" color={colors.primary} />
+                </View>
+              ) : comments && comments.length > 0 ? (
+                comments.map((comment: any) => (
+                  <View key={comment.id} className="mb-4">
+                    <View className="flex-row items-start">
+                      <View
+                        className="w-8 h-8 rounded-full items-center justify-center mr-3"
+                        style={{ backgroundColor: colors.primary }}
+                      >
+                        <Text
+                          className="text-xs font-bold"
+                          style={{ color: colors.background }}
+                        >
+                          {getInitials(comment.userName || "U")}
+                        </Text>
+                      </View>
+                      <View className="flex-1">
+                        <View className="flex-row items-center mb-1">
+                          <Text className="text-sm font-bold text-foreground mr-2">
+                            {comment.userName || "User"}
+                          </Text>
+                          <Text className="text-xs text-muted">
+                            {formatTimeAgo(new Date(comment.createdAt))}
+                          </Text>
+                        </View>
+                        <Text className="text-sm text-foreground leading-relaxed">
+                          {comment.content}
+                        </Text>
+                      </View>
+                    </View>
+                  </View>
+                ))
+              ) : (
+                <View className="items-center justify-center py-8">
+                  <Text className="text-muted">No comments yet. Be the first!</Text>
+                </View>
+              )}
+            </ScrollView>
+
+            {/* Comment Input */}
+            <View
+              className="p-4 border-t"
+              style={{ borderTopColor: colors.border }}
+            >
+              <View className="flex-row items-end gap-2">
+                <TextInput
+                  placeholder="Write a comment..."
+                  placeholderTextColor={colors.muted}
+                  value={commentText}
+                  onChangeText={setCommentText}
+                  multiline
+                  maxLength={500}
+                  className="flex-1 p-3 rounded-xl"
+                  style={{
+                    backgroundColor: colors.surface,
+                    color: colors.foreground,
+                    maxHeight: 100,
+                  }}
+                />
+                <Pressable
+                  onPress={handleSubmitComment}
+                  disabled={!commentText.trim() || createComment.isPending}
+                  className="px-4 py-3 rounded-xl"
+                  style={({ pressed }) => [
+                    {
+                      backgroundColor: commentText.trim()
+                        ? colors.primary
+                        : colors.border,
+                      opacity: pressed ? 0.7 : 1,
+                    },
+                  ]}
+                >
+                  {createComment.isPending ? (
+                    <ActivityIndicator size="small" color={colors.background} />
+                  ) : (
+                    <Text
+                      className="font-bold"
+                      style={{ color: colors.background }}
+                    >
+                      Post
+                    </Text>
+                  )}
+                </Pressable>
+              </View>
+            </View>
+          </View>
+        </View>
+      </KeyboardAvoidingView>
+    </Modal>
+  );
+}

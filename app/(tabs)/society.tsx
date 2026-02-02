@@ -5,6 +5,7 @@ import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { formatTimeAgo } from "@/lib/mock-data";
 import { CreatePostModal } from "@/components/create-post-modal";
+import { CommentModal } from "@/components/comment-modal";
 
 type FeedTab = 'following' | 'global';
 
@@ -13,6 +14,7 @@ export default function SocietyScreen() {
   const [activeTab, setActiveTab] = useState<FeedTab>('global');
   const [postContent, setPostContent] = useState('');
   const [showCreatePost, setShowCreatePost] = useState(false);
+  const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
 
   // Fetch real data from database
   const { data: posts, isLoading: postsLoading, refetch: refetchPosts } = trpc.social.posts.useQuery({ limit: 20 });
@@ -222,7 +224,7 @@ export default function SocietyScreen() {
                   </Pressable>
 
                   <Pressable
-                    onPress={() => console.log('Comment on post:', item.post.id)}
+                    onPress={() => setSelectedPostId(item.post.id)}
                     className="flex-row items-center"
                     style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
                   >
@@ -271,6 +273,18 @@ export default function SocietyScreen() {
         }}
         books={books?.filter(b => b.status === 'reading') || []}
       />
+      
+      {/* Comment Modal */}
+      {selectedPostId && (
+        <CommentModal
+          visible={selectedPostId !== null}
+          postId={selectedPostId}
+          onClose={() => {
+            setSelectedPostId(null);
+            refetchPosts(); // Refresh to update comment counts
+          }}
+        />
+      )}
     </ScreenContainer>
   );
 }

@@ -321,7 +321,21 @@ export async function likePost(postId: number, userId: number) {
 export async function getPostComments(postId: number) {
   const db = await getDb();
   if (!db) return [];
-  return db.select().from(postComments).where(eq(postComments.postId, postId)).orderBy(desc(postComments.createdAt));
+  
+  const comments = await db.select({
+    id: postComments.id,
+    postId: postComments.postId,
+    userId: postComments.userId,
+    content: postComments.content,
+    createdAt: postComments.createdAt,
+    userName: users.name,
+  })
+  .from(postComments)
+  .leftJoin(users, eq(postComments.userId, users.id))
+  .where(eq(postComments.postId, postId))
+  .orderBy(desc(postComments.createdAt));
+  
+  return comments;
 }
 
 export async function createComment(data: InsertPostComment) {

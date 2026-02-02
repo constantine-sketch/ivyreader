@@ -4,7 +4,7 @@ import { getSessionCookieOptions } from "./_core/cookies";
 import { systemRouter } from "./_core/systemRouter";
 import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import * as db from "./db";
-import { searchBooks } from "./lib/google-books";
+import { searchBooks } from "./lib/open-library";
 
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
@@ -27,7 +27,7 @@ export const appRouter = router({
     // Get demo books for users with no books (public for social proof)
     demo: publicProcedure.query(() => db.getDemoBooks()),
     
-    // Search books using Google Books API
+    // Search books using Open Library API
     search: publicProcedure
       .input(z.object({ 
         query: z.string().min(1),
