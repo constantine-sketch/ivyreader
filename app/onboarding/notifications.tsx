@@ -72,6 +72,9 @@ export default function NotificationsScreen() {
       // Invalidate user query to refresh auth state with updated onboarding status
       await utils.auth.me.invalidate();
 
+      // Wait for query to refetch before navigating
+      await new Promise(resolve => setTimeout(resolve, 500));
+
       // Navigate to main app
       router.replace("/(tabs)");
     } catch (error) {
