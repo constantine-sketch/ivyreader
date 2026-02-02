@@ -104,8 +104,8 @@ export function CommentModal({ visible, postId, onClose }: CommentModalProps) {
         
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
-          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
-          style={{ maxHeight: "85%" }}
+          keyboardVerticalOffset={0}
+          style={{ flex: 1, maxHeight: "90%" }}
         >
           <View
             className="rounded-t-3xl flex-1"

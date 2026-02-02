@@ -464,3 +464,17 @@
 - [x] Implement delete post flow (user's own posts only, long press in Society feed)
 - [x] Add delete post API endpoint
 - [x] Add confirmation dialogs for all delete actions
+
+
+## Keyboard and Input Fixes
+
+- [x] Fix Society tab publish input keyboard getting stuck
+- [x] Fix comment modal textbar being out of view when keyboard opens
+- [x] Ensure proper KeyboardAvoidingView behavior across all input fields
+
+## Add Book Status Selection
+
+- [x] Add status picker (Reading/Queue/Archive) to Add Book page
+- [x] Set default status to "Queue"
+- [x] Update book creation to use selected status
+- [x] Add visual indicator for selected status

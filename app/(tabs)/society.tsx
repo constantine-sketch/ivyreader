@@ -146,6 +146,8 @@ export default function SocietyScreen() {
               onChangeText={setPostContent}
               multiline
               numberOfLines={3}
+              returnKeyType="done"
+              blurOnSubmit={true}
               className="mb-3"
               style={{ 
                 color: colors.foreground,

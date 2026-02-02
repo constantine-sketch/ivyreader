@@ -27,6 +27,7 @@ export default function AddBookScreen() {
   const [totalPages, setTotalPages] = useState("");
   const [category, setCategory] = useState("");
   const [coverUrl, setCoverUrl] = useState("");
+  const [status, setStatus] = useState<"reading" | "queue" | "completed">("queue");
   const [isCreating, setIsCreating] = useState(false);
 
   // Search books with automatic query when user types
@@ -68,7 +69,7 @@ export default function AddBookScreen() {
         totalPages: parseInt(totalPages) || 100,
         category: category || "Uncategorized",
         coverUrl: coverUrl || undefined,
-        status: "queue",
+        status,
       });
 
       // Invalidate cache to trigger refresh
@@ -326,6 +327,68 @@ export default function AddBookScreen() {
                     color: colors.foreground,
                   }}
                 />
+              </View>
+              
+              {/* Status Selection */}
+              <View>
+                <Text className="text-sm font-semibold text-foreground mb-3">
+                  Add to
+                </Text>
+                <View className="flex-row gap-3">
+                  <Pressable
+                    onPress={() => setStatus("reading")}
+                    className="flex-1 py-3 px-4 rounded-lg items-center"
+                    style={({ pressed }) => [{
+                      backgroundColor: status === "reading" ? colors.primary : colors.surface,
+                      borderColor: status === "reading" ? colors.primary : colors.border,
+                      borderWidth: 1,
+                      opacity: pressed ? 0.7 : 1,
+                    }]}
+                  >
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: status === "reading" ? colors.background : colors.foreground }}
+                    >
+                      📖 Reading
+                    </Text>
+                  </Pressable>
+                  
+                  <Pressable
+                    onPress={() => setStatus("queue")}
+                    className="flex-1 py-3 px-4 rounded-lg items-center"
+                    style={({ pressed }) => [{
+                      backgroundColor: status === "queue" ? colors.primary : colors.surface,
+                      borderColor: status === "queue" ? colors.primary : colors.border,
+                      borderWidth: 1,
+                      opacity: pressed ? 0.7 : 1,
+                    }]}
+                  >
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: status === "queue" ? colors.background : colors.foreground }}
+                    >
+                      📚 Queue
+                    </Text>
+                  </Pressable>
+                  
+                  <Pressable
+                    onPress={() => setStatus("completed")}
+                    className="flex-1 py-3 px-4 rounded-lg items-center"
+                    style={({ pressed }) => [{
+                      backgroundColor: status === "completed" ? colors.primary : colors.surface,
+                      borderColor: status === "completed" ? colors.primary : colors.border,
+                      borderWidth: 1,
+                      opacity: pressed ? 0.7 : 1,
+                    }]}
+                  >
+                    <Text
+                      className="text-sm font-semibold"
+                      style={{ color: status === "completed" ? colors.background : colors.foreground }}
+                    >
+                      ✅ Archive
+                    </Text>
+                  </Pressable>
+                </View>
               </View>
             </View>
 
