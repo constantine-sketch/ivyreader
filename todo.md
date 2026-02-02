@@ -416,3 +416,11 @@
 - [ ] Research Amazon Product Advertising API as alternative (requires approval)
 - [x] Consider Open Library API as free alternative
 - [x] Implement Open Library API as primary book search (no rate limits)
+
+
+## Book Search UI Fix
+
+- [x] Fix search results layout to prevent overlapping with manual entry form
+- [x] Add proper spacing and visual separation between search results and manual entry
+- [x] Style search result cards with proper layout (cover, title, author)
+- [x] Add clear "OR ADD MANUALLY" divider between sections

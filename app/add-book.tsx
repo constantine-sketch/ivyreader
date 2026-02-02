@@ -117,34 +117,34 @@ export default function AddBookScreen() {
               <Text className="text-sm font-semibold text-foreground mb-2">
                 Search Books
               </Text>
-              <View className="relative">
-                <TextInput
-                  value={searchQuery}
-                  onChangeText={handleSearchChange}
-                  placeholder="Search our database"
-                  placeholderTextColor={colors.muted}
-                  returnKeyType="search"
-                  className="p-4 rounded-lg text-foreground"
+              <TextInput
+                value={searchQuery}
+                onChangeText={handleSearchChange}
+                placeholder="Search our database"
+                placeholderTextColor={colors.muted}
+                returnKeyType="search"
+                className="p-4 rounded-lg text-foreground"
+                style={{
+                  backgroundColor: colors.surface,
+                  borderColor: colors.border,
+                  borderWidth: 1,
+                  color: colors.foreground,
+                }}
+              />
+            </View>
+            
+            {/* Search Results */}
+            {showResults && (
+              <View className="mb-6">
+                <View
+                  className="rounded-lg overflow-hidden"
                   style={{
                     backgroundColor: colors.surface,
                     borderColor: colors.border,
                     borderWidth: 1,
-                    color: colors.foreground,
+                    maxHeight: 300,
                   }}
-                />
-                
-                {/* Search Results Dropdown */}
-                {showResults && (
-                  <View
-                    className="absolute top-full left-0 right-0 mt-2 rounded-lg overflow-hidden"
-                    style={{
-                      backgroundColor: colors.surface,
-                      borderColor: colors.border,
-                      borderWidth: 1,
-                      maxHeight: 300,
-                      zIndex: 1000,
-                    }}
-                  >
+                >
                     {isSearching ? (
                       <View className="p-4 items-center">
                         <ActivityIndicator size="small" color={colors.primary} />
@@ -213,10 +213,9 @@ export default function AddBookScreen() {
                         </Text>
                       </View>
                     )}
-                  </View>
-                )}
+                </View>
               </View>
-            </View>
+            )}
 
             {/* Divider */}
             <View className="flex-row items-center mb-6">
