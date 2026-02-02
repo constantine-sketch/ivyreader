@@ -556,3 +556,10 @@
 - [x] Remove colored background from delete button
 - [x] Make delete button smaller and more subtle (plain × text)
 - [x] Verify confirmation dialog works on button press
+
+
+## Up Next Image Bug Fix
+
+- [x] Fix book cover images in Up Next section displaying with incorrect aspect ratios
+- [x] Ensure all book covers show properly (no blank gray boxes)
+- [x] Make cover images consistent size and properly scaled

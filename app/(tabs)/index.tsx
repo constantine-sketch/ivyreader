@@ -307,26 +307,41 @@ export default function DashboardScreen() {
         {queueBooks.length > 0 && (
           <View className="px-6 mb-6">
             <Text className="text-xl font-bold text-foreground mb-3">Up Next</Text>
-            <View className="flex-row gap-3">
+            <ScrollView horizontal showsHorizontalScrollIndicator={false} className="-mx-6 px-6">
+              <View className="flex-row gap-3">
               {queueBooks.map((book, index) => (
                 <Pressable 
                   key={book.id}
                   onPress={() => router.push(`/reading-session?bookId=${book.id}`)}
-                  className="flex-1 p-3 rounded-xl" 
+                  className="p-3 rounded-xl"
                   style={({ pressed }) => [{
                     backgroundColor: colors.surface,
-                    opacity: pressed ? 0.7 : 1
+                    opacity: pressed ? 0.7 : 1,
+                    width: 140,
                   }]}
                 >
                   {book.coverUrl ? (
                     <Image
                       source={{ uri: book.coverUrl }}
-                      className="w-full aspect-[2/3] rounded-lg mb-2"
-                      style={{ backgroundColor: colors.border }}
+                      style={{ 
+                        width: 116,
+                        height: 174,
+                        borderRadius: 8,
+                        marginBottom: 8,
+                        backgroundColor: colors.border 
+                      }}
                       resizeMode="cover"
                     />
                   ) : (
-                    <View className="w-full aspect-[2/3] rounded-lg mb-2 items-center justify-center" style={{ backgroundColor: colors.border }}>
+                    <View style={{ 
+                      width: 116,
+                      height: 174,
+                      borderRadius: 8,
+                      marginBottom: 8,
+                      backgroundColor: colors.border,
+                      alignItems: 'center',
+                      justifyContent: 'center'
+                    }}>
                       <Text style={{ fontSize: 32 }}>📚</Text>
                     </View>
                   )}
@@ -341,7 +356,8 @@ export default function DashboardScreen() {
                   </Text>
                 </Pressable>
               ))}
-            </View>
+              </View>
+            </ScrollView>
           </View>
         )}
 
