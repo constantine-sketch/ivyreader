@@ -212,6 +212,12 @@ export const appRouter = router({
       }))
       .mutation(({ ctx, input }) => db.updateUserProfile(ctx.user.id, input)),
     
+    updateSubscriptionTier: protectedProcedure
+      .input(z.object({
+        subscriptionTier: z.enum(["free", "premium", "elite"]),
+      }))
+      .mutation(({ ctx, input }) => db.updateUserSubscriptionTier(ctx.user.id, input.subscriptionTier)),
+    
     updateOnboarding: protectedProcedure
       .input(z.object({
         onboardingCompleted: z.boolean().optional(),

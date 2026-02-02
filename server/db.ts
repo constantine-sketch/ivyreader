@@ -580,6 +580,16 @@ export async function getFollowingCount(userId: number) {
 }
 
 
+export async function updateUserSubscriptionTier(
+  userId: number,
+  tier: 'free' | 'premium' | 'elite'
+) {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.update(users).set({ subscriptionTier: tier }).where(eq(users.id, userId));
+}
+
 export async function updateUserProfile(
   userId: number,
   data: {

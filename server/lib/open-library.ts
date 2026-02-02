@@ -29,7 +29,7 @@ export interface BookSearchResult {
   id: string;
   title: string;
   author: string;
-  pageCount: number;
+  totalPages: number;
   category: string;
   coverUrl?: string;
   description?: string;
@@ -80,8 +80,8 @@ export async function searchBooks(
         id: item.key,
         title: item.title || "Unknown Title",
         author: item.author_name?.join(", ") || "Unknown Author",
-        pageCount: item.number_of_pages_median || 0,
-        category: item.subject?.[0] || "Uncategorized",
+        totalPages: item.number_of_pages_median || 250, // Default to 250 if not available
+        category: item.subject?.[0] || "General",
         coverUrl,
         description: undefined, // Open Library search doesn't include descriptions
       };
@@ -122,8 +122,8 @@ export async function getBookDetails(workKey: string): Promise<BookSearchResult 
       id: data.key,
       title: data.title || "Unknown Title",
       author: data.authors?.map((a: any) => a.name).join(", ") || "Unknown Author",
-      pageCount: 0, // Work endpoint doesn't include page count
-      category: data.subjects?.[0] || "Uncategorized",
+      totalPages: 250, // Work endpoint doesn't include page count, use default
+      category: data.subjects?.[0] || "General",
       coverUrl,
       description: typeof data.description === 'string' 
         ? data.description 

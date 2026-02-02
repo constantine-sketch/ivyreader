@@ -614,3 +614,22 @@
 - [x] Ensure notification preferences are saved to user settings
 - [ ] Test complete data flow from onboarding to main app
 - [ ] Verify all onboarding data appears correctly in dashboard, library, and profile
+
+## Book Search & Marketing Integration
+
+- [ ] Debug book search not returning results in onboarding
+- [ ] Fix Open Library API integration
+- [ ] Implement deep linking to receive subscription tier from marketing website
+- [ ] Update onboarding flow to set user tier from deep link parameters
+- [ ] Test complete flow: marketing website → payment → deep link → app with correct tier
+
+## Completed: Book Search & Marketing Integration
+
+- [x] Debug book search not returning results in onboarding (fixed totalPages field name)
+- [x] Fix Open Library API integration (returns proper book data with defaults)
+- [x] Implement deep linking to receive subscription tier from marketing website
+- [x] Create purchase-complete deep link handler
+- [x] Add updateSubscriptionTier API endpoint
+- [x] Create MARKETING_INTEGRATION.md guide for marketing team
+- [x] Update onboarding flow to work with tier from deep link
+- [ ] Test complete flow: marketing website → payment → deep link → app with correct tier (ready for testing)

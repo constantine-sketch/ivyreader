@@ -47,7 +47,7 @@ export default function AddBookScreen() {
   const handleSelectBook = (book: any) => {
     setTitle(book.title);
     setAuthor(book.author);
-    setTotalPages(book.pageCount?.toString() || "");
+    setTotalPages(book.totalPages?.toString() || "");
     setCategory(book.category || "");
     setCoverUrl(book.coverUrl || "");
     setSearchQuery("");
@@ -198,9 +198,9 @@ export default function AddBookScreen() {
                               <Text className="text-xs text-muted" numberOfLines={1}>
                                 {book.author}
                               </Text>
-                              {book.pageCount && (
+                              {book.totalPages && (
                                 <Text className="text-xs text-muted">
-                                  {book.pageCount} pages
+                                  {book.totalPages} pages
                                 </Text>
                               )}
                             </View>
