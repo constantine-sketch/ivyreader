@@ -79,13 +79,22 @@ export default function ProfileScreen() {
               className="w-24 h-24 rounded-full items-center justify-center mb-4"
               style={{ backgroundColor: colors.primary }}
             >
-              <Text className="text-4xl font-bold" style={{ color: colors.background }}>
-                {user?.name ? getInitials(user.name) : 'U'}
-              </Text>
+              {user?.avatar ? (
+                <Text style={{ fontSize: 48 }}>{user.avatar}</Text>
+              ) : (
+                <Text className="text-4xl font-bold" style={{ color: colors.background }}>
+                  {user?.name ? getInitials(user.name) : 'U'}
+                </Text>
+              )}
             </View>
             <Text className="text-2xl font-bold text-foreground mb-1">
               {user?.name || 'User'}
             </Text>
+            {user?.username && (
+              <Text className="text-sm text-muted mb-2">
+                @{user.username}
+              </Text>
+            )}
             <View className="px-3 py-1 rounded-full" style={{ backgroundColor: colors.primary + '20' }}>
               <Text className="text-xs font-semibold" style={{ color: colors.primary }}>
                 {focusScore > 90 ? 'Top 1% Reader' : focusScore > 75 ? 'Top 5% Reader' : 'Active Reader'}

@@ -50,7 +50,7 @@ export default function WelcomeScreen() {
 
         {/* Get Started Button */}
         <TouchableOpacity
-          onPress={() => router.push("/onboarding/goals")}
+          onPress={() => router.push("/onboarding/profile")}
           className="mt-8 w-full rounded-full py-4 px-8"
           style={{ backgroundColor: colors.primary }}
         >

@@ -84,6 +84,7 @@ export default function NotificationsScreen() {
           <View className="flex-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
           <View className="flex-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
           <View className="flex-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
+          <View className="flex-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
         </View>
 
         {/* Icon */}

@@ -43,6 +43,13 @@
       "when": 1770007276480,
       "tag": "0005_exotic_james_howlett",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "5",
+      "when": 1770008357989,
+      "tag": "0006_fantastic_sentinels",
+      "breakpoints": true
     }
   ]
 }

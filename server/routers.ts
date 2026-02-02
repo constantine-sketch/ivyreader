@@ -204,6 +204,14 @@ export const appRouter = router({
   }),
   
   user: router({
+    updateProfile: protectedProcedure
+      .input(z.object({
+        name: z.string().min(1).max(100).optional(),
+        username: z.string().min(1).max(50).optional(),
+        avatar: z.string().max(10).optional(),
+      }))
+      .mutation(({ ctx, input }) => db.updateUserProfile(ctx.user.id, input)),
+    
     updateOnboarding: protectedProcedure
       .input(z.object({
         onboardingCompleted: z.boolean().optional(),

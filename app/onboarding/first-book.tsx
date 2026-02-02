@@ -74,7 +74,8 @@ export default function FirstBookScreen() {
         <View className="flex-row gap-2 mt-6 mb-8">
           <View className="flex-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
           <View className="flex-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
-          <View className="flex-1 h-1 rounded-full" style={{ backgroundColor: colors.border }} />
+          <View className="flex-1 h-1 rounded-full" style={{ backgroundColor: colors.primary }} />
+          <View className="flex-1 h-1 rounded-full bg-border" />
         </View>
 
         {/* Header */}

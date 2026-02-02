@@ -592,3 +592,25 @@
 - [x] Store onboarding data in user profile
 - [x] Redirect to main app after onboarding completion
 - [ ] Test onboarding flow on web and mobile (ready for testing)
+
+## Enhanced Onboarding Flow
+
+- [ ] Add profile/account creation screen (name, username, avatar selection)
+- [ ] Integrate existing book search API into onboarding Add First Book screen
+- [ ] Create database flow to save profile data to users table
+- [ ] Create database flow to save first book to books table with proper user association
+- [ ] Create database flow to save reading goals to user profile
+- [ ] Ensure notification preferences are saved to user settings
+- [ ] Test complete data flow from onboarding to main app
+- [ ] Verify all onboarding data appears correctly in dashboard, library, and profile
+
+## Enhanced Onboarding Status Update
+
+- [x] Add profile/account creation screen (name, username, avatar selection)
+- [x] Integrate existing book search API into onboarding Add First Book screen
+- [x] Create database flow to save profile data to users table
+- [x] Create database flow to save first book to books table with proper user association
+- [x] Create database flow to save reading goals to user profile
+- [x] Ensure notification preferences are saved to user settings
+- [ ] Test complete data flow from onboarding to main app
+- [ ] Verify all onboarding data appears correctly in dashboard, library, and profile

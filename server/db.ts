@@ -580,6 +580,32 @@ export async function getFollowingCount(userId: number) {
 }
 
 
+export async function updateUserProfile(
+  userId: number,
+  data: {
+    name?: string;
+    username?: string;
+    avatar?: string;
+  }
+) {
+  const db = await getDb();
+  if (!db) return;
+
+  const updateData: Record<string, any> = {};
+  
+  if (data.name !== undefined) {
+    updateData.name = data.name;
+  }
+  if (data.username !== undefined) {
+    updateData.username = data.username;
+  }
+  if (data.avatar !== undefined) {
+    updateData.avatar = data.avatar;
+  }
+
+  await db.update(users).set(updateData).where(eq(users.id, userId));
+}
+
 export async function updateUserOnboarding(
   userId: number,
   data: {
