@@ -309,10 +309,14 @@ export default function DashboardScreen() {
             <Text className="text-xl font-bold text-foreground mb-3">Up Next</Text>
             <View className="flex-row gap-3">
               {queueBooks.map((book, index) => (
-                <View 
+                <Pressable 
                   key={book.id}
+                  onPress={() => router.push(`/reading-session?bookId=${book.id}`)}
                   className="flex-1 p-3 rounded-xl" 
-                  style={{ backgroundColor: colors.surface }}
+                  style={({ pressed }) => [{
+                    backgroundColor: colors.surface,
+                    opacity: pressed ? 0.7 : 1
+                  }]}
                 >
                   {book.coverUrl ? (
                     <Image
@@ -332,7 +336,10 @@ export default function DashboardScreen() {
                   <Text className="text-xs text-muted" numberOfLines={1}>
                     {book.author}
                   </Text>
-                </View>
+                  <Text className="text-xs mt-2" style={{ color: colors.primary }}>
+                    Tap to start →
+                  </Text>
+                </Pressable>
               ))}
             </View>
           </View>

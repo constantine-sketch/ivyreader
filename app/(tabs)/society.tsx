@@ -336,14 +336,7 @@ export default function SocietyScreen() {
                     <Text className="text-sm text-muted">{(item as any).comments || 0}</Text>
                   </Pressable>
 
-                  <Pressable
-                    onPress={() => console.log('Share post:', item.post.id)}
-                    className="flex-row items-center"
-                    style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
-                  >
-                    <Text className="text-base mr-1">🔗</Text>
-                    <Text className="text-sm text-muted">Share</Text>
-                  </Pressable>
+
                 </View>
                 
                 {/* Delete hint for own posts */}

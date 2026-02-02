@@ -530,3 +530,12 @@
 - [x] Create Elite Pomodoro sessions page with schedule and join link
 - [x] Add Elite-only Pomodoro button in Society tab
 - [x] Gate Pomodoro feature behind Elite subscription check
+
+
+## Library and Reading Improvements
+
+- [x] Enable multiple books in "Reading" status simultaneously (already supported)
+- [x] Verify delete book flow works correctly (already implemented via long press)
+- [x] Make Up Next books tappable to start reading sessions
+- [x] Add navigation from Up Next to reading session screen
+- [x] Remove share buttons from Society feed posts
