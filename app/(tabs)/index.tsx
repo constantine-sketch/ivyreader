@@ -116,20 +116,7 @@ export default function DashboardScreen() {
               Resume Reading
             </Text>
           </Pressable>
-          <Pressable
-            onPress={() => router.push('/reading-lists')}
-            className="flex-1 items-center justify-center border"
-            style={({ pressed }) => [{
-              borderColor: colors.primary,
-              opacity: pressed ? 0.7 : 1,
-              paddingVertical: 12,
-              borderRadius: 8,
-            }]}
-          >
-            <Text className="text-sm font-bold" style={{ color: colors.primary }}>
-              Reading Lists
-            </Text>
-          </Pressable>
+
         </View>
 
         {/* Stats Grid */}

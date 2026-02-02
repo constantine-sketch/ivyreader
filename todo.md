@@ -366,3 +366,11 @@
 - [x] Debug and fix Add Book database insertion issue
 - [x] Create curated reading lists page
 - [x] Add navigation to curated reading lists from dashboard or library
+
+
+## Reading Lists Tab Navigation
+
+- [x] Move Reading Lists from standalone page to bottom tab navigation
+- [x] Add Reading Lists tab icon
+- [x] Remove Reading Lists button from dashboard
+- [x] Add back button to Reading Lists page (temporary until tab is created)

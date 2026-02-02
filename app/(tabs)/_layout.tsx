@@ -44,6 +44,13 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
+        name="reading-lists"
+        options={{
+          title: "Lists",
+          tabBarIcon: ({ color}) => <IconSymbol size={28} name="list.bullet.rectangle" color={color} />,
+        }}
+      />
+      <Tabs.Screen
         name="society"
         options={{
           title: "Society",

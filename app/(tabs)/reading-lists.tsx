@@ -1,9 +1,10 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
 import { router } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
+import { IconSymbol } from "@/components/ui/icon-symbol";
 
 interface ReadingList {
   id: string;
@@ -93,11 +94,23 @@ export default function ReadingListsScreen() {
   return (
     <ScreenContainer>
       <ScrollView className="flex-1 p-6">
-        {/* Header */}
+        {/* Header with Back Button */}
         <View className="mb-6">
-          <Text className="text-3xl font-bold text-foreground mb-2">
-            Curated Reading Lists
-          </Text>
+          <View className="flex-row items-center mb-4">
+            <Pressable
+              onPress={() => router.back()}
+              className="mr-3 p-2 rounded-lg"
+              style={({ pressed }) => [{
+                backgroundColor: colors.surface,
+                opacity: pressed ? 0.7 : 1
+              }]}
+            >
+              <IconSymbol name="chevron.left" size={24} color={colors.foreground} />
+            </Pressable>
+            <Text className="text-3xl font-bold text-foreground">
+              Curated Reading Lists
+            </Text>
+          </View>
           <Text className="text-base text-muted">
             Expert-curated book collections for focused learning
           </Text>
