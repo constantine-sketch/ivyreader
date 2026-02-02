@@ -64,21 +64,21 @@ export function CommentModal({ visible, postId, onClose }: CommentModalProps) {
       transparent={true}
       onRequestClose={onClose}
     >
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
+      <View
         className="flex-1"
+        style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
       >
-        <View
-          className="flex-1 justify-end"
-          style={{ backgroundColor: "rgba(0,0,0,0.5)" }}
+        <Pressable className="flex-1" onPress={onClose} />
+        
+        <KeyboardAvoidingView
+          behavior={Platform.OS === "ios" ? "padding" : "height"}
+          keyboardVerticalOffset={Platform.OS === "ios" ? 0 : 20}
+          style={{ maxHeight: "85%" }}
         >
-          <Pressable className="flex-1" onPress={onClose} />
-
           <View
-            className="rounded-t-3xl"
+            className="rounded-t-3xl flex-1"
             style={{
               backgroundColor: colors.background,
-              maxHeight: "80%",
             }}
           >
             {/* Header */}
@@ -185,8 +185,8 @@ export function CommentModal({ visible, postId, onClose }: CommentModalProps) {
               </View>
             </View>
           </View>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
+      </View>
     </Modal>
   );
 }

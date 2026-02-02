@@ -424,3 +424,24 @@
 - [x] Add proper spacing and visual separation between search results and manual entry
 - [x] Style search result cards with proper layout (cover, title, author)
 - [x] Add clear "OR ADD MANUALLY" divider between sections
+
+
+## Dashboard and Library Fixes
+
+- [x] Fix Up Next section to display book cover images
+- [x] Fix View Library button navigation on dashboard
+- [x] Add cover URLs to all books in seed data (already present)
+
+## Comment Modal Mobile Issues
+
+- [x] Fix keyboard covering comment input on mobile
+- [x] Ensure comment input stays in view when keyboard opens
+- [x] Fix KeyboardAvoidingView behavior for iOS and Android
+
+## Publish Feature
+
+- [x] Design publish feature flow (reading updates, reviews, thoughts with optional book attachment)
+- [x] Create publish button/modal UI
+- [x] Implement publish to social feed functionality
+- [x] Add ability to attach book to published post
+- [x] Add optional rating when publishing about a book

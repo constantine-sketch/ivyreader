@@ -6,6 +6,7 @@ import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { LogSessionModal } from "@/components/log-session-modal";
 import { BookPickerModal } from "@/components/book-picker-modal";
+import { PublishModal } from "@/components/publish-modal";
 import { 
   getGreeting,
   formatDate,
@@ -18,6 +19,7 @@ export default function DashboardScreen() {
   const router = useRouter();
   const [showLogModal, setShowLogModal] = useState(false);
   const [showBookPicker, setShowBookPicker] = useState(false);
+  const [showPublishModal, setShowPublishModal] = useState(false);
   
   // Fetch real data from API
   const { data: stats, isLoading: statsLoading, refetch: refetchStats } = trpc.stats.get.useQuery();
@@ -94,29 +96,48 @@ export default function DashboardScreen() {
           </Text>
         </View>
 
-        {/* Daily Goal and Resume Button */}
-        <View className="px-6 mb-6 flex-row items-center justify-between">
-          <View>
-            <Text className="text-xs text-muted mb-1">DAILY GOAL</Text>
-            <Text className="text-2xl font-bold text-foreground">
-              {todayMinutes} / {dailyGoal} min
-            </Text>
+        {/* Daily Goal and Action Buttons */}
+        <View className="px-6 mb-6">
+          <View className="flex-row items-center justify-between mb-3">
+            <View>
+              <Text className="text-xs text-muted mb-1">DAILY GOAL</Text>
+              <Text className="text-2xl font-bold text-foreground">
+                {todayMinutes} / {dailyGoal} min
+              </Text>
+            </View>
           </View>
-          <Pressable
-            onPress={() => setShowBookPicker(true)}
-            className="flex-1 items-center justify-center"
-            style={({ pressed }) => [{
-              backgroundColor: colors.primary,
-              opacity: pressed ? 0.8 : 1,
-              paddingVertical: 12,
-              borderRadius: 8,
-            }]}
-          >
-            <Text className="text-sm font-bold" style={{ color: colors.background }}>
-              Resume Reading
-            </Text>
-          </Pressable>
-
+          <View className="flex-row gap-3">
+            <Pressable
+              onPress={() => setShowBookPicker(true)}
+              className="flex-1 items-center justify-center"
+              style={({ pressed }) => [{
+                backgroundColor: colors.primary,
+                paddingVertical: 12,
+                borderRadius: 8,
+                opacity: pressed ? 0.8 : 1,
+              }]}
+            >
+              <Text className="text-sm font-bold" style={{ color: colors.background }}>
+                Resume Reading
+              </Text>
+            </Pressable>
+            <Pressable
+              onPress={() => setShowPublishModal(true)}
+              className="flex-1 items-center justify-center"
+              style={({ pressed }) => [{
+                backgroundColor: colors.surface,
+                borderColor: colors.primary,
+                borderWidth: 2,
+                paddingVertical: 12,
+                borderRadius: 8,
+                opacity: pressed ? 0.7 : 1,
+              }]}
+            >
+              <Text className="text-sm font-bold" style={{ color: colors.primary }}>
+                Publish Update
+              </Text>
+            </Pressable>
+          </View>
         </View>
 
         {/* Stats Grid */}
@@ -167,7 +188,7 @@ export default function DashboardScreen() {
           <View className="px-6 mb-6">
             <View className="flex-row items-center justify-between mb-3">
               <Text className="text-xl font-bold text-foreground">Currently Reading</Text>
-              <Pressable onPress={() => console.log('View Library')}>
+              <Pressable onPress={() => router.push('/(tabs)/library')}>
                 <Text className="text-sm" style={{ color: colors.primary }}>VIEW LIBRARY</Text>
               </Pressable>
             </View>
@@ -286,7 +307,18 @@ export default function DashboardScreen() {
                   className="flex-1 p-3 rounded-xl" 
                   style={{ backgroundColor: colors.surface }}
                 >
-                  <View className="w-full aspect-[2/3] rounded-lg mb-2" style={{ backgroundColor: colors.border }} />
+                  {book.coverUrl ? (
+                    <Image
+                      source={{ uri: book.coverUrl }}
+                      className="w-full aspect-[2/3] rounded-lg mb-2"
+                      style={{ backgroundColor: colors.border }}
+                      resizeMode="cover"
+                    />
+                  ) : (
+                    <View className="w-full aspect-[2/3] rounded-lg mb-2 items-center justify-center" style={{ backgroundColor: colors.border }}>
+                      <Text style={{ fontSize: 32 }}>📚</Text>
+                    </View>
+                  )}
                   <Text className="text-xs font-bold text-foreground mb-1" numberOfLines={2}>
                     {book.title}
                   </Text>
@@ -368,6 +400,12 @@ export default function DashboardScreen() {
         onSelectBook={(book) => {
           router.push(`/reading-session?bookId=${book.id}`);
         }}
+      />
+
+      {/* Publish Modal */}
+      <PublishModal
+        visible={showPublishModal}
+        onClose={() => setShowPublishModal(false)}
       />
     </ScreenContainer>
   );
