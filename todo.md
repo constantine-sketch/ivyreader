@@ -374,3 +374,28 @@
 - [x] Add Reading Lists tab icon
 - [x] Remove Reading Lists button from dashboard
 - [x] Add back button to Reading Lists page (temporary until tab is created)
+
+
+## UI/UX Fixes
+
+- [x] Fix Settings section layout to look more professional
+- [x] Remove back button from Lists tab (no longer needed as bottom tab)
+
+## Social Engagement Features
+
+- [x] Create database schema for post likes
+- [x] Create database schema for post comments
+- [ ] Create database schema for post shares
+- [x] Implement like post API endpoint
+- [x] Implement comment on post API endpoint
+- [ ] Implement share post API endpoint
+- [x] Connect like button in Society tab to backend
+- [x] Connect comment button in Society tab to backend (displays count)
+- [ ] Connect share button in Society tab to backend
+- [x] Update UI to show real-time engagement counts
+
+## Google Books API
+
+- [x] Verify Google Books API integration is working correctly
+- [x] Test book search functionality
+- [x] Fix any issues with book data retrieval

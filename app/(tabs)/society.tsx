@@ -19,8 +19,18 @@ export default function SocietyScreen() {
   const { data: leaderboard, isLoading: leaderboardLoading } = trpc.social.leaderboard.useQuery({ limit: 10 });
   const { data: books } = trpc.books.list.useQuery();
   
-  // Mutation for creating posts
+  // Mutations for social interactions
   const createPost = trpc.social.createPost.useMutation();
+  const likePost = trpc.social.likePost.useMutation();
+  
+  const handleLikePost = async (postId: number) => {
+    try {
+      await likePost.mutateAsync({ postId });
+      await refetchPosts();
+    } catch (error) {
+      console.error('Failed to like post:', error);
+    }
+  };
   
   const isLoading = postsLoading || leaderboardLoading;
 
@@ -203,7 +213,7 @@ export default function SocietyScreen() {
                 {/* Actions */}
                 <View className="flex-row gap-4 pt-2 border-t" style={{ borderTopColor: colors.border }}>
                   <Pressable
-                    onPress={() => console.log('Like post:', item.post.id)}
+                    onPress={() => handleLikePost(item.post.id)}
                     className="flex-row items-center"
                     style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
                   >
