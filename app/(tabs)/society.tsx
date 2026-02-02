@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, RefreshControl, Platform } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
@@ -15,6 +15,13 @@ export default function SocietyScreen() {
   const [postContent, setPostContent] = useState('');
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
+  
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await refetchPosts();
+    setRefreshing(false);
+  };
 
   // Fetch real data from database
   const { data: posts, isLoading: postsLoading, refetch: refetchPosts } = trpc.social.posts.useQuery({ limit: 20 });
@@ -24,6 +31,8 @@ export default function SocietyScreen() {
   // Mutations for social interactions
   const createPost = trpc.social.createPost.useMutation();
   const likePost = trpc.social.likePost.useMutation();
+  const deletePost = trpc.social.deletePost.useMutation();
+  const { data: currentUser } = trpc.auth.me.useQuery();
   
   const handleLikePost = async (postId: number) => {
     try {
@@ -31,6 +40,36 @@ export default function SocietyScreen() {
       await refetchPosts();
     } catch (error) {
       console.error('Failed to like post:', error);
+    }
+  };
+  
+  const handleDeletePost = async (postId: number, postUserId: number) => {
+    // Only allow deleting own posts
+    if (currentUser?.id !== postUserId) return;
+    
+    if (Platform.OS === 'web') {
+      if (!confirm('Delete this post?')) return;
+    } else {
+      const { Alert } = await import('react-native');
+      await new Promise<void>((resolve, reject) => {
+        Alert.alert(
+          'Delete Post',
+          'Are you sure you want to delete this post?',
+          [
+            { text: 'Cancel', style: 'cancel', onPress: () => reject() },
+            { text: 'Delete', style: 'destructive', onPress: () => resolve() },
+          ]
+        );
+      }).catch(() => { throw new Error('Cancelled'); });
+    }
+    
+    try {
+      await deletePost.mutateAsync({ postId });
+      await refetchPosts();
+    } catch (error: any) {
+      if (error.message !== 'Cancelled') {
+        console.error('Failed to delete post:', error);
+      }
     }
   };
   
@@ -132,7 +171,17 @@ export default function SocietyScreen() {
           </View>
         </View>
 
-        <ScrollView className="flex-1">
+        <ScrollView 
+          className="flex-1"
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={handleRefresh}
+              tintColor={colors.primary}
+              colors={[colors.primary]}
+            />
+          }
+        >
           {/* Leaderboard Widget */}
           <View className="px-6 mb-6">
             <View className="rounded-2xl p-4" style={{ backgroundColor: colors.surface }}>
@@ -169,8 +218,9 @@ export default function SocietyScreen() {
           <View className="px-6 pb-8">
             <Text className="text-lg font-bold text-foreground mb-3">Feed</Text>
             {posts?.map((item) => (
-              <View 
-                key={item.post.id} 
+              <Pressable
+                key={item.post.id}
+                onLongPress={() => handleDeletePost(item.post.id, item.post.userId)}
                 className="rounded-2xl p-4 mb-4"
                 style={{ backgroundColor: colors.surface }}
               >
@@ -241,7 +291,14 @@ export default function SocietyScreen() {
                     <Text className="text-sm text-muted">Share</Text>
                   </Pressable>
                 </View>
-              </View>
+                
+                {/* Delete hint for own posts */}
+                {currentUser?.id === item.post.userId && (
+                  <Text className="text-xs mt-2" style={{ color: colors.error }}>
+                    Hold to delete
+                  </Text>
+                )}
+              </Pressable>
             ))}
           </View>
         </ScrollView>

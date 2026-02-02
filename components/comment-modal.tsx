@@ -30,8 +30,40 @@ export function CommentModal({ visible, postId, onClose }: CommentModalProps) {
     { enabled: visible }
   );
 
-  // Mutation for creating comment
+  // Mutations
   const createComment = trpc.social.createComment.useMutation();
+  const deleteComment = trpc.social.deleteComment.useMutation();
+  const { data: currentUser } = trpc.auth.me.useQuery();
+  
+  const handleDeleteComment = async (commentId: number, commentUserId: number) => {
+    // Only allow deleting own comments
+    if (currentUser?.id !== commentUserId) return;
+    
+    if (Platform.OS === 'web') {
+      if (!confirm('Delete this comment?')) return;
+    } else {
+      const { Alert } = await import('react-native');
+      await new Promise<void>((resolve, reject) => {
+        Alert.alert(
+          'Delete Comment',
+          'Are you sure you want to delete this comment?',
+          [
+            { text: 'Cancel', style: 'cancel', onPress: () => reject() },
+            { text: 'Delete', style: 'destructive', onPress: () => resolve() },
+          ]
+        );
+      }).catch(() => { throw new Error('Cancelled'); });
+    }
+    
+    try {
+      await deleteComment.mutateAsync({ commentId });
+      await refetch();
+    } catch (error: any) {
+      if (error.message !== 'Cancelled') {
+        console.error('Failed to delete comment:', error);
+      }
+    }
+  };
 
   const getInitials = (name: string): string => {
     return name
@@ -102,7 +134,11 @@ export function CommentModal({ visible, postId, onClose }: CommentModalProps) {
                 </View>
               ) : comments && comments.length > 0 ? (
                 comments.map((comment: any) => (
-                  <View key={comment.id} className="mb-4">
+                  <Pressable
+                    key={comment.id}
+                    onLongPress={() => handleDeleteComment(comment.id, comment.userId)}
+                    className="mb-4"
+                  >
                     <View className="flex-row items-start">
                       <View
                         className="w-8 h-8 rounded-full items-center justify-center mr-3"
@@ -123,13 +159,18 @@ export function CommentModal({ visible, postId, onClose }: CommentModalProps) {
                           <Text className="text-xs text-muted">
                             {formatTimeAgo(new Date(comment.createdAt))}
                           </Text>
+                          {currentUser?.id === comment.userId && (
+                            <Text className="text-xs ml-auto" style={{ color: colors.error }}>
+                              Hold to delete
+                            </Text>
+                          )}
                         </View>
                         <Text className="text-sm text-foreground leading-relaxed">
                           {comment.content}
                         </Text>
                       </View>
                     </View>
-                  </View>
+                  </Pressable>
                 ))
               ) : (
                 <View className="items-center justify-center py-8">

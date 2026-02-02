@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, Image, RefreshControl } from "react-native";
+import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, Image, RefreshControl, Platform } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -31,6 +31,37 @@ export default function LibraryScreen() {
   
   // Use demo books if user has no books
   const booksToDisplay = (allBooks && allBooks.length > 0) ? allBooks : (demoBooks || []);
+  
+  const deleteBook = trpc.books.delete.useMutation();
+  
+  const handleDeleteBook = async (bookId: number, bookTitle: string) => {
+    if (Platform.OS === 'web') {
+      if (!confirm(`Delete "${bookTitle}"?`)) return;
+    } else {
+      // For mobile, we'll use Alert
+      const { Alert } = await import('react-native');
+      await new Promise<void>((resolve, reject) => {
+        Alert.alert(
+          'Delete Book',
+          `Are you sure you want to delete "${bookTitle}"?`,
+          [
+            { text: 'Cancel', style: 'cancel', onPress: () => reject() },
+            { text: 'Delete', style: 'destructive', onPress: () => resolve() },
+          ]
+        );
+      }).catch(() => { throw new Error('Cancelled'); });
+    }
+    
+    try {
+      await deleteBook.mutateAsync({ id: bookId });
+      await refetch();
+    } catch (error: any) {
+      if (error.message !== 'Cancelled') {
+        console.error('Failed to delete book:', error);
+        alert('Failed to delete book. Please try again.');
+      }
+    }
+  };
 
   if (isLoading) {
     return (
@@ -74,6 +105,7 @@ export default function LibraryScreen() {
       <Pressable 
         key={book.id}
         onPress={() => console.log('Book pressed:', book.title)}
+        onLongPress={() => handleDeleteBook(book.id, book.title)}
         style={({ pressed }) => [{
           backgroundColor: colors.surface,
           borderRadius: 16,

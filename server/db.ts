@@ -345,6 +345,22 @@ export async function createComment(data: InsertPostComment) {
   return Number(result.insertId);
 }
 
+export async function deletePost(postId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  // Delete associated likes and comments first
+  await db.delete(postLikes).where(eq(postLikes.postId, postId));
+  await db.delete(postComments).where(eq(postComments.postId, postId));
+  // Then delete the post
+  await db.delete(socialPosts).where(eq(socialPosts.id, postId));
+}
+
+export async function deleteComment(commentId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  await db.delete(postComments).where(eq(postComments.id, commentId));
+}
+
 // Leaderboard
 export async function getWeeklyLeaderboard(limit: number = 10) {
   const db = await getDb();

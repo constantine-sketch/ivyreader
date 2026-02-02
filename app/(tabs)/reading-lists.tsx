@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { View, Text, ScrollView, Pressable, ActivityIndicator } from "react-native";
+import { View, Text, ScrollView, Pressable, ActivityIndicator, RefreshControl } from "react-native";
 import { router } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -80,6 +80,14 @@ const CURATED_LISTS: ReadingList[] = [
 
 export default function ReadingListsScreen() {
   const colors = useColors();
+  const [refreshing, setRefreshing] = useState(false);
+  
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    // Simulate refresh (in future, refetch lists from database)
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    setRefreshing(false);
+  };
   const { data: user } = trpc.auth.me.useQuery();
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
@@ -93,7 +101,17 @@ export default function ReadingListsScreen() {
 
   return (
     <ScreenContainer>
-      <ScrollView className="flex-1 p-6">
+      <ScrollView 
+        className="flex-1 p-6"
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+          />
+        }
+      >
         {/* Header */}
         <View className="mb-6">
           <Text className="text-3xl font-bold text-foreground mb-2">

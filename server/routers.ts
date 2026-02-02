@@ -163,6 +163,14 @@ export const appRouter = router({
         db.createComment({ ...input, userId: ctx.user.id })
       ),
     
+    deletePost: protectedProcedure
+      .input(z.object({ postId: z.number() }))
+      .mutation(({ input }) => db.deletePost(input.postId)),
+    
+    deleteComment: protectedProcedure
+      .input(z.object({ commentId: z.number() }))
+      .mutation(({ input }) => db.deleteComment(input.commentId)),
+    
     leaderboard: publicProcedure
       .input(z.object({ limit: z.number().default(10) }))
       .query(({ input }) => db.getWeeklyLeaderboard(input.limit)),

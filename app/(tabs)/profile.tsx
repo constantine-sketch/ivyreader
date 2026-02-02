@@ -1,4 +1,5 @@
-import { Text, View, ScrollView, Pressable, ActivityIndicator, Platform } from "react-native";
+import { useState } from "react";
+import { Text, View, ScrollView, Pressable, ActivityIndicator, Platform, RefreshControl } from "react-native";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
@@ -10,10 +11,17 @@ export default function ProfileScreen() {
   const colors = useColors();
   const { logout } = useAuth();
   const { data: user } = trpc.auth.me.useQuery();
+  const [refreshing, setRefreshing] = useState(false);
   
   // Fetch real data from database
-  const { data: stats, isLoading: statsLoading } = trpc.stats.get.useQuery();
-  const { data: books, isLoading: booksLoading } = trpc.books.list.useQuery();
+  const { data: stats, isLoading: statsLoading, refetch: refetchStats } = trpc.stats.get.useQuery();
+  const { data: books, isLoading: booksLoading, refetch: refetchBooks } = trpc.books.list.useQuery();
+  
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await Promise.all([refetchStats(), refetchBooks()]);
+    setRefreshing(false);
+  };
   
   const isLoading = statsLoading || booksLoading;
   
@@ -47,7 +55,18 @@ export default function ProfileScreen() {
 
   return (
     <ScreenContainer>
-      <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView 
+        className="flex-1" 
+        contentContainerStyle={{ paddingBottom: 32 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+          />
+        }
+      >
         {/* Header */}
         <View className="px-6 pt-6 pb-4">
           <Text className="text-3xl font-bold text-foreground mb-2">Profile</Text>

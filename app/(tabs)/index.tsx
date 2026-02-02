@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { View, Text, ScrollView, Pressable, Dimensions, ActivityIndicator, Image } from "react-native";
+import { View, Text, ScrollView, Pressable, Dimensions, ActivityIndicator, Image, RefreshControl } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -20,6 +20,7 @@ export default function DashboardScreen() {
   const [showLogModal, setShowLogModal] = useState(false);
   const [showBookPicker, setShowBookPicker] = useState(false);
   const [showPublishModal, setShowPublishModal] = useState(false);
+  const [refreshing, setRefreshing] = useState(false);
   
   // Fetch real data from API
   const { data: stats, isLoading: statsLoading, refetch: refetchStats } = trpc.stats.get.useQuery();
@@ -31,6 +32,16 @@ export default function DashboardScreen() {
   const updateBook = trpc.books.update.useMutation();
   
   const isLoading = statsLoading || booksLoading;
+  
+  const handleRefresh = async () => {
+    setRefreshing(true);
+    await Promise.all([
+      refetchStats(),
+      refetchBooks(),
+      refetchSessions()
+    ]);
+    setRefreshing(false);
+  };
   
   if (isLoading) {
     return (
@@ -85,7 +96,18 @@ export default function DashboardScreen() {
 
   return (
     <ScreenContainer>
-      <ScrollView className="flex-1" contentContainerStyle={{ paddingBottom: 32 }}>
+      <ScrollView 
+        className="flex-1" 
+        contentContainerStyle={{ paddingBottom: 32 }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={handleRefresh}
+            tintColor={colors.primary}
+            colors={[colors.primary]}
+          />
+        }
+      >
         {/* Header Section */}
         <View className="px-6 pt-6 pb-4">
           <Text className="text-4xl font-bold text-foreground" style={{ fontFamily: 'System' }}>

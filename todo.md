@@ -445,3 +445,22 @@
 - [x] Implement publish to social feed functionality
 - [x] Add ability to attach book to published post
 - [x] Add optional rating when publishing about a book
+
+
+## Pull-to-Refresh for All Tabs
+
+- [x] Add pull-to-refresh to Dashboard tab
+- [x] Add pull-to-refresh to Library tab (already had it)
+- [x] Add pull-to-refresh to Lists tab
+- [x] Add pull-to-refresh to Society tab
+- [x] Add pull-to-refresh to Profile tab
+
+## Delete Flows
+
+- [x] Implement delete book flow with confirmation dialog (long press in Library)
+- [x] Add delete book API endpoint (already existed)
+- [x] Implement delete comment flow (user's own comments only, long press in CommentModal)
+- [x] Add delete comment API endpoint
+- [x] Implement delete post flow (user's own posts only, long press in Society feed)
+- [x] Add delete post API endpoint
+- [x] Add confirmation dialogs for all delete actions
