@@ -262,19 +262,33 @@ export async function calculateUserStats(userId: number) {
 }
 
 // Social Posts
-export async function getSocialPosts(userId?: number, limit: number = 20) {
+export async function getSocialPosts(userId?: number, limit: number = 20, followingOnly: boolean = false, currentUserId?: number) {
   const db = await getDb();
   if (!db) return [];
   
-  const postsResult = await db.select({ post: socialPosts, book: books, user: users })
+  let postsResult = await db.select({ post: socialPosts, book: books, user: users })
     .from(socialPosts)
     .leftJoin(books, eq(socialPosts.bookId, books.id))
     .leftJoin(users, eq(socialPosts.userId, users.id))
     .orderBy(desc(socialPosts.createdAt))
-    .limit(limit);
+    .limit(limit * 3); // Fetch more to filter
   
   if (userId) {
-    return postsResult.filter(item => item.post.userId === userId);
+    postsResult = postsResult.filter(item => item.post.userId === userId);
+  }
+  
+  // Filter by following if requested
+  if (followingOnly && currentUserId) {
+    const following = await db.select().from(userFollows).where(eq(userFollows.followerId, currentUserId));
+    const followingIds = following.map(f => f.followingId);
+    postsResult = postsResult.filter(item => followingIds.includes(item.post.userId));
+  }
+  
+  // Limit after filtering
+  postsResult = postsResult.slice(0, limit);
+  
+  if (userId) {
+    return postsResult;
   }
   
   // Add comment counts to each post
@@ -514,4 +528,53 @@ export async function markAllNotificationsAsRead(userId: number) {
     .update(notifications)
     .set({ isRead: 1 })
     .where(eq(notifications.userId, userId));
+}
+
+
+export async function unfollowUser(followerId: number, followingId: number) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+  
+  const { userFollows } = await import("../drizzle/schema");
+  const { eq, and } = await import("drizzle-orm");
+  
+  await db.delete(userFollows).where(
+    and(eq(userFollows.followerId, followerId), eq(userFollows.followingId, followingId))
+  );
+}
+
+export async function isFollowing(followerId: number, followingId: number) {
+  const db = await getDb();
+  if (!db) return false;
+  
+  const { userFollows } = await import("../drizzle/schema");
+  const { eq, and } = await import("drizzle-orm");
+  
+  const result = await db.select().from(userFollows).where(
+    and(eq(userFollows.followerId, followerId), eq(userFollows.followingId, followingId))
+  ).limit(1);
+  
+  return result.length > 0;
+}
+
+export async function getFollowerCount(userId: number) {
+  const db = await getDb();
+  if (!db) return 0;
+  
+  const { userFollows } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  const results = await db.select().from(userFollows).where(eq(userFollows.followingId, userId));
+  return results.length;
+}
+
+export async function getFollowingCount(userId: number) {
+  const db = await getDb();
+  if (!db) return 0;
+  
+  const { userFollows } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  const results = await db.select().from(userFollows).where(eq(userFollows.followerId, userId));
+  return results.length;
 }

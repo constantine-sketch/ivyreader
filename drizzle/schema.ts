@@ -138,6 +138,17 @@ export const notifications = mysqlTable("notifications", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+// Buddy pairing table (Elite feature)
+export const buddyPairs = mysqlTable("buddy_pairs", {
+  id: int("id").autoincrement().primaryKey(),
+  user1Id: int("user1Id").notNull(),
+  user2Id: int("user2Id").notNull(),
+  status: mysqlEnum("status", ["pending", "matched", "inactive"]).default("pending").notNull(),
+  requestedAt: timestamp("requestedAt").defaultNow().notNull(),
+  matchedAt: timestamp("matchedAt"),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
 // Export types
 export type Book = typeof books.$inferSelect;
 export type InsertBook = typeof books.$inferInsert;
@@ -165,3 +176,6 @@ export type InsertUserFollow = typeof userFollows.$inferInsert;
 
 export type Notification = typeof notifications.$inferSelect;
 export type InsertNotification = typeof notifications.$inferInsert;
+
+export type BuddyPair = typeof buddyPairs.$inferSelect;
+export type InsertBuddyPair = typeof buddyPairs.$inferInsert;

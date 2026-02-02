@@ -11,6 +11,34 @@ export default function UserProfileScreen() {
   const { userId } = useLocalSearchParams<{ userId: string }>();
   const [refreshing, setRefreshing] = useState(false);
   
+  const userIdNum = userId ? parseInt(userId) : 0;
+  
+  // Follow/unfollow state
+  const { data: isFollowing, refetch: refetchFollowing } = trpc.social.isFollowing.useQuery(
+    { userId: userIdNum },
+    { enabled: userIdNum > 0 }
+  );
+  const { data: followerCount = 0, refetch: refetchFollowerCount } = trpc.social.getFollowerCount.useQuery(
+    { userId: userIdNum },
+    { enabled: userIdNum > 0 }
+  );
+  const { data: followingCount = 0, refetch: refetchFollowingCount } = trpc.social.getFollowingCount.useQuery(
+    { userId: userIdNum },
+    { enabled: userIdNum > 0 }
+  );
+  
+  const followMutation = trpc.social.followUser.useMutation();
+  const unfollowMutation = trpc.social.unfollowUser.useMutation();
+  
+  const handleFollowToggle = async () => {
+    if (isFollowing) {
+      await unfollowMutation.mutateAsync({ userId: userIdNum });
+    } else {
+      await followMutation.mutateAsync({ userId: userIdNum });
+    }
+    await Promise.all([refetchFollowing(), refetchFollowerCount()]);
+  };
+  
   // Fetch user data
   const { data: userStats, isLoading: statsLoading, refetch: refetchStats } = trpc.stats.get.useQuery(
     undefined,
@@ -24,7 +52,7 @@ export default function UserProfileScreen() {
   
   const handleRefresh = async () => {
     setRefreshing(true);
-    await Promise.all([refetchStats(), refetchBooks(), refetchPosts()]);
+    await Promise.all([refetchStats(), refetchBooks(), refetchPosts(), refetchFollowing(), refetchFollowerCount(), refetchFollowingCount()]);
     setRefreshing(false);
   };
   
@@ -84,9 +112,39 @@ export default function UserProfileScreen() {
             <Text className="text-2xl font-bold text-foreground mb-1">
               User Profile
             </Text>
-            <Text className="text-sm text-muted">
+            <Text className="text-sm text-muted mb-3">
               Member since 2024
             </Text>
+            
+            {/* Follow/Unfollow Button */}
+            <Pressable
+              onPress={handleFollowToggle}
+              className="px-6 py-2 rounded-full"
+              style={{
+                backgroundColor: isFollowing ? colors.surface : colors.primary,
+                borderWidth: isFollowing ? 1 : 0,
+                borderColor: colors.border,
+              }}
+            >
+              <Text
+                className="font-semibold"
+                style={{ color: isFollowing ? colors.foreground : colors.background }}
+              >
+                {isFollowing ? 'Following' : 'Follow'}
+              </Text>
+            </Pressable>
+            
+            {/* Follower/Following Counts */}
+            <View className="flex-row gap-4 mt-4">
+              <View className="items-center">
+                <Text className="text-lg font-bold text-foreground">{followerCount}</Text>
+                <Text className="text-xs text-muted">Followers</Text>
+              </View>
+              <View className="items-center">
+                <Text className="text-lg font-bold text-foreground">{followingCount}</Text>
+                <Text className="text-xs text-muted">Following</Text>
+              </View>
+            </View>
           </View>
           
           {/* Stats Grid */}

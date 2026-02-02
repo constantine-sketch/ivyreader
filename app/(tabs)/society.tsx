@@ -30,7 +30,10 @@ export default function SocietyScreen() {
   };
 
   // Fetch real data from database
-  const { data: posts, isLoading: postsLoading, refetch: refetchPosts } = trpc.social.posts.useQuery({ limit: 20 });
+  const { data: posts, isLoading: postsLoading, refetch: refetchPosts } = trpc.social.posts.useQuery({ 
+    limit: 20,
+    followingOnly: activeTab === 'following'
+  });
   const { data: leaderboard, isLoading: leaderboardLoading } = trpc.social.leaderboard.useQuery({ limit: 10 });
   const { data: books } = trpc.books.list.useQuery();
   
@@ -106,23 +109,43 @@ export default function SocietyScreen() {
         <View className="px-6 pt-6 pb-4">
           <View className="flex-row justify-between items-center mb-4">
             <Text className="text-3xl font-bold text-foreground">Society</Text>
-            <Pressable
-              onPress={() => setShowNotifications(true)}
-              className="relative"
-              style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
-            >
-              <Text className="text-2xl">🔔</Text>
-              {unreadCount > 0 && (
-                <View
-                  className="absolute -top-1 -right-1 w-5 h-5 rounded-full items-center justify-center"
-                  style={{ backgroundColor: colors.error }}
+            <View className="flex-row gap-3">
+              {/* Elite Pomodoro Button */}
+              {currentUser?.subscriptionTier === 'elite' && (
+                <Pressable
+                  onPress={() => router.push('/pomodoro-sessions')}
+                  className="px-3 py-1.5 rounded-full flex-row items-center gap-1"
+                  style={({ pressed }) => [{
+                    backgroundColor: colors.primary,
+                    opacity: pressed ? 0.8 : 1
+                  }]}
                 >
+                  <Text className="text-base">⏱️</Text>
                   <Text className="text-xs font-bold" style={{ color: colors.background }}>
-                    {unreadCount > 9 ? '9+' : unreadCount}
+                    Pomodoro
                   </Text>
-                </View>
+                </Pressable>
               )}
-            </Pressable>
+              
+              {/* Notifications */}
+              <Pressable
+                onPress={() => setShowNotifications(true)}
+                className="relative"
+                style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+              >
+                <Text className="text-2xl">🔔</Text>
+                {unreadCount > 0 && (
+                  <View
+                    className="absolute -top-1 -right-1 w-5 h-5 rounded-full items-center justify-center"
+                    style={{ backgroundColor: colors.error }}
+                  >
+                    <Text className="text-xs font-bold" style={{ color: colors.background }}>
+                      {unreadCount > 9 ? '9+' : unreadCount}
+                    </Text>
+                  </View>
+                )}
+              </Pressable>
+            </View>
           </View>
 
           {/* Tabs */}

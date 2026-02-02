@@ -501,3 +501,32 @@
 - [x] Add notification triggers for post comments
 - [ ] Add notification triggers for reading milestones (future enhancement)
 - [ ] Implement push notification delivery (future enhancement)
+
+
+## Follow/Unfollow System
+
+- [x] Update database schema to support follow relationships (already exists in userFollows table)
+- [x] Implement follow/unfollow API endpoints
+- [x] Add follow/unfollow button to user profile pages
+- [x] Display follower and following counts on profiles
+- [x] Update Following tab in Society to filter posts from followed users only
+- [ ] Add "You're not following anyone yet" empty state in Following tab (future enhancement)
+
+## Premium Upgrade with Calendly
+
+- [x] Add "Upgrade" section to Profile settings
+- [x] Create Calendly booking cards for "Ivy League Consulting for Families"
+- [x] Create Calendly booking cards for "90-Day Attention Span 1-on-1 Consulting"
+- [x] Add external link handling for Calendly URLs
+- [x] Display current subscription tier prominently
+
+## Elite Accountability Features
+
+- [x] Create buddy pairing database schema (buddyPairs table)
+- [ ] Build Elite onboarding flow with buddy request option (future phase)
+- [ ] Implement 72-hour matching period logic (future phase)
+- [ ] Create buddy dashboard showing partner's progress (future phase)
+- [ ] Add notification when buddy is matched (future phase)
+- [x] Create Elite Pomodoro sessions page with schedule and join link
+- [x] Add Elite-only Pomodoro button in Society tab
+- [x] Gate Pomodoro feature behind Elite subscription check

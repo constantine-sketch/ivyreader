@@ -182,6 +182,84 @@ export default function ProfileScreen() {
           </View>
         </View>
 
+        {/* Premium Upgrade */}
+        <View className="px-6 mb-6">
+          <Text className="text-xl font-bold text-foreground mb-3">Upgrade Your Experience</Text>
+          
+          <View className="gap-3">
+            {/* Ivy League Consulting */}
+            <Pressable
+              onPress={() => {
+                if (Platform.OS === 'web') {
+                  window.open('https://calendly.com/ivyreader/ivy-league-consulting', '_blank');
+                } else {
+                  // For mobile, we'll need to use Linking
+                  import('expo-web-browser').then(WebBrowser => {
+                    WebBrowser.openBrowserAsync('https://calendly.com/ivyreader/ivy-league-consulting');
+                  });
+                }
+              }}
+              className="rounded-2xl p-5 border"
+              style={({ pressed }) => [{
+                backgroundColor: colors.surface,
+                borderColor: colors.primary,
+                borderWidth: 2,
+                opacity: pressed ? 0.8 : 1
+              }]}
+            >
+              <View className="flex-row justify-between items-start mb-2">
+                <Text className="text-lg font-bold text-foreground flex-1">
+                  Ivy League Consulting for Families
+                </Text>
+                <Text className="text-2xl">🎓</Text>
+              </View>
+              <Text className="text-sm text-muted mb-3">
+                Expert guidance for college admissions, academic planning, and family strategy sessions
+              </Text>
+              <View className="flex-row items-center">
+                <Text className="text-sm font-semibold" style={{ color: colors.primary }}>
+                  Book a Discovery Call →
+                </Text>
+              </View>
+            </Pressable>
+            
+            {/* 90-Day Attention Span */}
+            <Pressable
+              onPress={() => {
+                if (Platform.OS === 'web') {
+                  window.open('https://calendly.com/ivyreader/90-day-attention-span', '_blank');
+                } else {
+                  import('expo-web-browser').then(WebBrowser => {
+                    WebBrowser.openBrowserAsync('https://calendly.com/ivyreader/90-day-attention-span');
+                  });
+                }
+              }}
+              className="rounded-2xl p-5 border"
+              style={({ pressed }) => [{
+                backgroundColor: colors.surface,
+                borderColor: colors.primary,
+                borderWidth: 2,
+                opacity: pressed ? 0.8 : 1
+              }]}
+            >
+              <View className="flex-row justify-between items-start mb-2">
+                <Text className="text-lg font-bold text-foreground flex-1">
+                  90-Day Attention Span 1-on-1 Consulting
+                </Text>
+                <Text className="text-2xl">🎯</Text>
+              </View>
+              <Text className="text-sm text-muted mb-3">
+                Transform your focus and reading habits with personalized coaching and accountability
+              </Text>
+              <View className="flex-row items-center">
+                <Text className="text-sm font-semibold" style={{ color: colors.primary }}>
+                  Book a Discovery Call →
+                </Text>
+              </View>
+            </Pressable>
+          </View>
+        </View>
+        
         {/* Settings */}
         <View className="px-6 mb-6">
           <Text className="text-xl font-bold text-foreground mb-3">Settings</Text>

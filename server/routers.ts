@@ -132,9 +132,14 @@ export const appRouter = router({
   }),
   
   social: router({
-    posts: publicProcedure
-      .input(z.object({ limit: z.number().default(20) }))
-      .query(({ input }) => db.getSocialPosts(undefined, input.limit)),
+    posts: protectedProcedure
+      .input(z.object({ 
+        limit: z.number().default(20),
+        followingOnly: z.boolean().default(false)
+      }))
+      .query(({ ctx, input }) => 
+        db.getSocialPosts(undefined, input.limit, input.followingOnly, ctx.user.id)
+      ),
     
     createPost: protectedProcedure
       .input(z.object({
@@ -178,6 +183,22 @@ export const appRouter = router({
     followUser: protectedProcedure
       .input(z.object({ userId: z.number() }))
       .mutation(({ ctx, input }) => db.followUser(ctx.user.id, input.userId)),
+    
+    unfollowUser: protectedProcedure
+      .input(z.object({ userId: z.number() }))
+      .mutation(({ ctx, input }) => db.unfollowUser(ctx.user.id, input.userId)),
+    
+    isFollowing: protectedProcedure
+      .input(z.object({ userId: z.number() }))
+      .query(({ ctx, input }) => db.isFollowing(ctx.user.id, input.userId)),
+    
+    getFollowerCount: protectedProcedure
+      .input(z.object({ userId: z.number() }))
+      .query(({ input }) => db.getFollowerCount(input.userId)),
+    
+    getFollowingCount: protectedProcedure
+      .input(z.object({ userId: z.number() }))
+      .query(({ input }) => db.getFollowingCount(input.userId)),
     
     following: protectedProcedure.query(({ ctx }) => db.getFollowing(ctx.user.id)),
   }),
