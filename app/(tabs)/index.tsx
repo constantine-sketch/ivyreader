@@ -6,7 +6,7 @@ import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { LogSessionModal } from "@/components/log-session-modal";
 import { BookPickerModal } from "@/components/book-picker-modal";
-import { PublishModal } from "@/components/publish-modal";
+
 import { 
   getGreeting,
   formatDate,
@@ -19,7 +19,7 @@ export default function DashboardScreen() {
   const router = useRouter();
   const [showLogModal, setShowLogModal] = useState(false);
   const [showBookPicker, setShowBookPicker] = useState(false);
-  const [showPublishModal, setShowPublishModal] = useState(false);
+
   const [refreshing, setRefreshing] = useState(false);
   
   // Fetch real data from API
@@ -143,22 +143,7 @@ export default function DashboardScreen() {
                 Resume Reading
               </Text>
             </Pressable>
-            <Pressable
-              onPress={() => setShowPublishModal(true)}
-              className="flex-1 items-center justify-center"
-              style={({ pressed }) => [{
-                backgroundColor: colors.surface,
-                borderColor: colors.primary,
-                borderWidth: 2,
-                paddingVertical: 12,
-                borderRadius: 8,
-                opacity: pressed ? 0.7 : 1,
-              }]}
-            >
-              <Text className="text-sm font-bold" style={{ color: colors.primary }}>
-                Publish Update
-              </Text>
-            </Pressable>
+
           </View>
         </View>
 
@@ -424,11 +409,7 @@ export default function DashboardScreen() {
         }}
       />
 
-      {/* Publish Modal */}
-      <PublishModal
-        visible={showPublishModal}
-        onClose={() => setShowPublishModal(false)}
-      />
+
     </ScreenContainer>
   );
 }

@@ -478,3 +478,26 @@
 - [x] Set default status to "Queue"
 - [x] Update book creation to use selected status
 - [x] Add visual indicator for selected status
+
+
+## Dashboard Cleanup
+
+- [x] Remove Publish Update button from Dashboard tab
+
+## User Profile Viewing
+
+- [x] Create user profile page component showing stats and library
+- [x] Add navigation from usernames/avatars in Society feed to profile pages
+- [x] Display user's books, reading stats, and recent posts on profile page
+- [x] Add back button to return to previous screen
+
+## Notification System
+
+- [x] Create notifications database schema
+- [x] Implement notification API endpoints (create, list, mark as read)
+- [x] Create notification bell icon in app header
+- [x] Build notification list UI component
+- [x] Add notification triggers for post likes
+- [x] Add notification triggers for post comments
+- [ ] Add notification triggers for reading milestones (future enhancement)
+- [ ] Implement push notification delivery (future enhancement)

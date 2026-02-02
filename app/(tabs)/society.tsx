@@ -1,21 +1,27 @@
 import { useState } from "react";
 import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, RefreshControl, Platform } from "react-native";
+import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { formatTimeAgo } from "@/lib/mock-data";
 import { CreatePostModal } from "@/components/create-post-modal";
 import { CommentModal } from "@/components/comment-modal";
+import { NotificationsModal } from "@/components/notifications-modal";
 
 type FeedTab = 'following' | 'global';
 
 export default function SocietyScreen() {
   const colors = useColors();
-  const [activeTab, setActiveTab] = useState<FeedTab>('global');
+  const router = useRouter();
+  const [activeTab, setActiveTab] = useState<'following' | 'global'>('global');
   const [postContent, setPostContent] = useState('');
   const [showCreatePost, setShowCreatePost] = useState(false);
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
+  const [showNotifications, setShowNotifications] = useState(false);
+  
+  const { data: unreadCount = 0 } = trpc.notifications.unreadCount.useQuery();
   
   const handleRefresh = async () => {
     setRefreshing(true);
@@ -98,7 +104,26 @@ export default function SocietyScreen() {
       <View className="flex-1">
         {/* Header */}
         <View className="px-6 pt-6 pb-4">
-          <Text className="text-3xl font-bold text-foreground mb-4">Society</Text>
+          <View className="flex-row justify-between items-center mb-4">
+            <Text className="text-3xl font-bold text-foreground">Society</Text>
+            <Pressable
+              onPress={() => setShowNotifications(true)}
+              className="relative"
+              style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+            >
+              <Text className="text-2xl">🔔</Text>
+              {unreadCount > 0 && (
+                <View
+                  className="absolute -top-1 -right-1 w-5 h-5 rounded-full items-center justify-center"
+                  style={{ backgroundColor: colors.error }}
+                >
+                  <Text className="text-xs font-bold" style={{ color: colors.background }}>
+                    {unreadCount > 9 ? '9+' : unreadCount}
+                  </Text>
+                </View>
+              )}
+            </Pressable>
+          </View>
 
           {/* Tabs */}
           <View className="flex-row gap-2 mb-4">
@@ -227,7 +252,11 @@ export default function SocietyScreen() {
                 style={{ backgroundColor: colors.surface }}
               >
                 {/* User Info */}
-                <View className="flex-row items-center mb-3">
+                <Pressable
+                  onPress={() => router.push(`/user-profile?userId=${item.post.userId}`)}
+                  className="flex-row items-center mb-3"
+                  style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
+                >
                   <View 
                     className="w-10 h-10 rounded-full items-center justify-center mr-3"
                     style={{ backgroundColor: colors.primary }}
@@ -244,7 +273,7 @@ export default function SocietyScreen() {
                       {formatTimeAgo(new Date(item.post.createdAt))}
                     </Text>
                   </View>
-                </View>
+                </Pressable>
 
                 {/* Book Reference */}
                 {item.book && (
@@ -344,6 +373,12 @@ export default function SocietyScreen() {
           }}
         />
       )}
+      
+      {/* Notifications Modal */}
+      <NotificationsModal
+        visible={showNotifications}
+        onClose={() => setShowNotifications(false)}
+      />
     </ScreenContainer>
   );
 }

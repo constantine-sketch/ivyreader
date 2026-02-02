@@ -314,6 +314,21 @@ export async function likePost(postId: number, userId: number) {
   } else {
     await db.insert(postLikes).values({ postId, userId });
     await db.update(socialPosts).set({ likes: sql`${socialPosts.likes} + 1` }).where(eq(socialPosts.id, postId));
+    
+    // Get post author to send notification
+    const post = await db.select().from(socialPosts).where(eq(socialPosts.id, postId)).limit(1);
+    if (post.length > 0 && post[0].userId !== userId) {
+      // Don't notify if user likes their own post
+      await createNotification({
+        userId: post[0].userId,
+        type: "like",
+        title: "New Like",
+        message: "Someone liked your post",
+        relatedId: postId,
+        fromUserId: userId,
+      });
+    }
+    
     return true;
   }
 }
@@ -342,6 +357,21 @@ export async function createComment(data: InsertPostComment) {
   const db = await getDb();
   if (!db) throw new Error("Database not available");
   const result: any = await db.insert(postComments).values(data);
+  
+  // Get post author to send notification
+  const post = await db.select().from(socialPosts).where(eq(socialPosts.id, data.postId)).limit(1);
+  if (post.length > 0 && post[0].userId !== data.userId) {
+    // Don't notify if user comments on their own post
+    await createNotification({
+      userId: post[0].userId,
+      type: "comment",
+      title: "New Comment",
+      message: "Someone commented on your post",
+      relatedId: data.postId,
+      fromUserId: data.userId,
+    });
+  }
+  
   return Number(result.insertId);
 }
 
@@ -401,4 +431,87 @@ export async function getFollowing(userId: number) {
   const db = await getDb();
   if (!db) return [];
   return db.select().from(userFollows).where(eq(userFollows.followerId, userId));
+}
+
+
+// Notification functions
+export async function createNotification(data: {
+  userId: number;
+  type: "like" | "comment" | "follow" | "milestone";
+  title: string;
+  message: string;
+  relatedId?: number;
+  fromUserId?: number;
+}) {
+  const db = await getDb();
+  if (!db) return null;
+  
+  const { notifications } = await import("../drizzle/schema");
+  
+  await db.insert(notifications).values(data);
+}
+
+export async function getNotifications(userId: number, limit: number = 20) {
+  const db = await getDb();
+  if (!db) return [];
+  
+  const { notifications, users } = await import("../drizzle/schema");
+  const { desc, eq } = await import("drizzle-orm");
+  
+  const results = await db
+    .select({
+      notification: notifications,
+      fromUser: users,
+    })
+    .from(notifications)
+    .leftJoin(users, eq(notifications.fromUserId, users.id))
+    .where(eq(notifications.userId, userId))
+    .orderBy(desc(notifications.createdAt))
+    .limit(limit);
+  
+  return results;
+}
+
+export async function getUnreadNotificationCount(userId: number) {
+  const db = await getDb();
+  if (!db) return 0;
+  
+  const { notifications } = await import("../drizzle/schema");
+  const { eq, and } = await import("drizzle-orm");
+  
+  const results = await db
+    .select()
+    .from(notifications)
+    .where(and(
+      eq(notifications.userId, userId),
+      eq(notifications.isRead, 0)
+    ));
+  
+  return results.length;
+}
+
+export async function markNotificationAsRead(notificationId: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const { notifications } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  await db
+    .update(notifications)
+    .set({ isRead: 1 })
+    .where(eq(notifications.id, notificationId));
+}
+
+export async function markAllNotificationsAsRead(userId: number) {
+  const db = await getDb();
+  if (!db) return;
+  
+  const { notifications } = await import("../drizzle/schema");
+  const { eq } = await import("drizzle-orm");
+  
+  await db
+    .update(notifications)
+    .set({ isRead: 1 })
+    .where(eq(notifications.userId, userId));
 }

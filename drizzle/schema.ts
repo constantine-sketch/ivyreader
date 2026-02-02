@@ -1,4 +1,4 @@
-import { int, mysqlEnum, mysqlTable, text, timestamp, varchar } from "drizzle-orm/mysql-core";
+import { int, mysqlEnum, mysqlTable, text, timestamp, tinyint, varchar } from "drizzle-orm/mysql-core";
 
 /**
  * Core user table backing auth flow.
@@ -125,6 +125,19 @@ export const userFollows = mysqlTable("user_follows", {
   createdAt: timestamp("createdAt").defaultNow().notNull(),
 });
 
+// Notifications table
+export const notifications = mysqlTable("notifications", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // User who receives the notification
+  type: mysqlEnum("type", ["like", "comment", "follow", "milestone"]).notNull(),
+  title: varchar("title", { length: 255 }).notNull(),
+  message: text("message").notNull(),
+  relatedId: int("relatedId"), // ID of related entity (post, comment, etc.)
+  fromUserId: int("fromUserId"), // User who triggered the notification
+  isRead: tinyint("isRead").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
 // Export types
 export type Book = typeof books.$inferSelect;
 export type InsertBook = typeof books.$inferInsert;
@@ -149,3 +162,6 @@ export type InsertPostComment = typeof postComments.$inferInsert;
 
 export type UserFollow = typeof userFollows.$inferSelect;
 export type InsertUserFollow = typeof userFollows.$inferInsert;
+
+export type Notification = typeof notifications.$inferSelect;
+export type InsertNotification = typeof notifications.$inferInsert;

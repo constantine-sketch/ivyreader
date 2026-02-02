@@ -181,6 +181,22 @@ export const appRouter = router({
     
     following: protectedProcedure.query(({ ctx }) => db.getFollowing(ctx.user.id)),
   }),
+  
+  notifications: router({
+    list: protectedProcedure
+      .input(z.object({ limit: z.number().default(20) }))
+      .query(({ ctx, input }) => db.getNotifications(ctx.user.id, input.limit)),
+    
+    unreadCount: protectedProcedure
+      .query(({ ctx }) => db.getUnreadNotificationCount(ctx.user.id)),
+    
+    markAsRead: protectedProcedure
+      .input(z.object({ notificationId: z.number() }))
+      .mutation(({ input }) => db.markNotificationAsRead(input.notificationId)),
+    
+    markAllAsRead: protectedProcedure
+      .mutation(({ ctx }) => db.markAllNotificationsAsRead(ctx.user.id)),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
