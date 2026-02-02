@@ -193,7 +193,7 @@ function InlineUpgradePrompt({
 export function UpgradeModal({ 
   visible, 
   onClose,
-  targetTier = "premium",
+  targetTier: requestedTier = "premium",
 }: { 
   visible: boolean; 
   onClose: () => void;
@@ -201,7 +201,10 @@ export function UpgradeModal({
 }) {
   const colors = useColors();
   const router = useRouter();
-  const { tier, isDarkTheme } = useTierAccess();
+  const { tier, isDarkTheme, isPremiumOrHigher } = useTierAccess();
+  
+  // If user is already Premium, always show Elite upgrade
+  const targetTier = isPremiumOrHigher && requestedTier === "premium" ? "elite" : requestedTier;
   const targetTierInfo = TIERS[targetTier];
   const upgradeFeatures = getUpgradeFeatures(tier, targetTier);
   

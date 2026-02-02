@@ -112,7 +112,7 @@ const CATEGORIES = ["All", "Academic", "Business", "Productivity", "Psychology",
 
 export default function ReadingListsScreen() {
   const colors = useColors();
-  const { accentColor, isDarkTheme, isPremiumOrHigher, canAccess } = useTierAccess();
+  const { accentColor, isDarkTheme, isPremiumOrHigher, isElite, canAccess } = useTierAccess();
   const [refreshing, setRefreshing] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>("All");
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
@@ -138,7 +138,8 @@ export default function ReadingListsScreen() {
     : CURATED_LISTS.filter((list) => list.category === selectedCategory);
 
   const featuredLists = CURATED_LISTS.filter(list => list.featured);
-  const hasAccess = canAccess("curated_lists");
+  // Premium and Elite both have full access to lists
+  const hasAccess = isPremiumOrHigher;
 
   const handleListPress = (list: ReadingList, isLocked: boolean) => {
     if (isLocked) {
@@ -184,8 +185,8 @@ export default function ReadingListsScreen() {
             </Text>
           </View>
 
-          {/* Premium Upgrade Banner (for non-premium users) */}
-          {!hasAccess && (
+          {/* Elite Upgrade Banner (for non-elite users) */}
+          {!isElite && (
             <View className="px-6 mb-6">
               <TouchableOpacity
                 onPress={() => setShowUpgradeModal(true)}
@@ -209,7 +210,7 @@ export default function ReadingListsScreen() {
                   className="text-sm mb-4"
                   style={{ color: isDarkTheme ? "#888" : colors.muted }}
                 >
-                  Upgrade to Premium to access all curated collections, monthly updates, and exclusive book recommendations.
+                  Upgrade to Elite to access AI-powered recommendations, advanced analytics, and exclusive Elite features.
                 </Text>
                 <View
                   className="self-start px-5 py-2 rounded-xl"
@@ -219,7 +220,7 @@ export default function ReadingListsScreen() {
                     className="font-bold"
                     style={{ color: isDarkTheme ? "#000" : "#fff" }}
                   >
-                    Upgrade to Premium
+                    Upgrade to Elite
                   </Text>
                 </View>
               </TouchableOpacity>
@@ -240,7 +241,7 @@ export default function ReadingListsScreen() {
               contentContainerStyle={{ paddingHorizontal: 24 }}
             >
               {featuredLists.map((list) => {
-                const isLocked = !hasAccess;
+                const isLocked = false; // Premium has full access
                 return (
                   <TouchableOpacity
                     key={list.id}
@@ -349,7 +350,7 @@ export default function ReadingListsScreen() {
             </Text>
 
             {filteredLists.map((list) => {
-              const isLocked = !hasAccess;
+              const isLocked = false; // Premium has full access
               return (
                 <TouchableOpacity
                   key={list.id}
@@ -424,7 +425,7 @@ export default function ReadingListsScreen() {
       <UpgradeModal
         visible={showUpgradeModal}
         onClose={() => setShowUpgradeModal(false)}
-        targetTier="premium"
+        targetTier="elite"
       />
     </ScreenContainer>
   );

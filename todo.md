@@ -782,3 +782,17 @@
 - [x] Route users to tier-appropriate dashboard
 - [x] Tier-specific welcome content on dashboard
 - [x] Upgrade prompts at gate points
+
+## Tier Access Updates
+- [ ] Premium gets full access to curated reading lists
+- [ ] Upgrade buttons show "Upgrade to Elite" for Premium users
+- [ ] Remove AI tab from bottom navigation
+- [ ] Add AI Concierge teaser in Profile section
+
+## Tier Access Changes Completed
+- [x] Premium users now have full access to reading lists (no lock icons)
+- [x] Upgrade buttons show "Upgrade to Elite" for Premium users
+- [x] Removed AI tab from bottom navigation
+- [x] Added AI Concierge teaser in Profile section with pulse animation
+- [x] Elite users can access AI Concierge directly from Profile
+- [x] Non-Elite users see teaser with upgrade prompt

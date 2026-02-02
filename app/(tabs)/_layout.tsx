@@ -58,8 +58,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="concierge"
         options={{
-          title: "AI",
-          tabBarIcon: ({ color }) => <IconSymbol size={28} name="sparkles" color={color} />,
+          href: null, // Hide from tab bar - accessed via Profile
         }}
       />
       <Tabs.Screen
