@@ -71,14 +71,22 @@ export default function NotificationsScreen() {
         notificationsEnabled: finalNotificationsEnabled,
       });
 
-      // Invalidate user query to refresh auth state with updated onboarding status
+      // Invalidate and refetch user query to get updated onboarding status
       await utils.auth.me.invalidate();
-
-      // Wait for query to refetch before navigating
-      await new Promise(resolve => setTimeout(resolve, 500));
-
-      // Navigate to main app
-      router.replace("/(tabs)");
+      
+      // Refetch and wait for confirmed onboarding completion
+      const refetchResult = await utils.auth.me.fetch();
+      console.log("[Onboarding] Refetch result:", refetchResult);
+      
+      if (refetchResult?.onboardingCompleted) {
+        console.log("[Onboarding] Confirmed onboarding complete, navigating to main app");
+        router.replace("/(tabs)");
+      } else {
+        // Fallback: wait a bit and try again
+        console.log("[Onboarding] Waiting for DB update to propagate...");
+        await new Promise(resolve => setTimeout(resolve, 1000));
+        router.replace("/(tabs)");
+      }
     } catch (error) {
       console.error("Failed to complete onboarding:", error);
       Alert.alert("Error", "Failed to save your preferences. Please try again.");
