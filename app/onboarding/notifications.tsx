@@ -15,6 +15,7 @@ export default function NotificationsScreen() {
   const [permissionStatus, setPermissionStatus] = useState<string | null>(null);
 
   const updateOnboardingMutation = trpc.user.updateOnboarding.useMutation();
+  const utils = trpc.useUtils();
 
   useEffect(() => {
     checkPermissions();
@@ -67,6 +68,9 @@ export default function NotificationsScreen() {
         favoriteGenres: genres.length > 0 ? JSON.stringify(genres) : undefined,
         notificationsEnabled: finalNotificationsEnabled,
       });
+
+      // Invalidate user query to refresh auth state with updated onboarding status
+      await utils.auth.me.invalidate();
 
       // Navigate to main app
       router.replace("/(tabs)");

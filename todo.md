@@ -647,3 +647,18 @@
 - [x] Skip onboarding for returning users, go directly to main app
 - [x] Update purchase-complete handler to respect onboarding status
 - [x] Returning users now bypass onboarding and go straight to dashboard
+
+## Onboarding Completion Bug
+
+- [ ] Fix onboarding stuck issue - users can't proceed to main app after completing onboarding
+- [ ] Ensure onboardingCompleted flag is set properly in database
+- [ ] Verify redirect to main app works after onboarding
+- [ ] Test all onboarding steps complete successfully
+
+## Completed: Onboarding Completion Fix
+
+- [x] Fix onboarding stuck issue - users can now proceed to main app after completing onboarding
+- [x] Added query invalidation to refresh user data after profile and onboarding updates
+- [x] Ensured onboardingCompleted flag is set properly in database
+- [x] Verified redirect to main app works after onboarding completion
+- [x] All onboarding steps complete successfully and grant access to main app

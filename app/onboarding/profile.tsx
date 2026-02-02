@@ -16,6 +16,7 @@ export default function ProfileScreen() {
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const updateProfileMutation = trpc.user.updateProfile.useMutation();
+  const utils = trpc.useUtils();
 
   const handleContinue = async () => {
     if (!name.trim()) {
@@ -42,6 +43,9 @@ export default function ProfileScreen() {
         username: username.trim().toLowerCase(),
         avatar: selectedAvatar,
       });
+
+      // Invalidate user query to refresh profile data
+      await utils.auth.me.invalidate();
 
       router.push("/onboarding/goals");
     } catch (error: any) {
