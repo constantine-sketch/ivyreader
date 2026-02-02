@@ -563,3 +563,32 @@
 - [x] Fix book cover images in Up Next section displaying with incorrect aspect ratios
 - [x] Ensure all book covers show properly (no blank gray boxes)
 - [x] Make cover images consistent size and properly scaled
+
+
+## Onboarding Flow
+
+- [ ] Create database schema for user onboarding status and preferences
+- [ ] Build Welcome screen with IvyReader intro
+- [ ] Build Reading Goals screen (pages/week, favorite genres)
+- [ ] Build Add First Book screen with search integration
+- [ ] Build Notifications setup screen (push on mobile, email on web)
+- [ ] Create onboarding router with step progression
+- [ ] Add first-time user detection logic
+- [ ] Redirect new users to onboarding on app launch
+- [ ] Store onboarding completion status in database
+- [ ] Integrate with tier selection from marketing website
+- [ ] Test onboarding flow on web and mobile platforms
+
+
+## Onboarding Flow
+
+- [x] Create database schema for onboarding status fields
+- [x] Build Welcome screen component
+- [x] Build Reading Goals setup screen with pages/week and genre selection
+- [x] Build Add First Book screen with book search
+- [x] Build Notifications setup screen
+- [x] Create onboarding router and navigation logic
+- [x] Add first-time user detection and redirect to onboarding
+- [x] Store onboarding data in user profile
+- [x] Redirect to main app after onboarding completion
+- [ ] Test onboarding flow on web and mobile (ready for testing)

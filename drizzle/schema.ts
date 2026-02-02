@@ -22,6 +22,11 @@ export const users = mysqlTable("users", {
   stripeSubscriptionId: varchar("stripeSubscriptionId", { length: 255 }),
   subscriptionStatus: mysqlEnum("subscriptionStatus", ["active", "canceled", "past_due", "trialing"]),
   subscriptionEndsAt: timestamp("subscriptionEndsAt"),
+  // Onboarding fields
+  onboardingCompleted: tinyint("onboardingCompleted").default(0).notNull(),
+  readingGoalPagesPerWeek: int("readingGoalPagesPerWeek"),
+  favoriteGenres: text("favoriteGenres"), // JSON array of genres
+  notificationsEnabled: tinyint("notificationsEnabled").default(1).notNull(),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),

@@ -578,3 +578,34 @@ export async function getFollowingCount(userId: number) {
   const results = await db.select().from(userFollows).where(eq(userFollows.followerId, userId));
   return results.length;
 }
+
+
+export async function updateUserOnboarding(
+  userId: number,
+  data: {
+    onboardingCompleted?: boolean;
+    readingGoalPagesPerWeek?: number;
+    favoriteGenres?: string;
+    notificationsEnabled?: boolean;
+  }
+) {
+  const db = await getDb();
+  if (!db) return;
+
+  const updateData: Record<string, any> = {};
+  
+  if (data.onboardingCompleted !== undefined) {
+    updateData.onboardingCompleted = data.onboardingCompleted ? 1 : 0;
+  }
+  if (data.readingGoalPagesPerWeek !== undefined) {
+    updateData.readingGoalPagesPerWeek = data.readingGoalPagesPerWeek;
+  }
+  if (data.favoriteGenres !== undefined) {
+    updateData.favoriteGenres = data.favoriteGenres;
+  }
+  if (data.notificationsEnabled !== undefined) {
+    updateData.notificationsEnabled = data.notificationsEnabled ? 1 : 0;
+  }
+
+  await db.update(users).set(updateData).where(eq(users.id, userId));
+}

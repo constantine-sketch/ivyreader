@@ -1,8 +1,9 @@
-import { ReactNode } from "react";
+import { ReactNode, useEffect } from "react";
 import { View, ActivityIndicator } from "react-native";
 import { useAuth } from "@/hooks/use-auth";
 import { useColors } from "@/hooks/use-colors";
 import { LoginScreen } from "./login-screen";
+import { useRouter } from "expo-router";
 
 interface AuthWrapperProps {
   children: ReactNode;
@@ -15,6 +16,18 @@ interface AuthWrapperProps {
 export function AuthWrapper({ children }: AuthWrapperProps) {
   const { user, loading } = useAuth();
   const colors = useColors();
+  const router = useRouter();
+  
+  // Check if user needs onboarding
+  useEffect(() => {
+    if (user && !loading) {
+      // Check if onboarding is completed
+      const onboardingCompleted = (user as any).onboardingCompleted;
+      if (!onboardingCompleted) {
+        router.replace("/onboarding/welcome");
+      }
+    }
+  }, [user, loading, router]);
 
   // Show loading spinner while checking auth status
   if (loading) {

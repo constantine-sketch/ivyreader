@@ -203,6 +203,17 @@ export const appRouter = router({
     following: protectedProcedure.query(({ ctx }) => db.getFollowing(ctx.user.id)),
   }),
   
+  user: router({
+    updateOnboarding: protectedProcedure
+      .input(z.object({
+        onboardingCompleted: z.boolean().optional(),
+        readingGoalPagesPerWeek: z.number().int().positive().optional(),
+        favoriteGenres: z.string().optional(),
+        notificationsEnabled: z.boolean().optional(),
+      }))
+      .mutation(({ ctx, input }) => db.updateUserOnboarding(ctx.user.id, input)),
+  }),
+  
   notifications: router({
     list: protectedProcedure
       .input(z.object({ limit: z.number().default(20) }))
