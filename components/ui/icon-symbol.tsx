@@ -24,6 +24,7 @@ const MAPPING = {
   "person.fill": "person",
   "list.bullet.rectangle": "list-alt",
   "sparkles": "auto-awesome",
+  "message.fill": "chat",
 } as IconMapping;
 
 /**

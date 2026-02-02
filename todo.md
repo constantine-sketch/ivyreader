@@ -796,3 +796,25 @@
 - [x] Added AI Concierge teaser in Profile section with pulse animation
 - [x] Elite users can access AI Concierge directly from Profile
 - [x] Non-Elite users see teaser with upgrade prompt
+
+## New Features - Subscription, Society & Accountability
+- [ ] Build /subscription route with current plan display
+- [ ] Add billing history section to subscription page
+- [ ] Add upgrade/downgrade options to subscription page
+- [ ] Enhance Society tab with prominent Pomodoro group calls for Elite
+- [ ] Make Pomodoro section more aesthetic
+- [ ] Create Accountability bottom tab
+- [ ] Add chat with founders feature
+- [ ] Add accountability partner messaging system
+- [ ] Implement messaging UI components
+
+## Features Completed - Subscription, Society & Accountability
+- [x] Build /subscription route with current plan display
+- [x] Add billing history section to subscription page
+- [x] Add upgrade/downgrade options to subscription page
+- [x] Enhance Society tab with prominent Pomodoro group calls for Elite
+- [x] Make Pomodoro section more aesthetic with animations
+- [x] Create Accountability bottom tab
+- [x] Add chat with founders feature (Elite exclusive)
+- [x] Add accountability partner messaging system
+- [x] Implement messaging UI components

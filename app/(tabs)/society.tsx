@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, RefreshControl, Platform } from "react-native";
+import { useState, useRef, useEffect } from "react";
+import { ScrollView, Text, View, Pressable, TextInput, ActivityIndicator, RefreshControl, Platform, TouchableOpacity, Animated } from "react-native";
 import { useRouter } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
@@ -8,8 +8,17 @@ import { formatTimeAgo } from "@/lib/mock-data";
 import { CreatePostModal } from "@/components/create-post-modal";
 import { CommentModal } from "@/components/comment-modal";
 import { NotificationsModal } from "@/components/notifications-modal";
+import { useTierAccess } from "@/hooks/use-tier-access";
+import { TierBadge } from "@/components/tier-gate";
 
 type FeedTab = 'following' | 'global';
+
+// Mock upcoming Pomodoro sessions
+const UPCOMING_SESSIONS = [
+  { id: "1", title: "Morning Focus Session", host: "Sarah K.", time: "Today, 9:00 AM", participants: 12, duration: "25 min" },
+  { id: "2", title: "Deep Work Hour", host: "Marcus T.", time: "Today, 2:00 PM", participants: 8, duration: "50 min" },
+  { id: "3", title: "Evening Reading Sprint", host: "IvyReader Team", time: "Today, 7:00 PM", participants: 24, duration: "25 min" },
+];
 
 export default function SocietyScreen() {
   const colors = useColors();
@@ -20,6 +29,28 @@ export default function SocietyScreen() {
   const [selectedPostId, setSelectedPostId] = useState<number | null>(null);
   const [refreshing, setRefreshing] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
+  const { accentColor, isDarkTheme, isElite, isPremiumOrHigher } = useTierAccess();
+  
+  // Animation for Pomodoro card
+  const pulseAnim = useRef(new Animated.Value(1)).current;
+  useEffect(() => {
+    if (isElite) {
+      Animated.loop(
+        Animated.sequence([
+          Animated.timing(pulseAnim, {
+            toValue: 1.02,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+          Animated.timing(pulseAnim, {
+            toValue: 1,
+            duration: 2000,
+            useNativeDriver: true,
+          }),
+        ])
+      ).start();
+    }
+  }, [isElite]);
   
   const { data: unreadCount = 0 } = trpc.notifications.unreadCount.useQuery();
   
@@ -83,6 +114,14 @@ export default function SocietyScreen() {
   };
   
   const isLoading = postsLoading || leaderboardLoading;
+  
+  // Theme colors
+  const bgColor = isDarkTheme ? "#0a0a0a" : colors.background;
+  const cardBg = isDarkTheme ? "#151515" : colors.surface;
+  const borderColor = isDarkTheme ? "#333" : colors.border;
+  const textColor = isDarkTheme ? "#fff" : colors.foreground;
+  const mutedColor = isDarkTheme ? "#888" : colors.muted;
+  const goldAccent = "#FFD700";
 
   const getInitials = (name: string): string => {
     return name
@@ -94,39 +133,25 @@ export default function SocietyScreen() {
 
   if (isLoading) {
     return (
-      <ScreenContainer>
+      <ScreenContainer containerClassName={isDarkTheme ? "bg-[#0a0a0a]" : "bg-background"}>
         <View className="flex-1 items-center justify-center">
-          <ActivityIndicator size="large" color={colors.primary} />
+          <ActivityIndicator size="large" color={accentColor} />
         </View>
       </ScreenContainer>
     );
   }
 
   return (
-    <ScreenContainer>
+    <ScreenContainer containerClassName={isDarkTheme ? "bg-[#0a0a0a]" : "bg-background"}>
       <View className="flex-1">
         {/* Header */}
         <View className="px-6 pt-6 pb-4">
           <View className="flex-row justify-between items-center mb-4">
-            <Text className="text-3xl font-bold text-foreground">Society</Text>
+            <View className="flex-row items-center">
+              <Text className="text-3xl font-bold mr-3" style={{ color: textColor }}>Society</Text>
+              <TierBadge size="small" />
+            </View>
             <View className="flex-row gap-3">
-              {/* Elite Pomodoro Button */}
-              {currentUser?.subscriptionTier === 'elite' && (
-                <Pressable
-                  onPress={() => router.push('/pomodoro-sessions')}
-                  className="px-3 py-1.5 rounded-full flex-row items-center gap-1"
-                  style={({ pressed }) => [{
-                    backgroundColor: colors.primary,
-                    opacity: pressed ? 0.8 : 1
-                  }]}
-                >
-                  <Text className="text-base">⏱️</Text>
-                  <Text className="text-xs font-bold" style={{ color: colors.background }}>
-                    Pomodoro
-                  </Text>
-                </Pressable>
-              )}
-              
               {/* Notifications */}
               <Pressable
                 onPress={() => setShowNotifications(true)}
@@ -139,85 +164,13 @@ export default function SocietyScreen() {
                     className="absolute -top-1 -right-1 w-5 h-5 rounded-full items-center justify-center"
                     style={{ backgroundColor: colors.error }}
                   >
-                    <Text className="text-xs font-bold" style={{ color: colors.background }}>
+                    <Text className="text-xs font-bold" style={{ color: "#fff" }}>
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </Text>
                   </View>
                 )}
               </Pressable>
             </View>
-          </View>
-
-          {/* Tabs */}
-          <View className="flex-row gap-2 mb-4">
-            <Pressable
-              onPress={() => setActiveTab('following')}
-              className="px-4 py-2 rounded-lg"
-              style={{ 
-                backgroundColor: activeTab === 'following' ? colors.primary : colors.surface,
-                borderWidth: 1,
-                borderColor: colors.border
-              }}
-            >
-              <Text 
-                className="font-semibold text-sm"
-                style={{ color: activeTab === 'following' ? colors.background : colors.foreground }}
-              >
-                FOLLOWING
-              </Text>
-            </Pressable>
-
-            <Pressable
-              onPress={() => setActiveTab('global')}
-              className="px-4 py-2 rounded-lg"
-              style={{ 
-                backgroundColor: activeTab === 'global' ? colors.primary : colors.surface,
-                borderWidth: 1,
-                borderColor: colors.border
-              }}
-            >
-              <Text 
-                className="font-semibold text-sm"
-                style={{ color: activeTab === 'global' ? colors.background : colors.foreground }}
-              >
-                GLOBAL
-              </Text>
-            </Pressable>
-          </View>
-
-          {/* Post Input */}
-          <View className="rounded-2xl p-4 border" style={{ backgroundColor: colors.surface, borderColor: colors.border }}>
-            <TextInput
-              placeholder="Share an insight or observation..."
-              placeholderTextColor={colors.muted}
-              value={postContent}
-              onChangeText={setPostContent}
-              multiline
-              numberOfLines={3}
-              returnKeyType="done"
-              blurOnSubmit={true}
-              className="mb-3"
-              style={{ 
-                color: colors.foreground,
-                minHeight: 60,
-                textAlignVertical: 'top'
-              }}
-            />
-            <Pressable
-              onPress={() => {
-                console.log('Publish post:', postContent);
-                setPostContent('');
-              }}
-              className="py-2 px-4 rounded-lg self-end"
-              style={({ pressed }) => [{ 
-                backgroundColor: colors.primary,
-                opacity: pressed ? 0.8 : 1
-              }]}
-            >
-              <Text className="font-bold text-sm" style={{ color: colors.background }}>
-                PUBLISH
-              </Text>
-            </Pressable>
           </View>
         </View>
 
@@ -227,36 +180,217 @@ export default function SocietyScreen() {
             <RefreshControl
               refreshing={refreshing}
               onRefresh={handleRefresh}
-              tintColor={colors.primary}
-              colors={[colors.primary]}
+              tintColor={accentColor}
+              colors={[accentColor]}
             />
           }
         >
+          {/* Elite Pomodoro Group Calls - Prominent Section */}
+          {isElite && (
+            <View className="px-6 mb-6">
+              <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+                <View 
+                  className="rounded-2xl overflow-hidden"
+                  style={{
+                    backgroundColor: `${goldAccent}10`,
+                    borderWidth: 2,
+                    borderColor: goldAccent,
+                  }}
+                >
+                  {/* Header */}
+                  <View className="p-4 flex-row items-center justify-between" style={{ backgroundColor: `${goldAccent}15` }}>
+                    <View className="flex-row items-center">
+                      <Text style={{ fontSize: 28, marginRight: 10 }}>🎯</Text>
+                      <View>
+                        <Text className="text-lg font-bold" style={{ color: textColor }}>
+                          Pomodoro Group Calls
+                        </Text>
+                        <Text className="text-xs" style={{ color: goldAccent }}>
+                          ELITE EXCLUSIVE
+                        </Text>
+                      </View>
+                    </View>
+                    <View 
+                      className="px-3 py-1 rounded-full"
+                      style={{ backgroundColor: colors.success }}
+                    >
+                      <Text className="text-xs font-bold" style={{ color: "#fff" }}>
+                        LIVE NOW
+                      </Text>
+                    </View>
+                  </View>
+                  
+                  {/* Upcoming Sessions */}
+                  <View className="p-4">
+                    <Text className="text-xs font-bold tracking-widest mb-3" style={{ color: mutedColor }}>
+                      UPCOMING SESSIONS
+                    </Text>
+                    
+                    {UPCOMING_SESSIONS.map((session, index) => (
+                      <TouchableOpacity
+                        key={session.id}
+                        onPress={() => router.push('/pomodoro-sessions')}
+                        className="flex-row items-center justify-between py-3"
+                        style={{
+                          borderBottomWidth: index < UPCOMING_SESSIONS.length - 1 ? 1 : 0,
+                          borderBottomColor: `${goldAccent}30`,
+                        }}
+                      >
+                        <View className="flex-1">
+                          <Text className="font-semibold" style={{ color: textColor }}>
+                            {session.title}
+                          </Text>
+                          <View className="flex-row items-center mt-1">
+                            <Text className="text-xs" style={{ color: mutedColor }}>
+                              {session.time} • {session.duration}
+                            </Text>
+                          </View>
+                        </View>
+                        <View className="items-end">
+                          <View className="flex-row items-center">
+                            <Text className="text-xs mr-1" style={{ color: goldAccent }}>
+                              {session.participants}
+                            </Text>
+                            <Text style={{ fontSize: 12 }}>👥</Text>
+                          </View>
+                          <Text className="text-xs" style={{ color: mutedColor }}>
+                            Hosted by {session.host}
+                          </Text>
+                        </View>
+                      </TouchableOpacity>
+                    ))}
+                    
+                    {/* Join Button */}
+                    <TouchableOpacity
+                      onPress={() => router.push('/pomodoro-sessions')}
+                      className="mt-4 py-3 rounded-xl items-center"
+                      style={{ backgroundColor: goldAccent }}
+                    >
+                      <Text className="font-bold" style={{ color: "#000" }}>
+                        Join a Session →
+                      </Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </Animated.View>
+            </View>
+          )}
+
+          {/* Tabs */}
+          <View className="px-6 mb-4">
+            <View className="flex-row gap-2">
+              <Pressable
+                onPress={() => setActiveTab('following')}
+                className="px-4 py-2 rounded-lg"
+                style={{ 
+                  backgroundColor: activeTab === 'following' ? accentColor : cardBg,
+                  borderWidth: 1,
+                  borderColor: activeTab === 'following' ? accentColor : borderColor
+                }}
+              >
+                <Text 
+                  className="font-semibold text-sm"
+                  style={{ color: activeTab === 'following' ? (isDarkTheme ? "#000" : "#fff") : textColor }}
+                >
+                  FOLLOWING
+                </Text>
+              </Pressable>
+
+              <Pressable
+                onPress={() => setActiveTab('global')}
+                className="px-4 py-2 rounded-lg"
+                style={{ 
+                  backgroundColor: activeTab === 'global' ? accentColor : cardBg,
+                  borderWidth: 1,
+                  borderColor: activeTab === 'global' ? accentColor : borderColor
+                }}
+              >
+                <Text 
+                  className="font-semibold text-sm"
+                  style={{ color: activeTab === 'global' ? (isDarkTheme ? "#000" : "#fff") : textColor }}
+                >
+                  GLOBAL
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+
+          {/* Post Input */}
+          <View className="px-6 mb-6">
+            <View 
+              className="rounded-2xl p-4"
+              style={{ 
+                backgroundColor: cardBg,
+                borderWidth: 1,
+                borderColor: borderColor,
+              }}
+            >
+              <TextInput
+                placeholder="Share an insight or observation..."
+                placeholderTextColor={mutedColor}
+                value={postContent}
+                onChangeText={setPostContent}
+                multiline
+                numberOfLines={3}
+                returnKeyType="done"
+                blurOnSubmit={true}
+                className="mb-3"
+                style={{ 
+                  color: textColor,
+                  minHeight: 60,
+                  textAlignVertical: 'top'
+                }}
+              />
+              <Pressable
+                onPress={() => {
+                  console.log('Publish post:', postContent);
+                  setPostContent('');
+                }}
+                className="py-2 px-4 rounded-lg self-end"
+                style={({ pressed }) => [{ 
+                  backgroundColor: accentColor,
+                  opacity: pressed ? 0.8 : 1
+                }]}
+              >
+                <Text className="font-bold text-sm" style={{ color: isDarkTheme ? "#000" : "#fff" }}>
+                  PUBLISH
+                </Text>
+              </Pressable>
+            </View>
+          </View>
+
           {/* Leaderboard Widget */}
           <View className="px-6 mb-6">
-            <View className="rounded-2xl p-4" style={{ backgroundColor: colors.surface }}>
-              <Text className="text-lg font-bold text-foreground mb-3">
+            <View 
+              className="rounded-2xl p-4"
+              style={{ 
+                backgroundColor: cardBg,
+                borderWidth: 1,
+                borderColor: borderColor,
+              }}
+            >
+              <Text className="text-lg font-bold mb-3" style={{ color: textColor }}>
                 🏆 Top Readers This Week
               </Text>
               {leaderboard?.map((entry, index) => (
                 <View key={entry.userId} className="flex-row items-center justify-between py-2">
                   <View className="flex-row items-center flex-1">
-                    <Text className="text-lg font-bold mr-3" style={{ color: colors.muted }}>
+                    <Text className="text-lg font-bold mr-3" style={{ color: mutedColor }}>
                       #{index + 1}
                     </Text>
                     <View 
                       className="w-8 h-8 rounded-full items-center justify-center mr-3"
-                      style={{ backgroundColor: colors.primary }}
+                      style={{ backgroundColor: accentColor }}
                     >
-                      <Text className="text-xs font-bold" style={{ color: colors.background }}>
+                      <Text className="text-xs font-bold" style={{ color: isDarkTheme ? "#000" : "#fff" }}>
                         {getInitials(entry.name || `User ${entry.userId}`)}
                       </Text>
                     </View>
-                    <Text className="text-sm font-semibold text-foreground">
+                    <Text className="text-sm font-semibold" style={{ color: textColor }}>
                       {entry.name || `User ${entry.userId}`}
                     </Text>
                   </View>
-                  <Text className="text-sm font-bold" style={{ color: colors.primary }}>
+                  <Text className="text-sm font-bold" style={{ color: accentColor }}>
                     {entry.pagesRead} pages
                   </Text>
                 </View>
@@ -266,13 +400,17 @@ export default function SocietyScreen() {
 
           {/* Social Feed */}
           <View className="px-6 pb-8">
-            <Text className="text-lg font-bold text-foreground mb-3">Feed</Text>
+            <Text className="text-lg font-bold mb-3" style={{ color: textColor }}>Feed</Text>
             {posts?.map((item) => (
               <Pressable
                 key={item.post.id}
                 onLongPress={() => handleDeletePost(item.post.id, item.post.userId)}
                 className="rounded-2xl p-4 mb-4"
-                style={{ backgroundColor: colors.surface }}
+                style={{ 
+                  backgroundColor: cardBg,
+                  borderWidth: 1,
+                  borderColor: borderColor,
+                }}
               >
                 {/* User Info */}
                 <Pressable
@@ -282,115 +420,93 @@ export default function SocietyScreen() {
                 >
                   <View 
                     className="w-10 h-10 rounded-full items-center justify-center mr-3"
-                    style={{ backgroundColor: colors.primary }}
+                    style={{ backgroundColor: accentColor }}
                   >
-                    <Text className="text-sm font-bold" style={{ color: colors.background }}>
-                      {getInitials(item.user?.name || `User ${item.post.userId}`)}
+                    <Text className="text-sm font-bold" style={{ color: isDarkTheme ? "#000" : "#fff" }}>
+                      {getInitials(item.user?.name || 'U')}
                     </Text>
                   </View>
                   <View className="flex-1">
-                    <Text className="text-sm font-bold text-foreground">
-                      {item.user?.name || `User ${item.post.userId}`}
-                    </Text>
-                    <Text className="text-xs text-muted">
-                      {formatTimeAgo(new Date(item.post.createdAt))}
+                    <View className="flex-row items-center">
+                      <Text className="font-semibold" style={{ color: textColor }}>
+                        {item.user?.name || 'Anonymous'}
+                      </Text>
+                      {item.user?.subscriptionTier === 'elite' && (
+                        <Text className="ml-1" style={{ fontSize: 12 }}>👑</Text>
+                      )}
+                    </View>
+                    <Text className="text-xs" style={{ color: mutedColor }}>
+                      {formatTimeAgo(item.post.createdAt)}
                     </Text>
                   </View>
                 </Pressable>
 
-                {/* Book Reference */}
-                {item.book && (
-                  <View className="px-3 py-2 rounded-lg mb-3" style={{ backgroundColor: colors.border }}>
-                    <Text className="text-xs font-semibold mb-1" style={{ color: colors.primary }}>
-                      {item.book.category.toUpperCase()}
-                    </Text>
-                    <Text className="text-sm font-bold text-foreground">
-                      {item.book.title}
-                    </Text>
-                    <Text className="text-xs text-muted">{item.book.author}</Text>
-                  </View>
-                )}
-
                 {/* Post Content */}
-                <Text className="text-sm text-foreground mb-3">
+                <Text className="mb-3" style={{ color: textColor, lineHeight: 22 }}>
                   {item.post.content}
                 </Text>
 
+                {/* Book Reference */}
+                {item.book && (
+                  <View 
+                    className="flex-row items-center p-3 rounded-xl mb-3"
+                    style={{ backgroundColor: isDarkTheme ? "#1a1a1a" : `${accentColor}10` }}
+                  >
+                    <Text className="text-2xl mr-3">📖</Text>
+                    <View className="flex-1">
+                      <Text className="font-semibold text-sm" style={{ color: textColor }}>
+                        {item.book.title}
+                      </Text>
+                      <Text className="text-xs" style={{ color: mutedColor }}>
+                        {item.book.author}
+                      </Text>
+                    </View>
+                  </View>
+                )}
+
                 {/* Actions */}
-                <View className="flex-row gap-4 pt-2 border-t" style={{ borderTopColor: colors.border }}>
+                <View className="flex-row items-center gap-4">
                   <Pressable
                     onPress={() => handleLikePost(item.post.id)}
                     className="flex-row items-center"
                     style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
                   >
-                    <Text className="text-base mr-1">👍</Text>
-                    <Text className="text-sm text-muted">{item.post.likes}</Text>
+                    <Text className="text-lg mr-1">{'❤️'}</Text>
+                    <Text className="text-sm" style={{ color: mutedColor }}>
+                      {item.post.likes || 0}
+                    </Text>
                   </Pressable>
-
                   <Pressable
                     onPress={() => setSelectedPostId(item.post.id)}
                     className="flex-row items-center"
                     style={({ pressed }) => [{ opacity: pressed ? 0.7 : 1 }]}
                   >
-                    <Text className="text-base mr-1">💬</Text>
-                    <Text className="text-sm text-muted">{(item as any).comments || 0}</Text>
+                    <Text className="text-lg mr-1">💬</Text>
+                    <Text className="text-sm" style={{ color: mutedColor }}>
+                      {item.post.likes || 0}
+                    </Text>
                   </Pressable>
-
-
                 </View>
-                
-                {/* Delete hint for own posts */}
-                {currentUser?.id === item.post.userId && (
-                  <Text className="text-xs mt-2" style={{ color: colors.error }}>
-                    Hold to delete
-                  </Text>
-                )}
               </Pressable>
             ))}
           </View>
         </ScrollView>
       </View>
-      
-      {/* Floating Create Post Button */}
-      <Pressable
-        onPress={() => setShowCreatePost(true)}
-        className="absolute bottom-6 right-6 w-14 h-14 rounded-full items-center justify-center"
-        style={({ pressed }) => [{
-          backgroundColor: colors.primary,
-          opacity: pressed ? 0.8 : 1,
-        }]}
-      >
-        <Text className="text-2xl">+</Text>
-      </Pressable>
-      
-      {/* Create Post Modal */}
+
+      {/* Modals */}
       <CreatePostModal
         visible={showCreatePost}
         onClose={() => setShowCreatePost(false)}
-        onPostCreated={async (content, bookId) => {
-          await createPost.mutateAsync({
-            content,
-            bookId: bookId || undefined,
-            rating: undefined,
-          });
-          await refetchPosts();
-        }}
-        books={books?.filter(b => b.status === 'reading') || []}
+        books={books || []}
+        onPostCreated={async () => { await refetchPosts(); }}
       />
       
-      {/* Comment Modal */}
-      {selectedPostId && (
-        <CommentModal
-          visible={selectedPostId !== null}
-          postId={selectedPostId}
-          onClose={() => {
-            setSelectedPostId(null);
-            refetchPosts(); // Refresh to update comment counts
-          }}
-        />
-      )}
+      <CommentModal
+        visible={selectedPostId !== null}
+        onClose={() => setSelectedPostId(null)}
+        postId={selectedPostId || 0}
+      />
       
-      {/* Notifications Modal */}
       <NotificationsModal
         visible={showNotifications}
         onClose={() => setShowNotifications(false)}
