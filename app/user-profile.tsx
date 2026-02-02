@@ -214,6 +214,60 @@ export default function UserProfileScreen() {
           )}
         </View>
         
+        {/* User's Archived Books */}
+        <View className="px-6 pb-6">
+          <Text className="text-lg font-bold text-foreground mb-3">
+            📚 Archive
+          </Text>
+          {userBooks && userBooks.filter((b: any) => b.status === 'completed').length > 0 ? (
+            <View className="flex-row flex-wrap gap-3">
+              {userBooks
+                .filter((b: any) => b.status === 'completed')
+                .slice(0, 6)
+                .map((book: any) => (
+                  <View
+                    key={book.id}
+                    className="w-[30%] rounded-lg overflow-hidden"
+                    style={{ backgroundColor: colors.surface }}
+                  >
+                    {book.coverUrl ? (
+                      <Image
+                        source={{ uri: book.coverUrl }}
+                        className="w-full aspect-[2/3]"
+                        style={{ backgroundColor: colors.border }}
+                        resizeMode="cover"
+                      />
+                    ) : (
+                      <View
+                        className="w-full aspect-[2/3] items-center justify-center"
+                        style={{ backgroundColor: colors.border }}
+                      >
+                        <Text className="text-2xl">📚</Text>
+                      </View>
+                    )}
+                    <View className="p-2">
+                      <Text className="text-xs font-bold text-foreground" numberOfLines={2}>
+                        {book.title}
+                      </Text>
+                      <Text className="text-xs text-muted" numberOfLines={1}>
+                        {book.author}
+                      </Text>
+                      {book.rating && (
+                        <Text className="text-xs mt-1" style={{ color: colors.primary }}>
+                          {'★'.repeat(book.rating)}{'☆'.repeat(5 - book.rating)}
+                        </Text>
+                      )}
+                    </View>
+                  </View>
+                ))}
+            </View>
+          ) : (
+            <Text className="text-sm text-muted">
+              No archived books yet
+            </Text>
+          )}
+        </View>
+        
         {/* User's Recent Posts */}
         <View className="px-6 pb-8">
           <Text className="text-lg font-bold text-foreground mb-3">

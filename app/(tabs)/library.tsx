@@ -102,20 +102,34 @@ export default function LibraryScreen() {
       : 0;
 
     return (
-      <Pressable 
+      <View 
         key={book.id}
-        onPress={() => console.log('Book pressed:', book.title)}
-        onLongPress={() => handleDeleteBook(book.id, book.title)}
-        style={({ pressed }) => [{
+        style={{
           backgroundColor: colors.surface,
           borderRadius: 16,
           padding: 16,
           borderWidth: 1,
           borderColor: colors.border,
           marginBottom: 12,
-          opacity: pressed ? 0.7 : 1,
-        }]}
+          position: 'relative',
+        }}
       >
+        {/* Delete Button */}
+        <Pressable
+          onPress={() => handleDeleteBook(book.id, book.title)}
+          className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full items-center justify-center"
+          style={({ pressed }) => [{
+            backgroundColor: colors.error + '15',
+            opacity: pressed ? 0.7 : 1,
+          }]}
+        >
+          <Text className="text-base" style={{ color: colors.error }}>×</Text>
+        </Pressable>
+
+        <Pressable 
+          onPress={() => console.log('Book pressed:', book.title)}
+          className="flex-1"
+        >
         <View className="flex-row">
           {/* Book Cover */}
           {book.coverUrl ? (
@@ -178,7 +192,8 @@ export default function LibraryScreen() {
             )}
           </View>
         </View>
-      </Pressable>
+        </Pressable>
+      </View>
     );
   };
 

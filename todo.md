@@ -539,3 +539,12 @@
 - [x] Make Up Next books tappable to start reading sessions
 - [x] Add navigation from Up Next to reading session screen
 - [x] Remove share buttons from Society feed posts
+
+
+## Delete Button and Archive Visibility
+
+- [x] Add visible delete buttons to book cards in Library (in addition to long press)
+- [x] Style delete buttons to be subtle but discoverable
+- [x] Update user profile page to show archived books section
+- [x] Add API endpoint to fetch user's archived books by userId (uses existing books.list)
+- [x] Display archived books in grid layout on profile pages
