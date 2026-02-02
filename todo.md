@@ -676,3 +676,59 @@
 - [x] Updated Auth.User type to include onboardingCompleted and other fields
 - [x] Fixed useAuth to map all user fields from API response
 - [x] User state now includes onboarding status for proper routing
+
+## Tier-Specific Onboarding
+
+### Free Tier (Heavily Gated)
+- [ ] Create Free tier welcome screen with limited features messaging
+- [ ] Restrict to 3 books max in library
+- [ ] No reading lists access
+- [ ] No Society (community) access
+- [ ] Basic reading tracking only
+- [ ] Show upgrade prompts throughout
+
+### Premium Tier (Current Flow)
+- [ ] Ungate curated reading lists
+- [ ] Full library access (unlimited books)
+- [ ] Basic Society access
+- [ ] Full reading tracking with analytics
+- [ ] No upgrade prompts for gated features
+
+### Elite Tier (Full Access)
+- [ ] Create Elite-specific welcome with VIP messaging
+- [ ] All Premium features plus:
+- [ ] Priority Society features
+- [ ] Advanced analytics
+- [ ] Exclusive reading challenges
+- [ ] Personal reading concierge features
+
+### Feature Gating
+- [ ] Create TierGate component for feature restrictions
+- [ ] Add upgrade prompts for Free users
+- [ ] Route users to correct onboarding based on tier
+
+## Revised Tier-Specific Onboarding (Premium & Elite Only)
+
+### Premium Tier
+- [ ] Aesthetic welcome screen with Premium branding
+- [ ] Ungate curated reading lists
+- [ ] Full library access
+- [ ] Society access
+- [ ] Advanced reading analytics
+
+### Elite Tier
+- [ ] VIP welcome screen with gold/luxury aesthetic
+- [ ] Exclusive Elite onboarding experience
+- [ ] All Premium features plus exclusive Elite perks
+- [ ] Personal concierge messaging
+- [ ] Priority features highlighted
+
+## Completed: Tier-Specific Onboarding
+
+- [x] Aesthetic welcome screen with tier-aware branding
+- [x] Elite VIP welcome screen with gold aesthetic
+- [x] Tier-aware profile screen
+- [x] Tier-aware goals screen
+- [x] Tier-aware first-book screen
+- [x] Tier-aware notifications screen
+- [x] All screens have animations and polished UI
