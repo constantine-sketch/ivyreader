@@ -94,6 +94,7 @@ export default function RootLayout() {
             <Stack.Screen name="add-book" />
             <Stack.Screen name="edit-book" />
             <Stack.Screen name="subscription" />
+            <Stack.Screen name="reading-lists" />
           </Stack>
           <StatusBar style="auto" />
         </QueryClientProvider>

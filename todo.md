@@ -358,3 +358,11 @@
 - [x] Add back button to subscription page header
 - [x] Add prominent "Upgrade to Premium" button to Profile page
 - [x] Ensure default subscription tier is 'free' for new users
+
+
+## UI & Feature Updates
+
+- [x] Make upgrade button more minimalist on Profile page
+- [x] Debug and fix Add Book database insertion issue
+- [x] Create curated reading lists page
+- [x] Add navigation to curated reading lists from dashboard or library

@@ -80,17 +80,14 @@ export default function ProfileScreen() {
           <View className="px-6 mb-6">
             <Pressable
               onPress={() => router.push('/subscription')}
-              className="py-4 rounded-2xl items-center"
+              className="py-3 rounded-lg items-center border"
               style={({ pressed }) => [{
-                backgroundColor: colors.primary,
-                opacity: pressed ? 0.8 : 1
+                borderColor: colors.primary,
+                opacity: pressed ? 0.7 : 1
               }]}
             >
-              <Text className="text-lg font-bold" style={{ color: colors.background }}>
+              <Text className="text-sm font-semibold" style={{ color: colors.primary }}>
                 {user?.subscriptionTier === 'premium' ? 'Upgrade to Elite' : 'Upgrade to Premium'}
-              </Text>
-              <Text className="text-sm mt-1" style={{ color: colors.background, opacity: 0.9 }}>
-                Unlock all features and coaching
               </Text>
             </Pressable>
           </View>

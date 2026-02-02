@@ -102,18 +102,32 @@ export default function DashboardScreen() {
               {todayMinutes} / {dailyGoal} min
             </Text>
           </View>
-          <Pressable 
+          <Pressable
             onPress={() => setShowBookPicker(true)}
+            className="flex-1 items-center justify-center"
             style={({ pressed }) => [{
               backgroundColor: colors.primary,
               opacity: pressed ? 0.8 : 1,
-              paddingHorizontal: 24,
               paddingVertical: 12,
               borderRadius: 8,
             }]}
           >
             <Text className="text-sm font-bold" style={{ color: colors.background }}>
               Resume Reading
+            </Text>
+          </Pressable>
+          <Pressable
+            onPress={() => router.push('/reading-lists')}
+            className="flex-1 items-center justify-center border"
+            style={({ pressed }) => [{
+              borderColor: colors.primary,
+              opacity: pressed ? 0.7 : 1,
+              paddingVertical: 12,
+              borderRadius: 8,
+            }]}
+          >
+            <Text className="text-sm font-bold" style={{ color: colors.primary }}>
+              Reading Lists
             </Text>
           </Pressable>
         </View>
