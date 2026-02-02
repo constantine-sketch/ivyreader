@@ -548,3 +548,11 @@
 - [x] Update user profile page to show archived books section
 - [x] Add API endpoint to fetch user's archived books by userId (uses existing books.list)
 - [x] Display archived books in grid layout on profile pages
+
+
+## Delete Button Refinement
+
+- [x] Move delete button from top-right to bottom-right of book cards
+- [x] Remove colored background from delete button
+- [x] Make delete button smaller and more subtle (plain × text)
+- [x] Verify confirmation dialog works on button press

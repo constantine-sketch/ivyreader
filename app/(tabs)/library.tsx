@@ -117,13 +117,12 @@ export default function LibraryScreen() {
         {/* Delete Button */}
         <Pressable
           onPress={() => handleDeleteBook(book.id, book.title)}
-          className="absolute top-2 right-2 z-10 w-8 h-8 rounded-full items-center justify-center"
+          className="absolute bottom-2 right-2 z-10 px-1"
           style={({ pressed }) => [{
-            backgroundColor: colors.error + '15',
-            opacity: pressed ? 0.7 : 1,
+            opacity: pressed ? 0.5 : 1,
           }]}
         >
-          <Text className="text-base" style={{ color: colors.error }}>×</Text>
+          <Text className="text-xs text-muted">×</Text>
         </Pressable>
 
         <Pressable 
