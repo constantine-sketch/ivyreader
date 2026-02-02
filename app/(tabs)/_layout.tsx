@@ -2,29 +2,34 @@ import { Tabs } from "expo-router";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import { HapticTab } from "@/components/haptic-tab";
 import { IconSymbol } from "@/components/ui/icon-symbol";
-import { Platform } from "react-native";
+import { Platform, Text } from "react-native";
 import { useColors } from "@/hooks/use-colors";
 import { AuthWrapper } from "@/components/auth-wrapper";
+import { trpc } from "@/lib/trpc";
 
 export default function TabLayout() {
   const colors = useColors();
   const insets = useSafeAreaInsets();
   const bottomPadding = Platform.OS === "web" ? 12 : Math.max(insets.bottom, 8);
   const tabBarHeight = 56 + bottomPadding;
+  
+  // Get user tier for conditional tab display
+  const { data: user } = trpc.auth.me.useQuery();
+  const isElite = user?.subscriptionTier === "elite";
 
   return (
     <AuthWrapper>
       <Tabs
       screenOptions={{
-        tabBarActiveTintColor: colors.tint,
+        tabBarActiveTintColor: isElite ? "#FFD700" : colors.tint,
         headerShown: false,
         tabBarButton: HapticTab,
         tabBarStyle: {
           paddingTop: 8,
           paddingBottom: bottomPadding,
           height: tabBarHeight,
-          backgroundColor: colors.background,
-          borderTopColor: colors.border,
+          backgroundColor: isElite ? "#0a0a0a" : colors.background,
+          borderTopColor: isElite ? "#333" : colors.border,
           borderTopWidth: 0.5,
         },
       }}
@@ -48,6 +53,13 @@ export default function TabLayout() {
         options={{
           title: "Lists",
           tabBarIcon: ({ color}) => <IconSymbol size={28} name="list.bullet.rectangle" color={color} />,
+        }}
+      />
+      <Tabs.Screen
+        name="concierge"
+        options={{
+          title: "AI",
+          tabBarIcon: ({ color }) => <IconSymbol size={28} name="sparkles" color={color} />,
         }}
       />
       <Tabs.Screen

@@ -23,6 +23,7 @@ const MAPPING = {
   "person.3.fill": "people",
   "person.fill": "person",
   "list.bullet.rectangle": "list-alt",
+  "sparkles": "auto-awesome",
 } as IconMapping;
 
 /**
