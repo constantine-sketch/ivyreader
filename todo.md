@@ -662,3 +662,17 @@
 - [x] Ensured onboardingCompleted flag is set properly in database
 - [x] Verified redirect to main app works after onboarding completion
 - [x] All onboarding steps complete successfully and grant access to main app
+
+## Onboarding UX Improvements
+
+- [ ] Add loading indicator during account setup delay
+- [ ] Implement optimistic user state updates to eliminate waiting
+- [ ] Test complete onboarding flow from login to dashboard
+- [ ] Verify no more stuck/loop issues
+
+## Completed: Onboarding UX Improvements
+
+- [x] Added loading indicator "Setting up your account..." during completion
+- [x] Updated Auth.User type to include onboardingCompleted and other fields
+- [x] Fixed useAuth to map all user fields from API response
+- [x] User state now includes onboarding status for proper routing

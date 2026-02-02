@@ -13,6 +13,7 @@ export default function NotificationsScreen() {
   
   const [notificationsEnabled, setNotificationsEnabled] = useState(true);
   const [permissionStatus, setPermissionStatus] = useState<string | null>(null);
+  const [isCompleting, setIsCompleting] = useState(false);
 
   const updateOnboardingMutation = trpc.user.updateOnboarding.useMutation();
   const utils = trpc.useUtils();
@@ -42,6 +43,7 @@ export default function NotificationsScreen() {
   };
 
   const handleComplete = async () => {
+    setIsCompleting(true);
     let finalNotificationsEnabled = notificationsEnabled;
 
     if (notificationsEnabled && Platform.OS !== "web") {
@@ -80,6 +82,7 @@ export default function NotificationsScreen() {
     } catch (error) {
       console.error("Failed to complete onboarding:", error);
       Alert.alert("Error", "Failed to save your preferences. Please try again.");
+      setIsCompleting(false);
     }
   };
 
@@ -175,10 +178,10 @@ export default function NotificationsScreen() {
           onPress={handleComplete}
           className="w-full rounded-full py-4 px-8"
           style={{ backgroundColor: colors.primary }}
-          disabled={updateOnboardingMutation.isPending}
+          disabled={isCompleting}
         >
           <Text className="text-center font-semibold text-lg" style={{ color: colors.background }}>
-            {updateOnboardingMutation.isPending ? "Setting up..." : "Get Started"}
+            {isCompleting ? "Setting up your account..." : "Get Started"}
           </Text>
         </TouchableOpacity>
       </View>

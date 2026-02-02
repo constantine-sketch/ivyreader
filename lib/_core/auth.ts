@@ -9,6 +9,11 @@ export type User = {
   email: string | null;
   loginMethod: string | null;
   lastSignedIn: Date;
+  // Onboarding fields
+  onboardingCompleted?: number;
+  username?: string | null;
+  avatar?: string | null;
+  subscriptionTier?: string;
 };
 
 export async function getSessionToken(): Promise<string | null> {

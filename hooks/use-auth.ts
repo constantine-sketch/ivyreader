@@ -33,6 +33,10 @@ export function useAuth(options?: UseAuthOptions) {
             email: apiUser.email,
             loginMethod: apiUser.loginMethod,
             lastSignedIn: new Date(apiUser.lastSignedIn),
+            onboardingCompleted: apiUser.onboardingCompleted,
+            username: apiUser.username,
+            avatar: apiUser.avatar,
+            subscriptionTier: apiUser.subscriptionTier,
           };
           setUser(userInfo);
           // Cache user info in localStorage for faster subsequent loads
