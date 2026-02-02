@@ -145,7 +145,7 @@ export default function ReadingListsScreen() {
     if (isLocked) {
       setShowUpgradeModal(true);
     } else {
-      router.push(`/list-detail?id=${list.id}`);
+      router.push(`/list-detail?listId=${list.id}`);
     }
   };
 

@@ -126,7 +126,7 @@ export default function LibraryScreen() {
         </Pressable>
 
         <Pressable 
-          onPress={() => console.log('Book pressed:', book.title)}
+          onPress={() => router.push(`/book-detail?bookId=${book.id}`)}
           className="flex-1"
         >
         <View className="flex-row">
@@ -188,6 +188,24 @@ export default function LibraryScreen() {
               <Text className="text-xs text-muted">
                 {book.totalPages} pages
               </Text>
+            )}
+            
+            {book.status === 'reading' && (
+              <Pressable
+                onPress={(e) => {
+                  e.stopPropagation();
+                  router.push(`/reading-session?bookId=${book.id}`);
+                }}
+                className="mt-3 py-2 rounded-lg items-center"
+                style={({ pressed }) => ({
+                  backgroundColor: colors.primary,
+                  opacity: pressed ? 0.8 : 1,
+                })}
+              >
+                <Text className="text-xs font-bold" style={{ color: colors.background }}>
+                  Start Reading
+                </Text>
+              </Pressable>
             )}
           </View>
         </View>

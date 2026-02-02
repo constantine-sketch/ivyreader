@@ -818,3 +818,31 @@
 - [x] Add chat with founders feature (Elite exclusive)
 - [x] Add accountability partner messaging system
 - [x] Implement messaging UI components
+
+## Launch Preparation Audit
+### Profile Settings (Broken)
+- [ ] Edit Profile - only logs to console, needs actual screen
+- [ ] Notifications settings - only logs to console, needs actual screen
+- [ ] Privacy settings - only logs to console, needs actual screen
+- [ ] About IvyReader - only logs to console, needs actual screen
+
+### Features to Verify
+- [ ] Book detail page functionality
+- [ ] Reading session timer
+- [ ] Post-session notes
+- [ ] Pomodoro sessions page
+- [ ] List detail page
+- [ ] User profile page (other users)
+- [ ] Create post functionality in Society
+
+## Launch Preparation Fixes (Completed)
+- [x] Create Edit Profile screen with name, username, avatar editing
+- [x] Create Notifications Settings screen with toggle preferences
+- [x] Create Privacy Settings screen with visibility and data management
+- [x] Create About screen with app info and links
+- [x] Wire Profile settings buttons to new screens
+- [x] Fix Library book cards to navigate to book detail
+- [x] Add "Start Reading" button to currently reading books
+- [x] Fix Reading Lists navigation to list-detail screen
+- [x] Enhance list-detail with add book functionality
+- [x] Sync curated list IDs between reading-lists and list-detail screens

@@ -476,7 +476,7 @@ export default function ProfileScreen() {
             </Pressable>
             
             <Pressable
-              onPress={() => console.log('Edit Profile')}
+              onPress={() => router.push('/edit-profile')}
               className="flex-row justify-between items-center p-4 border-b"
               style={({ pressed }) => [{ 
                 borderBottomColor: borderColor,
@@ -488,7 +488,7 @@ export default function ProfileScreen() {
             </Pressable>
             
             <Pressable
-              onPress={() => console.log('Notifications')}
+              onPress={() => router.push('/settings-notifications')}
               className="flex-row justify-between items-center p-4 border-b"
               style={({ pressed }) => [{ 
                 borderBottomColor: borderColor,
@@ -500,7 +500,7 @@ export default function ProfileScreen() {
             </Pressable>
             
             <Pressable
-              onPress={() => console.log('Privacy')}
+              onPress={() => router.push('/settings-privacy')}
               className="flex-row justify-between items-center p-4 border-b"
               style={({ pressed }) => [{ 
                 borderBottomColor: borderColor,
@@ -512,7 +512,7 @@ export default function ProfileScreen() {
             </Pressable>
             
             <Pressable
-              onPress={() => console.log('About')}
+              onPress={() => router.push('/about')}
               className="flex-row justify-between items-center p-4"
               style={({ pressed }) => [{ 
                 opacity: pressed ? 0.7 : 1
