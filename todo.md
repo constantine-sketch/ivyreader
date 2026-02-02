@@ -633,3 +633,17 @@
 - [x] Create MARKETING_INTEGRATION.md guide for marketing team
 - [x] Update onboarding flow to work with tier from deep link
 - [ ] Test complete flow: marketing website → payment → deep link → app with correct tier (ready for testing)
+
+## Returning User Flow
+
+- [ ] Update OAuth callback to check if user has completed onboarding
+- [ ] Skip onboarding for returning users, go directly to main app
+- [ ] Update purchase-complete handler to respect onboarding status
+- [ ] Test flow: returning user logs in → goes directly to dashboard
+
+## Completed: Returning User Flow
+
+- [x] Update OAuth callback to check if user has completed onboarding
+- [x] Skip onboarding for returning users, go directly to main app
+- [x] Update purchase-complete handler to respect onboarding status
+- [x] Returning users now bypass onboarding and go straight to dashboard

@@ -61,10 +61,30 @@ export default function OAuthCallback() {
           }
 
           setStatus("success");
-          console.log("[OAuth] Web authentication successful, redirecting to home...");
-          setTimeout(() => {
-            router.replace("/(tabs)");
-          }, 1000);
+          console.log("[OAuth] Web authentication successful, checking onboarding status...");
+          
+          // Check if user has completed onboarding
+          try {
+            const apiBaseUrl = (await import('@/constants/oauth')).getApiBaseUrl();
+            const response = await fetch(`${apiBaseUrl}/api/auth/me`, {
+              headers: {
+                Cookie: `sessionToken=${params.sessionToken}`,
+              },
+            });
+            const userData = await response.json();
+            
+            if (userData.onboardingCompleted) {
+              console.log("[OAuth] User has completed onboarding, redirecting to main app");
+              setTimeout(() => router.replace("/(tabs)"), 1000);
+            } else {
+              console.log("[OAuth] User needs onboarding, redirecting to welcome");
+              setTimeout(() => router.replace("/onboarding/welcome"), 1000);
+            }
+          } catch (err) {
+            console.error("[OAuth] Failed to check onboarding status:", err);
+            // Default to onboarding if check fails
+            setTimeout(() => router.replace("/onboarding/welcome"), 1000);
+          }
           return;
         }
 
@@ -158,10 +178,30 @@ export default function OAuthCallback() {
           // User info is already in the OAuth callback response
           // No need to fetch from API
           setStatus("success");
-          console.log("[OAuth] Redirecting to home...");
-          setTimeout(() => {
-            router.replace("/(tabs)");
-          }, 1000);
+          console.log("[OAuth] Checking onboarding status...");
+          
+          // Check if user has completed onboarding
+          try {
+            const apiBaseUrl = (await import('@/constants/oauth')).getApiBaseUrl();
+            const response = await fetch(`${apiBaseUrl}/api/auth/me`, {
+              headers: {
+                Cookie: `sessionToken=${sessionToken}`,
+              },
+            });
+            const userData = await response.json();
+            
+            if (userData.onboardingCompleted) {
+              console.log("[OAuth] User has completed onboarding, redirecting to main app");
+              setTimeout(() => router.replace("/(tabs)"), 1000);
+            } else {
+              console.log("[OAuth] User needs onboarding, redirecting to welcome");
+              setTimeout(() => router.replace("/onboarding/welcome"), 1000);
+            }
+          } catch (err) {
+            console.error("[OAuth] Failed to check onboarding status:", err);
+            // Default to onboarding if check fails
+            setTimeout(() => router.replace("/onboarding/welcome"), 1000);
+          }
           return;
         }
 
@@ -211,13 +251,36 @@ export default function OAuthCallback() {
           }
 
           setStatus("success");
-          console.log("[OAuth] Authentication successful, redirecting to home...");
+          console.log("[OAuth] Authentication successful, checking onboarding status...");
 
-          // Redirect to home after a short delay
-          setTimeout(() => {
-            console.log("[OAuth] Executing redirect...");
-            router.replace("/(tabs)");
-          }, 1000);
+          // Check if user has completed onboarding
+          try {
+            const apiBaseUrl = (await import('@/constants/oauth')).getApiBaseUrl();
+            const response = await fetch(`${apiBaseUrl}/api/auth/me`, {
+              headers: {
+                Cookie: `sessionToken=${result.sessionToken}`,
+              },
+            });
+            const userData = await response.json();
+            
+            if (userData.onboardingCompleted) {
+              console.log("[OAuth] User has completed onboarding, redirecting to main app");
+              setTimeout(() => {
+                console.log("[OAuth] Executing redirect to main app...");
+                router.replace("/(tabs)");
+              }, 1000);
+            } else {
+              console.log("[OAuth] User needs onboarding, redirecting to welcome");
+              setTimeout(() => {
+                console.log("[OAuth] Executing redirect to onboarding...");
+                router.replace("/onboarding/welcome");
+              }, 1000);
+            }
+          } catch (err) {
+            console.error("[OAuth] Failed to check onboarding status:", err);
+            // Default to onboarding if check fails
+            setTimeout(() => router.replace("/onboarding/welcome"), 1000);
+          }
         } else {
           console.error("[OAuth] No session token in result:", result);
           setStatus("error");

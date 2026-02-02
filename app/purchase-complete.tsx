@@ -52,12 +52,22 @@ export default function PurchaseCompleteScreen() {
 
       console.log('[PurchaseComplete] Tier updated successfully');
       
-      // Redirect to onboarding
-      router.replace("/onboarding/welcome");
+      // Check if user has already completed onboarding
+      if (user.onboardingCompleted) {
+        console.log('[PurchaseComplete] User has completed onboarding, redirecting to main app');
+        router.replace("/(tabs)");
+      } else {
+        console.log('[PurchaseComplete] User needs onboarding, redirecting to welcome');
+        router.replace("/onboarding/welcome");
+      }
     } catch (error) {
       console.error('[PurchaseComplete] Failed to update tier:', error);
-      // Still redirect to onboarding even if tier update fails
-      router.replace("/onboarding/welcome");
+      // Still redirect based on onboarding status even if tier update fails
+      if (user?.onboardingCompleted) {
+        router.replace("/(tabs)");
+      } else {
+        router.replace("/onboarding/welcome");
+      }
     }
   };
 
