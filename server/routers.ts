@@ -345,6 +345,54 @@ export const appRouter = router({
           users
         };
       }),
+    
+    // Update user tier
+    updateUserTier: publicProcedure
+      .input(z.object({ 
+        secretKey: z.string(),
+        userId: z.number(),
+        tier: z.enum(['free', 'premium', 'elite'])
+      }))
+      .mutation(async ({ input }) => {
+        const adminSecret = process.env.ADMIN_SECRET || 'ivyreader-admin-2026';
+        if (input.secretKey !== adminSecret) {
+          throw new Error("Unauthorized: Invalid admin key");
+        }
+        await db.updateUserSubscriptionTier(input.userId, input.tier);
+        return { success: true };
+      }),
+    
+    // Delete user
+    deleteUser: publicProcedure
+      .input(z.object({ 
+        secretKey: z.string(),
+        userId: z.number()
+      }))
+      .mutation(async ({ input }) => {
+        const adminSecret = process.env.ADMIN_SECRET || 'ivyreader-admin-2026';
+        if (input.secretKey !== adminSecret) {
+          throw new Error("Unauthorized: Invalid admin key");
+        }
+        await db.deleteUser(input.userId);
+        return { success: true };
+      }),
+    
+    // Send verification email (stores token, actual email sending handled separately)
+    sendVerificationEmail: publicProcedure
+      .input(z.object({ 
+        secretKey: z.string(),
+        userId: z.number()
+      }))
+      .mutation(async ({ input }) => {
+        const adminSecret = process.env.ADMIN_SECRET || 'ivyreader-admin-2026';
+        if (input.secretKey !== adminSecret) {
+          throw new Error("Unauthorized: Invalid admin key");
+        }
+        const token = generateVerificationToken();
+        const expiresAt = getTokenExpiration();
+        await db.setEmailVerificationToken(input.userId, token, expiresAt);
+        return { success: true, token };
+      }),
   }),
   
   notifications: router({

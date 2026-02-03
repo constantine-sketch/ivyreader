@@ -865,3 +865,19 @@
 - [x] Add engagement metrics (DAU, WAU, conversion rate, MRR)
 - [x] Add curated lists management view
 - [x] Add admin dashboard link in profile (visible only to admins)
+
+## Admin User Management & Email Service
+- [ ] Add API endpoints for user management (change tier, delete user, send email)
+- [ ] Add action buttons to admin dashboard UI
+- [ ] Verify landing page database connection
+- [ ] Verify confirmation page database connection  
+- [ ] Set up Resend email service integration
+- [ ] Test email sending functionality
+
+## Admin User Management & Email Service - COMPLETED
+- [x] Add API endpoints for user management (change tier, delete user, send email)
+- [x] Add action buttons to admin dashboard UI
+- [x] Verify landing page database connection (confirmed: uses URL params, DB update on app side)
+- [x] Verify confirmation page database connection (confirmed: passes tier to app via URL)
+- [ ] Set up Resend email service integration (skipped - user declined API key)
+- [x] Test admin dashboard functionality
