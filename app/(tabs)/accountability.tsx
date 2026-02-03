@@ -458,6 +458,80 @@ export default function AccountabilityScreen() {
             </View>
           </View>
 
+          {/* Accountability Partner */}
+          <View className="px-6 mb-6">
+            <Text className="text-xs font-bold tracking-widest mb-3" style={{ color: mutedColor }}>
+              READING BUDDY
+            </Text>
+            
+            <TouchableOpacity
+              className="rounded-2xl overflow-hidden"
+              style={{
+                backgroundColor: cardBg,
+                borderWidth: 1,
+                borderColor: borderColor,
+              }}
+              activeOpacity={0.7}
+            >
+              <View className="p-4 flex-row items-center">
+                <View 
+                  className="w-14 h-14 rounded-full items-center justify-center mr-4"
+                  style={{ backgroundColor: `${goldAccent}20`, borderWidth: 2, borderColor: `${goldAccent}40`, borderStyle: 'dashed' }}
+                >
+                  <Text style={{ fontSize: 28 }}>🤝</Text>
+                </View>
+                
+                <View className="flex-1">
+                  <Text className="font-bold text-lg" style={{ color: textColor }}>
+                    Find Your Reading Buddy
+                  </Text>
+                  <Text className="text-sm mt-1" style={{ color: mutedColor }}>
+                    Get matched with an accountability partner who shares your reading goals
+                  </Text>
+                </View>
+                
+                <Text style={{ color: goldAccent, fontSize: 20 }}>→</Text>
+              </View>
+              
+              {/* Matching status */}
+              <View 
+                className="px-4 py-3 flex-row items-center justify-between"
+                style={{ backgroundColor: `${goldAccent}10` }}
+              >
+                <View className="flex-row items-center">
+                  <Text style={{ fontSize: 14, marginRight: 8 }}>✨</Text>
+                  <Text className="text-sm" style={{ color: mutedColor }}>
+                    Matching available
+                  </Text>
+                </View>
+                <View 
+                  className="px-3 py-1.5 rounded-full"
+                  style={{ backgroundColor: goldAccent }}
+                >
+                  <Text className="text-xs font-bold" style={{ color: "#000" }}>
+                    GET MATCHED
+                  </Text>
+                </View>
+              </View>
+            </TouchableOpacity>
+            
+            {/* Partner benefits */}
+            <View className="mt-3 flex-row flex-wrap">
+              <View className="flex-row items-center mr-4 mb-2">
+                <Text style={{ fontSize: 12, marginRight: 4 }}>💬</Text>
+                <Text className="text-xs" style={{ color: mutedColor }}>Weekly check-ins</Text>
+              </View>
+              <View className="flex-row items-center mr-4 mb-2">
+                <Text style={{ fontSize: 12, marginRight: 4 }}>🎯</Text>
+                <Text className="text-xs" style={{ color: mutedColor }}>Shared goals</Text>
+              </View>
+              <View className="flex-row items-center mb-2">
+                <Text style={{ fontSize: 12, marginRight: 4 }}>📊</Text>
+                <Text className="text-xs" style={{ color: mutedColor }}>Progress tracking</Text>
+              </View>
+            </View>
+          </View>
+
           {/* Pomodoro Sessions */}
           <View className="px-6 mb-6">
             <Text className="text-xs font-bold tracking-widest mb-3" style={{ color: mutedColor }}>

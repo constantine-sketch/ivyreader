@@ -900,3 +900,7 @@
 - [x] Connect app chat to real database
 - [x] Add messaging interface to admin dashboard
 - [x] Test complete messaging flow
+
+## Accountability Partner UI
+- [x] Add accountability partner section back to Accountability tab
+- [x] Show partner matching placeholder for Elite users
