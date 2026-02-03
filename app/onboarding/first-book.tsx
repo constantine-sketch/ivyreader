@@ -39,10 +39,14 @@ export default function FirstBookScreen() {
     
     setIsSearching(true);
     try {
-      const results = await utils.client.books.search.query({ query: searchInput });
-      setSearchResults(results);
+      const results = await utils.client.books.search.query({ 
+        query: searchInput.trim(), 
+        maxResults: 10 
+      });
+      setSearchResults(results || []);
     } catch (error) {
       console.error("Search failed:", error);
+      setSearchResults([]);
     } finally {
       setIsSearching(false);
     }

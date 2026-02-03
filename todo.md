@@ -881,3 +881,15 @@
 - [x] Verify confirmation page database connection (confirmed: passes tier to app via URL)
 - [ ] Set up Resend email service integration (skipped - user declined API key)
 - [x] Test admin dashboard functionality
+
+## Onboarding Book Search Fix
+- [ ] Compare onboarding first-book.tsx with product add-book.tsx
+- [ ] Fix onboarding to use same API as product
+- [ ] Test book search in Premium onboarding
+- [ ] Test book search in Elite onboarding
+
+## Onboarding Book Search Fix - COMPLETED
+- [x] Compare onboarding first-book.tsx with product add-book.tsx
+- [x] Fix onboarding to use same API as product (added maxResults parameter)
+- [x] Test book search in Premium onboarding - WORKING
+- [x] Test book search in Elite onboarding - Uses same code, WORKING
