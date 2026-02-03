@@ -321,6 +321,32 @@ export const appRouter = router({
       }),
   }),
   
+  // Public admin API for standalone dashboard (uses secret key auth)
+  adminPublic: router({
+    // Get all data for admin dashboard
+    dashboard: publicProcedure
+      .input(z.object({ secretKey: z.string() }))
+      .query(async ({ input }) => {
+        // Simple secret key auth for standalone admin dashboard
+        const adminSecret = process.env.ADMIN_SECRET || 'ivyreader-admin-2026';
+        if (input.secretKey !== adminSecret) {
+          throw new Error("Unauthorized: Invalid admin key");
+        }
+        
+        const [userCounts, metrics, users] = await Promise.all([
+          db.getUserCount(),
+          db.getEngagementMetrics(),
+          db.getAllUsers(100, 0)
+        ]);
+        
+        return {
+          userCounts,
+          metrics,
+          users
+        };
+      }),
+  }),
+  
   notifications: router({
     list: protectedProcedure
       .input(z.object({ limit: z.number().default(20) }))
