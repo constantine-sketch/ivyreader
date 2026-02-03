@@ -1,47 +1,18 @@
 /**
  * Accountability Tab
  * 
- * Chat with founders and accountability partners.
- * Elite-exclusive feature with messaging system.
+ * Chat with founders for accountability check-ins.
+ * Elite-exclusive feature with async messaging system (1-2 responses per day).
  */
 
 import React, { useState, useRef, useEffect } from "react";
-import { View, Text, ScrollView, TouchableOpacity, TextInput, Animated, KeyboardAvoidingView, Platform, FlatList } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity, TextInput, Animated, KeyboardAvoidingView, Platform, FlatList, ActivityIndicator, RefreshControl } from "react-native";
 import { router } from "expo-router";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";
 import { useTierAccess } from "@/hooks/use-tier-access";
 import { TierBadge, UpgradeModal } from "@/components/tier-gate";
-
-// Mock conversations
-const FOUNDER_CHAT = {
-  id: "founder",
-  name: "IvyReader Founders",
-  avatar: "👑",
-  lastMessage: "Welcome to Elite! How can we help you reach your reading goals?",
-  timestamp: "Just now",
-  unread: 1,
-  isOnline: true,
-};
-
-const MOCK_PARTNER = {
-  id: "partner",
-  name: "Reading Buddy",
-  avatar: "📚",
-  lastMessage: "Tap to find your accountability partner",
-  timestamp: "",
-  unread: 0,
-  isOnline: false,
-  isPlaceholder: true,
-};
-
-// Mock messages for founder chat
-const FOUNDER_MESSAGES = [
-  { id: "1", sender: "founder", text: "Welcome to IvyReader Elite! 👑", timestamp: "10:00 AM" },
-  { id: "2", sender: "founder", text: "We're here to help you achieve your reading goals. Feel free to ask us anything about the app, reading strategies, or book recommendations.", timestamp: "10:00 AM" },
-  { id: "3", sender: "founder", text: "What are you currently reading?", timestamp: "10:01 AM" },
-];
 
 type ChatView = "list" | "conversation";
 
@@ -51,9 +22,22 @@ export default function AccountabilityScreen() {
   const { tier, tierInfo, accentColor, isDarkTheme, isElite, isPremiumOrHigher } = useTierAccess();
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [chatView, setChatView] = useState<ChatView>("list");
-  const [activeChat, setActiveChat] = useState<string | null>(null);
   const [messageText, setMessageText] = useState("");
-  const [messages, setMessages] = useState(FOUNDER_MESSAGES);
+  const [refreshing, setRefreshing] = useState(false);
+  
+  // tRPC queries and mutations
+  const utils = trpc.useUtils();
+  const { data: messages = [], isLoading: messagesLoading, refetch: refetchMessages } = trpc.accountability.getMessages.useQuery(
+    undefined,
+    { enabled: isElite }
+  );
+  
+  const sendMessageMutation = trpc.accountability.sendMessage.useMutation({
+    onSuccess: () => {
+      setMessageText("");
+      refetchMessages();
+    },
+  });
   
   // Animation
   const fadeAnim = useRef(new Animated.Value(0)).current;
@@ -74,44 +58,32 @@ export default function AccountabilityScreen() {
   const premiumAccent = "#D4A574";
 
   const handleSendMessage = () => {
-    if (!messageText.trim()) return;
-    
-    const newMessage = {
-      id: Date.now().toString(),
-      sender: "user",
-      text: messageText.trim(),
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-    };
-    
-    setMessages([...messages, newMessage]);
-    setMessageText("");
-    
-    // Simulate founder response
-    setTimeout(() => {
-      const responses = [
-        "That's a great choice! How are you finding it so far?",
-        "I love that book! What chapter are you on?",
-        "Excellent! Keep up the great reading habit.",
-        "Have you tried our Pomodoro sessions? They're great for focused reading.",
-      ];
-      const randomResponse = responses[Math.floor(Math.random() * responses.length)];
-      
-      setMessages(prev => [...prev, {
-        id: Date.now().toString(),
-        sender: "founder",
-        text: randomResponse,
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-      }]);
-    }, 1500);
+    if (!messageText.trim() || sendMessageMutation.isPending) return;
+    sendMessageMutation.mutate({ content: messageText.trim() });
   };
 
-  const openChat = (chatId: string) => {
-    if (chatId === "partner" && MOCK_PARTNER.isPlaceholder) {
-      // Show partner matching flow
-      return;
+  const onRefresh = async () => {
+    setRefreshing(true);
+    await refetchMessages();
+    setRefreshing(false);
+  };
+
+  const formatMessageTime = (dateStr: string) => {
+    const date = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now.getTime() - date.getTime();
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+    
+    if (diffDays === 0) {
+      return date.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+    } else if (diffDays === 1) {
+      return 'Yesterday';
+    } else if (diffDays < 7) {
+      return date.toLocaleDateString([], { weekday: 'short' });
+    } else {
+      return date.toLocaleDateString([], { month: 'short', day: 'numeric' });
     }
-    setActiveChat(chatId);
-    setChatView("conversation");
   };
 
   // Non-Elite users see upgrade prompt
@@ -144,7 +116,7 @@ export default function AccountabilityScreen() {
                 Elite Exclusive Feature
               </Text>
               <Text className="text-center mb-6" style={{ color: mutedColor }}>
-                Unlock direct access to founders and get matched with an accountability partner to supercharge your reading journey.
+                Unlock direct access to founders for personalized accountability check-ins to supercharge your reading journey.
               </Text>
               
               <View className="w-full mb-6">
@@ -153,16 +125,16 @@ export default function AccountabilityScreen() {
                   <Text style={{ color: textColor }}>Chat directly with founders</Text>
                 </View>
                 <View className="flex-row items-center mb-3">
-                  <Text style={{ fontSize: 20, marginRight: 12 }}>🤝</Text>
-                  <Text style={{ color: textColor }}>Get matched with a reading buddy</Text>
+                  <Text style={{ fontSize: 20, marginRight: 12 }}>📊</Text>
+                  <Text style={{ color: textColor }}>Personalized reading guidance</Text>
                 </View>
                 <View className="flex-row items-center mb-3">
-                  <Text style={{ fontSize: 20, marginRight: 12 }}>📊</Text>
-                  <Text style={{ color: textColor }}>Track progress together</Text>
+                  <Text style={{ fontSize: 20, marginRight: 12 }}>🎯</Text>
+                  <Text style={{ color: textColor }}>Daily accountability check-ins</Text>
                 </View>
                 <View className="flex-row items-center">
-                  <Text style={{ fontSize: 20, marginRight: 12 }}>🎯</Text>
-                  <Text style={{ color: textColor }}>Weekly check-ins</Text>
+                  <Text style={{ fontSize: 20, marginRight: 12 }}>⚡</Text>
+                  <Text style={{ color: textColor }}>1-2 responses per day</Text>
                 </View>
               </View>
               
@@ -188,10 +160,8 @@ export default function AccountabilityScreen() {
     );
   }
 
-  // Conversation View
-  if (chatView === "conversation" && activeChat) {
-    const chatInfo = activeChat === "founder" ? FOUNDER_CHAT : MOCK_PARTNER;
-    
+  // Conversation View (Elite users)
+  if (chatView === "conversation") {
     return (
       <ScreenContainer 
         containerClassName={isDarkTheme ? "bg-[#0a0a0a]" : "bg-background"}
@@ -208,10 +178,7 @@ export default function AccountabilityScreen() {
             style={{ borderBottomColor: borderColor }}
           >
             <TouchableOpacity
-              onPress={() => {
-                setChatView("list");
-                setActiveChat(null);
-              }}
+              onPress={() => setChatView("list")}
               className="mr-3"
             >
               <Text style={{ color: goldAccent, fontSize: 24 }}>←</Text>
@@ -219,60 +186,76 @@ export default function AccountabilityScreen() {
             
             <View 
               className="w-10 h-10 rounded-full items-center justify-center mr-3"
-              style={{ backgroundColor: `${goldAccent}20` }}
+              style={{ backgroundColor: goldAccent }}
             >
-              <Text style={{ fontSize: 20 }}>{chatInfo.avatar}</Text>
+              <Text style={{ fontSize: 20 }}>👑</Text>
             </View>
             
             <View className="flex-1">
               <Text className="font-bold" style={{ color: textColor }}>
-                {chatInfo.name}
+                IvyReader Founders
               </Text>
-              {chatInfo.isOnline && (
-                <View className="flex-row items-center">
-                  <View 
-                    className="w-2 h-2 rounded-full mr-1"
-                    style={{ backgroundColor: colors.success }}
-                  />
-                  <Text className="text-xs" style={{ color: colors.success }}>
-                    Online
-                  </Text>
-                </View>
-              )}
+              <Text className="text-xs" style={{ color: mutedColor }}>
+                Typically responds 1-2x daily
+              </Text>
             </View>
           </View>
           
           {/* Messages */}
-          <FlatList
-            data={messages}
-            keyExtractor={(item) => item.id}
-            className="flex-1 px-4"
-            contentContainerStyle={{ paddingVertical: 16 }}
-            renderItem={({ item }) => (
-              <View 
-                className={`mb-3 max-w-[80%] ${item.sender === "user" ? "self-end" : "self-start"}`}
-              >
-                <View 
-                  className="px-4 py-3 rounded-2xl"
-                  style={{
-                    backgroundColor: item.sender === "user" ? goldAccent : cardBg,
-                    borderWidth: item.sender === "user" ? 0 : 1,
-                    borderColor: borderColor,
-                  }}
-                >
-                  <Text style={{ color: item.sender === "user" ? "#000" : textColor }}>
-                    {item.text}
+          {messagesLoading ? (
+            <View className="flex-1 items-center justify-center">
+              <ActivityIndicator size="large" color={goldAccent} />
+            </View>
+          ) : (
+            <FlatList
+              data={messages}
+              keyExtractor={(item) => item.id.toString()}
+              className="flex-1 px-4"
+              contentContainerStyle={{ paddingVertical: 16 }}
+              refreshControl={
+                <RefreshControl
+                  refreshing={refreshing}
+                  onRefresh={onRefresh}
+                  tintColor={goldAccent}
+                />
+              }
+              ListEmptyComponent={
+                <View className="items-center py-12">
+                  <Text style={{ fontSize: 48, marginBottom: 16 }}>👋</Text>
+                  <Text className="text-lg font-semibold text-center mb-2" style={{ color: textColor }}>
+                    Welcome to Founder Chat!
+                  </Text>
+                  <Text className="text-center px-8" style={{ color: mutedColor }}>
+                    Send a message to start your accountability journey. We typically respond 1-2 times per day.
                   </Text>
                 </View>
-                <Text 
-                  className={`text-xs mt-1 ${item.sender === "user" ? "text-right" : "text-left"}`}
-                  style={{ color: mutedColor }}
+              }
+              renderItem={({ item }) => (
+                <View 
+                  className={`mb-3 max-w-[80%] ${item.senderType === "user" ? "self-end" : "self-start"}`}
                 >
-                  {item.timestamp}
-                </Text>
-              </View>
-            )}
-          />
+                  <View 
+                    className="px-4 py-3 rounded-2xl"
+                    style={{
+                      backgroundColor: item.senderType === "user" ? goldAccent : cardBg,
+                      borderWidth: item.senderType === "user" ? 0 : 1,
+                      borderColor: borderColor,
+                    }}
+                  >
+                    <Text style={{ color: item.senderType === "user" ? "#000" : textColor }}>
+                      {item.content}
+                    </Text>
+                  </View>
+                  <Text 
+                    className={`text-xs mt-1 ${item.senderType === "user" ? "text-right" : "text-left"}`}
+                    style={{ color: mutedColor }}
+                  >
+                    {formatMessageTime(String(item.createdAt))}
+                  </Text>
+                </View>
+              )}
+            />
+          )}
           
           {/* Message Input */}
           <View 
@@ -296,13 +279,22 @@ export default function AccountabilityScreen() {
               }}
               returnKeyType="send"
               onSubmitEditing={handleSendMessage}
+              editable={!sendMessageMutation.isPending}
             />
             <TouchableOpacity
               onPress={handleSendMessage}
               className="w-10 h-10 rounded-full items-center justify-center"
-              style={{ backgroundColor: goldAccent }}
+              style={{ 
+                backgroundColor: goldAccent,
+                opacity: sendMessageMutation.isPending ? 0.5 : 1,
+              }}
+              disabled={sendMessageMutation.isPending}
             >
-              <Text style={{ fontSize: 18 }}>→</Text>
+              {sendMessageMutation.isPending ? (
+                <ActivityIndicator size="small" color="#000" />
+              ) : (
+                <Text style={{ fontSize: 18 }}>→</Text>
+              )}
             </TouchableOpacity>
           </View>
         </KeyboardAvoidingView>
@@ -311,10 +303,23 @@ export default function AccountabilityScreen() {
   }
 
   // Chat List View (Elite users)
+  const lastMessage = messages.length > 0 ? messages[messages.length - 1] : null;
+  const unreadCount = messages.filter(m => m.senderType === "founder" && !m.isRead).length;
+  
   return (
     <ScreenContainer containerClassName={isDarkTheme ? "bg-[#0a0a0a]" : "bg-background"}>
       <Animated.View style={{ opacity: fadeAnim, flex: 1 }}>
-        <ScrollView className="flex-1" showsVerticalScrollIndicator={false}>
+        <ScrollView 
+          className="flex-1" 
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={refreshing}
+              onRefresh={onRefresh}
+              tintColor={goldAccent}
+            />
+          }
+        >
           {/* Header */}
           <View className="px-6 pt-6 pb-4">
             <View className="flex-row items-center justify-between mb-2">
@@ -335,7 +340,7 @@ export default function AccountabilityScreen() {
             </Text>
             
             <TouchableOpacity
-              onPress={() => openChat("founder")}
+              onPress={() => setChatView("conversation")}
               className="rounded-2xl overflow-hidden"
               style={{
                 backgroundColor: `${goldAccent}10`,
@@ -353,128 +358,70 @@ export default function AccountabilityScreen() {
                 
                 <View className="flex-1">
                   <View className="flex-row items-center justify-between">
-                    <Text className="text-lg font-bold" style={{ color: textColor }}>
-                      {FOUNDER_CHAT.name}
+                    <Text className="font-bold text-lg" style={{ color: textColor }}>
+                      IvyReader Founders
                     </Text>
-                    {FOUNDER_CHAT.unread > 0 && (
+                    {unreadCount > 0 && (
                       <View 
                         className="w-6 h-6 rounded-full items-center justify-center"
-                        style={{ backgroundColor: goldAccent }}
+                        style={{ backgroundColor: colors.error }}
                       >
-                        <Text className="text-xs font-bold" style={{ color: "#000" }}>
-                          {FOUNDER_CHAT.unread}
+                        <Text className="text-xs font-bold" style={{ color: "#fff" }}>
+                          {unreadCount}
                         </Text>
                       </View>
                     )}
                   </View>
-                  
-                  <View className="flex-row items-center mt-1">
-                    <View 
-                      className="w-2 h-2 rounded-full mr-2"
-                      style={{ backgroundColor: colors.success }}
-                    />
-                    <Text className="text-xs" style={{ color: colors.success }}>
-                      Online now
-                    </Text>
-                  </View>
-                  
-                  <Text 
-                    className="text-sm mt-2"
-                    style={{ color: mutedColor }}
-                    numberOfLines={1}
-                  >
-                    {FOUNDER_CHAT.lastMessage}
+                  <Text className="text-sm mt-1" style={{ color: mutedColor }}>
+                    {lastMessage 
+                      ? `${lastMessage.senderType === "user" ? "You: " : ""}${lastMessage.content.substring(0, 40)}${lastMessage.content.length > 40 ? "..." : ""}`
+                      : "Tap to start your accountability journey"
+                    }
                   </Text>
-                </View>
-              </View>
-              
-              <View 
-                className="px-4 py-3 flex-row items-center justify-center"
-                style={{ backgroundColor: `${goldAccent}20` }}
-              >
-                <Text className="font-semibold" style={{ color: goldAccent }}>
-                  Start Conversation →
-                </Text>
-              </View>
-            </TouchableOpacity>
-          </View>
-
-          {/* Accountability Partner */}
-          <View className="px-6 mb-6">
-            <Text className="text-xs font-bold tracking-widest mb-3" style={{ color: accentColor }}>
-              ACCOUNTABILITY PARTNER
-            </Text>
-            
-            <TouchableOpacity
-              onPress={() => {
-                // Show partner matching modal
-              }}
-              className="rounded-2xl p-4"
-              style={{
-                backgroundColor: cardBg,
-                borderWidth: 1,
-                borderColor: borderColor,
-              }}
-            >
-              <View className="flex-row items-center">
-                <View 
-                  className="w-14 h-14 rounded-full items-center justify-center mr-4"
-                  style={{ 
-                    backgroundColor: `${accentColor}20`,
-                    borderWidth: 2,
-                    borderColor: accentColor,
-                    borderStyle: "dashed",
-                  }}
-                >
-                  <Text style={{ fontSize: 28 }}>🤝</Text>
+                  {lastMessage && (
+                    <Text className="text-xs mt-1" style={{ color: mutedColor }}>
+                      {formatMessageTime(String(lastMessage.createdAt))}
+                    </Text>
+                  )}
                 </View>
                 
-                <View className="flex-1">
-                  <Text className="text-lg font-bold" style={{ color: textColor }}>
-                    Find Your Reading Buddy
-                  </Text>
-                  <Text className="text-sm mt-1" style={{ color: mutedColor }}>
-                    Get matched with someone who shares your reading goals
-                  </Text>
-                </View>
+                <Text style={{ color: goldAccent, fontSize: 20 }}>→</Text>
               </View>
               
+              {/* Response time indicator */}
               <View 
-                className="mt-4 py-3 rounded-xl items-center"
-                style={{ backgroundColor: accentColor }}
+                className="px-4 py-2 flex-row items-center justify-center"
+                style={{ backgroundColor: `${goldAccent}20` }}
               >
-                <Text className="font-bold" style={{ color: isDarkTheme ? "#000" : "#fff" }}>
-                  Find a Partner
+                <Text style={{ fontSize: 12, marginRight: 6 }}>⏱️</Text>
+                <Text className="text-xs" style={{ color: goldAccent }}>
+                  Typically responds 1-2x daily
                 </Text>
               </View>
             </TouchableOpacity>
           </View>
 
-          {/* How It Works */}
-          <View className="px-6 mb-8">
-            <Text className="text-xs font-bold tracking-widest mb-3" style={{ color: accentColor }}>
+          {/* How it works */}
+          <View className="px-6 mb-6">
+            <Text className="text-xs font-bold tracking-widest mb-3" style={{ color: mutedColor }}>
               HOW IT WORKS
             </Text>
             
             <View 
               className="rounded-2xl p-4"
-              style={{
-                backgroundColor: cardBg,
-                borderWidth: 1,
-                borderColor: borderColor,
-              }}
+              style={{ backgroundColor: cardBg, borderWidth: 1, borderColor: borderColor }}
             >
               <View className="flex-row items-start mb-4">
                 <View 
                   className="w-8 h-8 rounded-full items-center justify-center mr-3"
                   style={{ backgroundColor: `${goldAccent}20` }}
                 >
-                  <Text className="font-bold" style={{ color: goldAccent }}>1</Text>
+                  <Text style={{ fontSize: 14 }}>1</Text>
                 </View>
                 <View className="flex-1">
-                  <Text className="font-semibold" style={{ color: textColor }}>Get Matched</Text>
-                  <Text className="text-sm mt-1" style={{ color: mutedColor }}>
-                    We pair you with a reader who has similar goals and interests
+                  <Text className="font-semibold" style={{ color: textColor }}>Share your goals</Text>
+                  <Text className="text-sm" style={{ color: mutedColor }}>
+                    Tell us what you're reading and your targets
                   </Text>
                 </View>
               </View>
@@ -484,12 +431,12 @@ export default function AccountabilityScreen() {
                   className="w-8 h-8 rounded-full items-center justify-center mr-3"
                   style={{ backgroundColor: `${goldAccent}20` }}
                 >
-                  <Text className="font-bold" style={{ color: goldAccent }}>2</Text>
+                  <Text style={{ fontSize: 14 }}>2</Text>
                 </View>
                 <View className="flex-1">
-                  <Text className="font-semibold" style={{ color: textColor }}>Weekly Check-ins</Text>
-                  <Text className="text-sm mt-1" style={{ color: mutedColor }}>
-                    Share your progress and keep each other accountable
+                  <Text className="font-semibold" style={{ color: textColor }}>Daily check-ins</Text>
+                  <Text className="text-sm" style={{ color: mutedColor }}>
+                    Send updates on your reading progress
                   </Text>
                 </View>
               </View>
@@ -499,19 +446,68 @@ export default function AccountabilityScreen() {
                   className="w-8 h-8 rounded-full items-center justify-center mr-3"
                   style={{ backgroundColor: `${goldAccent}20` }}
                 >
-                  <Text className="font-bold" style={{ color: goldAccent }}>3</Text>
+                  <Text style={{ fontSize: 14 }}>3</Text>
                 </View>
                 <View className="flex-1">
-                  <Text className="font-semibold" style={{ color: textColor }}>Achieve Together</Text>
-                  <Text className="text-sm mt-1" style={{ color: mutedColor }}>
-                    Celebrate milestones and push each other to read more
+                  <Text className="font-semibold" style={{ color: textColor }}>Get personalized guidance</Text>
+                  <Text className="text-sm" style={{ color: mutedColor }}>
+                    Receive tailored advice and encouragement
                   </Text>
                 </View>
               </View>
             </View>
           </View>
+
+          {/* Pomodoro Sessions */}
+          <View className="px-6 mb-6">
+            <Text className="text-xs font-bold tracking-widest mb-3" style={{ color: mutedColor }}>
+              GROUP SESSIONS
+            </Text>
+            
+            <View 
+              className="rounded-2xl p-4"
+              style={{ backgroundColor: cardBg, borderWidth: 1, borderColor: borderColor }}
+            >
+              <View className="flex-row items-center mb-3">
+                <Text style={{ fontSize: 24, marginRight: 12 }}>🍅</Text>
+                <View className="flex-1">
+                  <Text className="font-bold" style={{ color: textColor }}>Pomodoro Reading Sessions</Text>
+                  <Text className="text-sm" style={{ color: mutedColor }}>
+                    Join live group reading sessions
+                  </Text>
+                </View>
+              </View>
+              
+              <View 
+                className="rounded-xl p-3 flex-row items-center justify-between"
+                style={{ backgroundColor: `${goldAccent}10` }}
+              >
+                <View>
+                  <Text className="font-semibold" style={{ color: textColor }}>Next Session</Text>
+                  <Text className="text-sm" style={{ color: mutedColor }}>Coming soon</Text>
+                </View>
+                <View 
+                  className="px-3 py-2 rounded-lg"
+                  style={{ backgroundColor: `${goldAccent}30` }}
+                >
+                  <Text className="text-xs font-medium" style={{ color: goldAccent }}>
+                    NOTIFY ME
+                  </Text>
+                </View>
+              </View>
+            </View>
+          </View>
+
+          {/* Bottom padding for tab bar */}
+          <View style={{ height: 100 }} />
         </ScrollView>
       </Animated.View>
+      
+      <UpgradeModal
+        visible={showUpgradeModal}
+        onClose={() => setShowUpgradeModal(false)}
+        targetTier="elite"
+      />
     </ScreenContainer>
   );
 }

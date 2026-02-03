@@ -57,6 +57,13 @@
       "when": 1770089307913,
       "tag": "0007_early_ultimo",
       "breakpoints": true
+    },
+    {
+      "idx": 8,
+      "version": "5",
+      "when": 1770151217615,
+      "tag": "0008_old_namora",
+      "breakpoints": true
     }
   ]
 }

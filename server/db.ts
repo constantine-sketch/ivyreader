@@ -867,3 +867,103 @@ export async function deleteUser(userId: number) {
   // Finally delete the user
   await db.delete(users).where(eq(users.id, userId));
 }
+
+
+// ========== ACCOUNTABILITY MESSAGING ==========
+
+export async function getAccountabilityMessages(userId: number) {
+  const db = await getDb();
+  if (!db) return [];
+
+  const { accountabilityMessages } = await import("../drizzle/schema");
+  
+  return db.select()
+    .from(accountabilityMessages)
+    .where(eq(accountabilityMessages.userId, userId))
+    .orderBy(accountabilityMessages.createdAt);
+}
+
+export async function sendAccountabilityMessage(
+  userId: number,
+  senderType: "user" | "founder",
+  content: string
+) {
+  const db = await getDb();
+  if (!db) throw new Error("Database not available");
+
+  const { accountabilityMessages } = await import("../drizzle/schema");
+  
+  const result = await db.insert(accountabilityMessages).values({
+    userId,
+    senderType,
+    content,
+  });
+  
+  return result;
+}
+
+export async function getAllAccountabilityConversations() {
+  const db = await getDb();
+  if (!db) return [];
+
+  const { accountabilityMessages } = await import("../drizzle/schema");
+  
+  // Get all messages grouped by user with user info
+  const messages = await db.select({
+    message: accountabilityMessages,
+    user: {
+      id: users.id,
+      name: users.name,
+      email: users.email,
+      username: users.username,
+      avatar: users.avatar,
+      subscriptionTier: users.subscriptionTier,
+    }
+  })
+  .from(accountabilityMessages)
+  .leftJoin(users, eq(accountabilityMessages.userId, users.id))
+  .orderBy(desc(accountabilityMessages.createdAt));
+  
+  // Group by user
+  const conversations: Record<number, {
+    user: typeof messages[0]["user"];
+    messages: typeof messages[0]["message"][];
+    lastMessage: typeof messages[0]["message"];
+    unreadCount: number;
+  }> = {};
+  
+  for (const row of messages) {
+    const userId = row.message.userId;
+    if (!conversations[userId]) {
+      conversations[userId] = {
+        user: row.user,
+        messages: [],
+        lastMessage: row.message,
+        unreadCount: 0,
+      };
+    }
+    conversations[userId].messages.push(row.message);
+    if (row.message.senderType === "user" && !row.message.isRead) {
+      conversations[userId].unreadCount++;
+    }
+  }
+  
+  return Object.values(conversations).sort((a, b) => 
+    new Date(b.lastMessage.createdAt).getTime() - new Date(a.lastMessage.createdAt).getTime()
+  );
+}
+
+export async function markMessagesAsRead(userId: number) {
+  const db = await getDb();
+  if (!db) return;
+
+  const { accountabilityMessages } = await import("../drizzle/schema");
+  const { and } = await import("drizzle-orm");
+  
+  await db.update(accountabilityMessages)
+    .set({ isRead: 1 })
+    .where(and(
+      eq(accountabilityMessages.userId, userId),
+      eq(accountabilityMessages.senderType, "user")
+    ));
+}

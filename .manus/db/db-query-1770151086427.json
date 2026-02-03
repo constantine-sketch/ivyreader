@@ -1,0 +1,9 @@
+{
+  "query": "CREATE TABLE IF NOT EXISTS accountability_messages (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  userId INT NOT NULL,\n  senderType ENUM('user', 'founder') NOT NULL,\n  content TEXT NOT NULL,\n  isRead TINYINT DEFAULT 0 NOT NULL,\n  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL\n);",
+  "command": "mysql --batch --raw --column-names --default-character-set=utf8mb4 --host gateway03.us-east-1.prod.aws.tidbcloud.com --port 4000 --user 2NArCQX8Vu3eBuN.root --database SUyByW4tTdn6ncf7oz4LZB --execute CREATE TABLE IF NOT EXISTS accountability_messages (\n  id INT AUTO_INCREMENT PRIMARY KEY,\n  userId INT NOT NULL,\n  senderType ENUM('user', 'founder') NOT NULL,\n  content TEXT NOT NULL,\n  isRead TINYINT DEFAULT 0 NOT NULL,\n  createdAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP NOT NULL\n);",
+  "rows": [],
+  "messages": [],
+  "stdout": "",
+  "stderr": "",
+  "execution_time_ms": 282
+}

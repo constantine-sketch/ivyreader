@@ -189,3 +189,16 @@ export type InsertNotification = typeof notifications.$inferInsert;
 
 export type BuddyPair = typeof buddyPairs.$inferSelect;
 export type InsertBuddyPair = typeof buddyPairs.$inferInsert;
+
+// Accountability messages table (Elite founder chat)
+export const accountabilityMessages = mysqlTable("accountability_messages", {
+  id: int("id").autoincrement().primaryKey(),
+  userId: int("userId").notNull(), // The Elite user
+  senderType: mysqlEnum("senderType", ["user", "founder"]).notNull(),
+  content: text("content").notNull(),
+  isRead: tinyint("isRead").default(0).notNull(),
+  createdAt: timestamp("createdAt").defaultNow().notNull(),
+});
+
+export type AccountabilityMessage = typeof accountabilityMessages.$inferSelect;
+export type InsertAccountabilityMessage = typeof accountabilityMessages.$inferInsert;

@@ -410,6 +410,74 @@ export const appRouter = router({
     markAllAsRead: protectedProcedure
       .mutation(({ ctx }) => db.markAllNotificationsAsRead(ctx.user.id)),
   }),
+  
+  // Accountability messaging (Elite feature - founder chat)
+  accountability: router({
+    // Get messages for current user
+    getMessages: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.subscriptionTier !== 'elite') {
+          throw new Error("Elite subscription required");
+        }
+        return db.getAccountabilityMessages(ctx.user.id);
+      }),
+    
+    // Send a message to founder
+    sendMessage: protectedProcedure
+      .input(z.object({ content: z.string().min(1).max(2000) }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.subscriptionTier !== 'elite') {
+          throw new Error("Elite subscription required");
+        }
+        await db.sendAccountabilityMessage(ctx.user.id, "user", input.content);
+        return { success: true };
+      }),
+  }),
+  
+  // Public admin API for accountability messaging
+  adminAccountability: router({
+    // Get all conversations for admin dashboard
+    getConversations: publicProcedure
+      .input(z.object({ secretKey: z.string() }))
+      .query(async ({ input }) => {
+        const adminSecret = process.env.ADMIN_SECRET || 'ivyreader-admin-2026';
+        if (input.secretKey !== adminSecret) {
+          throw new Error("Unauthorized: Invalid admin key");
+        }
+        return db.getAllAccountabilityConversations();
+      }),
+    
+    // Send a founder response
+    sendResponse: publicProcedure
+      .input(z.object({ 
+        secretKey: z.string(),
+        userId: z.number(),
+        content: z.string().min(1).max(2000)
+      }))
+      .mutation(async ({ input }) => {
+        const adminSecret = process.env.ADMIN_SECRET || 'ivyreader-admin-2026';
+        if (input.secretKey !== adminSecret) {
+          throw new Error("Unauthorized: Invalid admin key");
+        }
+        await db.sendAccountabilityMessage(input.userId, "founder", input.content);
+        return { success: true };
+      }),
+    
+    // Mark messages as read
+    markAsRead: publicProcedure
+      .input(z.object({ 
+        secretKey: z.string(),
+        userId: z.number()
+      }))
+      .mutation(async ({ input }) => {
+        const adminSecret = process.env.ADMIN_SECRET || 'ivyreader-admin-2026';
+        if (input.secretKey !== adminSecret) {
+          throw new Error("Unauthorized: Invalid admin key");
+        }
+        await db.markMessagesAsRead(input.userId);
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;
