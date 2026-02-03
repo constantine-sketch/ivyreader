@@ -15,9 +15,9 @@ import { IconSymbol } from "@/components/ui/icon-symbol";
 
 // Mock billing history
 const BILLING_HISTORY = [
-  { id: "1", date: "Jan 15, 2026", amount: 9.99, status: "Paid", plan: "Premium" },
-  { id: "2", date: "Dec 15, 2025", amount: 9.99, status: "Paid", plan: "Premium" },
-  { id: "3", date: "Nov 15, 2025", amount: 9.99, status: "Paid", plan: "Premium" },
+  { id: "1", date: "Jan 15, 2026", amount: 27, status: "Paid", plan: "Premium" },
+  { id: "2", date: "Dec 15, 2025", amount: 27, status: "Paid", plan: "Premium" },
+  { id: "3", date: "Nov 15, 2025", amount: 27, status: "Paid", plan: "Premium" },
 ];
 
 const PREMIUM_FEATURES = [
@@ -164,7 +164,7 @@ export default function SubscriptionScreen() {
                     </Text>
                     <View className="flex-row items-baseline">
                       <Text className="text-2xl font-bold" style={{ color: goldAccent }}>
-                        $19.99
+                        $97
                       </Text>
                       <Text className="text-sm ml-1" style={{ color: mutedColor }}>
                         /month
@@ -220,7 +220,7 @@ export default function SubscriptionScreen() {
                     <Text style={{ fontSize: 20, marginRight: 8 }}>⭐</Text>
                     <Text className="text-lg font-bold" style={{ color: textColor }}>Premium</Text>
                   </View>
-                  <Text className="font-bold" style={{ color: premiumAccent }}>$9.99/mo</Text>
+                  <Text className="font-bold" style={{ color: premiumAccent }}>$27/mo</Text>
                 </View>
                 {PREMIUM_FEATURES.map((feature, index) => (
                   <View key={index} className="flex-row items-center mb-2">
@@ -237,7 +237,7 @@ export default function SubscriptionScreen() {
                     <Text style={{ fontSize: 20, marginRight: 8 }}>👑</Text>
                     <Text className="text-lg font-bold" style={{ color: textColor }}>Elite</Text>
                   </View>
-                  <Text className="font-bold" style={{ color: goldAccent }}>$19.99/mo</Text>
+                  <Text className="font-bold" style={{ color: goldAccent }}>$97/mo</Text>
                 </View>
                 <Text className="text-xs mb-3" style={{ color: mutedColor }}>
                   Everything in Premium, plus:

@@ -37,8 +37,8 @@ export const TIERS: Record<SubscriptionTier, TierInfo> = {
     color: "#D4A574",
     darkColor: "#E5B885",
     icon: "⭐",
-    monthlyPrice: 9.99,
-    yearlyPrice: 99,
+    monthlyPrice: 27,
+    yearlyPrice: 270,
   },
   elite: {
     id: "elite",
@@ -47,8 +47,8 @@ export const TIERS: Record<SubscriptionTier, TierInfo> = {
     color: "#FFD700",
     darkColor: "#FFE44D",
     icon: "👑",
-    monthlyPrice: 19.99,
-    yearlyPrice: 199,
+    monthlyPrice: 97,
+    yearlyPrice: 970,
   },
 };
 
