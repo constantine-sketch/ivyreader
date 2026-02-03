@@ -515,12 +515,33 @@ export default function ProfileScreen() {
               onPress={() => router.push('/about')}
               className="flex-row justify-between items-center p-4"
               style={({ pressed }) => [{ 
+                borderBottomColor: borderColor,
+                borderBottomWidth: (user as any)?.role === 'admin' ? 1 : 0,
                 opacity: pressed ? 0.7 : 1
               }]}
             >
               <Text style={{ color: textColor }}>About IvyReader</Text>
               <Text style={{ color: mutedColor }}>›</Text>
             </Pressable>
+            
+            {/* Admin Dashboard - only visible to admins */}
+            {(user as any)?.role === 'admin' && (
+              <Pressable
+                onPress={() => router.push('/admin')}
+                className="flex-row justify-between items-center p-4"
+                style={({ pressed }) => [{ 
+                  opacity: pressed ? 0.7 : 1
+                }]}
+              >
+                <View className="flex-row items-center gap-2">
+                  <Text style={{ color: textColor }}>Admin Dashboard</Text>
+                  <View className="px-2 py-0.5 rounded" style={{ backgroundColor: '#EF4444' }}>
+                    <Text className="text-xs font-bold" style={{ color: '#fff' }}>ADMIN</Text>
+                  </View>
+                </View>
+                <Text style={{ color: mutedColor }}>›</Text>
+              </Pressable>
+            )}
           </View>
         </View>
 

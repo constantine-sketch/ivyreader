@@ -645,3 +645,225 @@ export async function updateUserOnboarding(
 
   await db.update(users).set(updateData).where(eq(users.id, userId));
 }
+
+
+// ========== EMAIL VERIFICATION ==========
+
+export async function setEmailVerificationToken(
+  userId: number,
+  token: string,
+  expiresAt: Date
+) {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.update(users).set({
+    emailVerificationToken: token,
+    emailVerificationExpires: expiresAt,
+  }).where(eq(users.id, userId));
+}
+
+export async function verifyEmail(token: string) {
+  const db = await getDb();
+  if (!db) return { success: false, error: "Database not available" };
+
+  // Find user with this token
+  const result = await db.select().from(users)
+    .where(eq(users.emailVerificationToken, token))
+    .limit(1);
+
+  if (result.length === 0) {
+    return { success: false, error: "Invalid verification token" };
+  }
+
+  const user = result[0];
+
+  // Check if token has expired
+  if (user.emailVerificationExpires && new Date() > user.emailVerificationExpires) {
+    return { success: false, error: "Verification token has expired" };
+  }
+
+  // Mark email as verified and clear token
+  await db.update(users).set({
+    emailVerified: 1,
+    emailVerificationToken: null,
+    emailVerificationExpires: null,
+  }).where(eq(users.id, user.id));
+
+  return { success: true, userId: user.id };
+}
+
+export async function getUserByEmail(email: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.select().from(users)
+    .where(eq(users.email, email))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+// ========== ADMIN FUNCTIONS ==========
+
+export async function getAllUsers(limit: number = 100, offset: number = 0) {
+  const db = await getDb();
+  if (!db) return [];
+
+  return db.select({
+    id: users.id,
+    name: users.name,
+    email: users.email,
+    username: users.username,
+    avatar: users.avatar,
+    role: users.role,
+    subscriptionTier: users.subscriptionTier,
+    subscriptionStatus: users.subscriptionStatus,
+    emailVerified: users.emailVerified,
+    onboardingCompleted: users.onboardingCompleted,
+    createdAt: users.createdAt,
+    lastSignedIn: users.lastSignedIn,
+  })
+  .from(users)
+  .orderBy(desc(users.createdAt))
+  .limit(limit)
+  .offset(offset);
+}
+
+export async function getUserCount() {
+  const db = await getDb();
+  if (!db) return { total: 0, premium: 0, elite: 0, verified: 0 };
+
+  const allUsers = await db.select().from(users);
+  
+  return {
+    total: allUsers.length,
+    premium: allUsers.filter(u => u.subscriptionTier === "premium").length,
+    elite: allUsers.filter(u => u.subscriptionTier === "elite").length,
+    verified: allUsers.filter(u => u.emailVerified === 1).length,
+  };
+}
+
+export async function getEngagementMetrics() {
+  const db = await getDb();
+  if (!db) return {
+    totalBooks: 0,
+    totalSessions: 0,
+    totalPagesRead: 0,
+    activeUsersToday: 0,
+    activeUsersWeek: 0,
+  };
+
+  const { books, readingSessions, userStats } = await import("../drizzle/schema");
+  
+  const allBooks = await db.select().from(books);
+  const allSessions = await db.select().from(readingSessions);
+  const allStats = await db.select().from(userStats);
+  
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  
+  const oneWeekAgo = new Date();
+  oneWeekAgo.setDate(oneWeekAgo.getDate() - 7);
+  
+  const activeToday = await db.select().from(users)
+    .where(gte(users.lastSignedIn, today));
+  
+  const activeWeek = await db.select().from(users)
+    .where(gte(users.lastSignedIn, oneWeekAgo));
+
+  const totalPagesRead = allStats.reduce((sum, s) => sum + (s.totalPagesRead || 0), 0);
+
+  return {
+    totalBooks: allBooks.length,
+    totalSessions: allSessions.length,
+    totalPagesRead,
+    activeUsersToday: activeToday.length,
+    activeUsersWeek: activeWeek.length,
+  };
+}
+
+// ========== CURATED READING LISTS (Admin) ==========
+
+import { mysqlTable, int, varchar, text, timestamp } from "drizzle-orm/mysql-core";
+
+// Note: This table needs to be added to schema.ts for proper type support
+// For now, we'll use raw SQL queries
+
+export async function getCuratedLists() {
+  const db = await getDb();
+  if (!db) return [];
+
+  // Return hardcoded lists for now - these match what's in reading-lists.tsx
+  return [
+    {
+      id: "law-school-essentials",
+      title: "Law School Essentials",
+      description: "Must-reads for aspiring lawyers",
+      bookCount: 12,
+      coverEmoji: "⚖️",
+      tier: "premium",
+    },
+    {
+      id: "business-strategy",
+      title: "Business Strategy",
+      description: "Build your business acumen",
+      bookCount: 15,
+      coverEmoji: "📈",
+      tier: "premium",
+    },
+    {
+      id: "philosophy-classics",
+      title: "Philosophy Classics",
+      description: "Timeless wisdom from great thinkers",
+      bookCount: 10,
+      coverEmoji: "🏛️",
+      tier: "premium",
+    },
+    {
+      id: "productivity-mastery",
+      title: "Productivity Mastery",
+      description: "Optimize your performance",
+      bookCount: 8,
+      coverEmoji: "⚡",
+      tier: "elite",
+    },
+    {
+      id: "leadership-excellence",
+      title: "Leadership Excellence",
+      description: "Lead with confidence",
+      bookCount: 11,
+      coverEmoji: "👑",
+      tier: "elite",
+    },
+  ];
+}
+
+export async function updateUserRole(userId: number, role: "user" | "admin") {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.update(users).set({ role }).where(eq(users.id, userId));
+}
+
+export async function deleteUser(userId: number) {
+  const db = await getDb();
+  if (!db) return;
+
+  // Delete user's related data first
+  const { books, readingSessions, notes, userStats, socialPosts, postLikes, postComments, userFollows, notifications } = await import("../drizzle/schema");
+  
+  await db.delete(readingSessions).where(eq(readingSessions.userId, userId));
+  await db.delete(notes).where(eq(notes.userId, userId));
+  await db.delete(books).where(eq(books.userId, userId));
+  await db.delete(userStats).where(eq(userStats.userId, userId));
+  await db.delete(socialPosts).where(eq(socialPosts.userId, userId));
+  await db.delete(postLikes).where(eq(postLikes.userId, userId));
+  await db.delete(postComments).where(eq(postComments.userId, userId));
+  await db.delete(userFollows).where(eq(userFollows.followerId, userId));
+  await db.delete(userFollows).where(eq(userFollows.followingId, userId));
+  await db.delete(notifications).where(eq(notifications.userId, userId));
+  
+  // Finally delete the user
+  await db.delete(users).where(eq(users.id, userId));
+}

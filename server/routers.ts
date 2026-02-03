@@ -6,6 +6,8 @@ import { publicProcedure, protectedProcedure, router } from "./_core/trpc";
 import * as db from "./db";
 import { searchBooks } from "./lib/open-library";
 
+import { generateVerificationToken, getTokenExpiration } from "./lib/email-verification";
+
 export const appRouter = router({
   // if you need to use socket.io, read and register route in server/_core/index.ts, all api should start with '/api/' so that the gateway can route correctly
   system: systemRouter,
@@ -204,6 +206,29 @@ export const appRouter = router({
   }),
   
   user: router({
+    // Email verification
+    sendVerificationEmail: protectedProcedure
+      .input(z.object({ email: z.string().email() }))
+      .mutation(async ({ ctx, input }) => {
+        const token = generateVerificationToken();
+        const expires = getTokenExpiration();
+        
+        // Update user email and set verification token
+        await db.setEmailVerificationToken(ctx.user.id, token, expires);
+        
+        // In production, send actual email here
+        // For now, return the verification URL for testing
+        const verificationUrl = `${process.env.APP_URL || 'https://ivyreader.app'}/verify-email?token=${token}`;
+        
+        return { success: true, verificationUrl };
+      }),
+    
+    verifyEmail: publicProcedure
+      .input(z.object({ token: z.string() }))
+      .mutation(async ({ input }) => {
+        return db.verifyEmail(input.token);
+      }),
+    
     updateProfile: protectedProcedure
       .input(z.object({
         name: z.string().min(1).max(100).optional(),
@@ -226,6 +251,74 @@ export const appRouter = router({
         notificationsEnabled: z.boolean().optional(),
       }))
       .mutation(({ ctx, input }) => db.updateUserOnboarding(ctx.user.id, input)),
+  }),
+  
+  // Admin routes (require admin role)
+  admin: router({
+    // Get all users
+    users: protectedProcedure
+      .input(z.object({ 
+        limit: z.number().default(100),
+        offset: z.number().default(0)
+      }))
+      .query(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new Error("Unauthorized: Admin access required");
+        }
+        return db.getAllUsers(input.limit, input.offset);
+      }),
+    
+    // Get user counts by tier
+    userCounts: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new Error("Unauthorized: Admin access required");
+        }
+        return db.getUserCount();
+      }),
+    
+    // Get engagement metrics
+    metrics: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new Error("Unauthorized: Admin access required");
+        }
+        return db.getEngagementMetrics();
+      }),
+    
+    // Get curated lists
+    curatedLists: protectedProcedure
+      .query(async ({ ctx }) => {
+        if (ctx.user.role !== "admin") {
+          throw new Error("Unauthorized: Admin access required");
+        }
+        return db.getCuratedLists();
+      }),
+    
+    // Update user role
+    updateUserRole: protectedProcedure
+      .input(z.object({
+        userId: z.number(),
+        role: z.enum(["user", "admin"])
+      }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new Error("Unauthorized: Admin access required");
+        }
+        await db.updateUserRole(input.userId, input.role);
+        return { success: true };
+      }),
+    
+    // Delete user
+    deleteUser: protectedProcedure
+      .input(z.object({ userId: z.number() }))
+      .mutation(async ({ ctx, input }) => {
+        if (ctx.user.role !== "admin") {
+          throw new Error("Unauthorized: Admin access required");
+        }
+        await db.deleteUser(input.userId);
+        return { success: true };
+      }),
   }),
   
   notifications: router({

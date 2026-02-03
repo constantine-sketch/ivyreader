@@ -846,3 +846,22 @@
 - [x] Fix Reading Lists navigation to list-detail screen
 - [x] Enhance list-detail with add book functionality
 - [x] Sync curated list IDs between reading-lists and list-detail screens
+
+## Email Verification & Admin Dashboard
+- [ ] Email verification system for post-purchase validation
+- [ ] Admin dashboard layout and authentication
+- [ ] Subscriber management panel (view all users, tiers, status)
+- [ ] Curated reading list management (add/edit/delete lists)
+- [ ] Engagement metrics dashboard (active users, books tracked, reading sessions)
+
+## Email Verification & Admin Dashboard (Completed)
+- [x] Add email verification fields to user schema
+- [x] Create email verification utility functions
+- [x] Add sendVerificationEmail and verifyEmail API endpoints
+- [x] Create verify-email page for handling verification links
+- [x] Create admin dashboard with overview, users, lists, and metrics tabs
+- [x] Add admin routes with role-based access control
+- [x] Add user management (view, update role, delete)
+- [x] Add engagement metrics (DAU, WAU, conversion rate, MRR)
+- [x] Add curated lists management view
+- [x] Add admin dashboard link in profile (visible only to admins)

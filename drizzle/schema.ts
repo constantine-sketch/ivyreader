@@ -29,6 +29,9 @@ export const users = mysqlTable("users", {
   readingGoalPagesPerWeek: int("readingGoalPagesPerWeek"),
   favoriteGenres: text("favoriteGenres"), // JSON array of genres
   notificationsEnabled: tinyint("notificationsEnabled").default(1).notNull(),
+  emailVerified: tinyint("emailVerified").default(0).notNull(),
+  emailVerificationToken: varchar("emailVerificationToken", { length: 64 }),
+  emailVerificationExpires: timestamp("emailVerificationExpires"),
   createdAt: timestamp("createdAt").defaultNow().notNull(),
   updatedAt: timestamp("updatedAt").defaultNow().onUpdateNow().notNull(),
   lastSignedIn: timestamp("lastSignedIn").defaultNow().notNull(),
