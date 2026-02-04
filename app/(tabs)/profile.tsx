@@ -376,10 +376,10 @@ export default function ProfileScreen() {
             <Pressable
               onPress={() => {
                 if (Platform.OS === 'web') {
-                  window.open('https://calendly.com/ivyreader/ivy-league-consulting', '_blank');
+                  window.open('https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders', '_blank');
                 } else {
                   import('expo-web-browser').then(WebBrowser => {
-                    WebBrowser.openBrowserAsync('https://calendly.com/ivyreader/ivy-league-consulting');
+                    WebBrowser.openBrowserAsync('https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders');
                   });
                 }
               }}
@@ -411,10 +411,10 @@ export default function ProfileScreen() {
             <Pressable
               onPress={() => {
                 if (Platform.OS === 'web') {
-                  window.open('https://calendly.com/ivyreader/90-day-attention-span', '_blank');
+                  window.open('https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders', '_blank');
                 } else {
                   import('expo-web-browser').then(WebBrowser => {
-                    WebBrowser.openBrowserAsync('https://calendly.com/ivyreader/90-day-attention-span');
+                    WebBrowser.openBrowserAsync('https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders');
                   });
                 }
               }}

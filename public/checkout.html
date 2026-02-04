@@ -1,0 +1,695 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | IvyReader</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #E8C84A;
+      --dark-bg: #0D0D0D;
+      --dark-surface: #1A2F2A;
+      --dark-card: #0A1F1A;
+      --light-text: #F5F5F0;
+      --muted-text: #A8B8B0;
+      --border: #2D4A42;
+      --success: #4ECDC4;
+      --error: #E07A5F;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+    
+    /* Navigation */
+    nav {
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(10px);
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .secure-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--success);
+      font-size: 0.9rem;
+    }
+    
+    /* Main Layout */
+    .checkout-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 3rem 2rem;
+      display: grid;
+      grid-template-columns: 1fr 400px;
+      gap: 3rem;
+    }
+    
+    @media (max-width: 900px) {
+      .checkout-container {
+        grid-template-columns: 1fr;
+      }
+    }
+    
+    /* Order Summary */
+    .order-summary {
+      background: var(--dark-surface);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      height: fit-content;
+      position: sticky;
+      top: 2rem;
+    }
+    
+    .order-summary h2 {
+      font-size: 1.25rem;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .plan-details {
+      margin-bottom: 1.5rem;
+    }
+    
+    .plan-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 0.5rem;
+    }
+    
+    .plan-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+    
+    .plan-badge {
+      background: var(--gold);
+      color: var(--dark-bg);
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    
+    .plan-price {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--gold);
+    }
+    
+    .plan-period {
+      color: var(--muted-text);
+      font-size: 0.9rem;
+    }
+    
+    .plan-features {
+      list-style: none;
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .plan-features li {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.9rem;
+      color: var(--muted-text);
+    }
+    
+    .plan-features .check {
+      color: var(--success);
+    }
+    
+    .total-section {
+      margin-top: 1.5rem;
+      padding-top: 1.5rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .total-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 0.5rem;
+    }
+    
+    .total-row.final {
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-top: 1rem;
+      padding-top: 1rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .guarantee-box {
+      margin-top: 1.5rem;
+      padding: 1rem;
+      background: rgba(78, 205, 196, 0.1);
+      border-radius: 8px;
+      border: 1px solid var(--success);
+    }
+    
+    .guarantee-box h4 {
+      color: var(--success);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .guarantee-box p {
+      color: var(--muted-text);
+      font-size: 0.85rem;
+    }
+    
+    /* Checkout Form */
+    .checkout-form {
+      background: var(--dark-surface);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+    }
+    
+    .checkout-form h1 {
+      font-size: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .checkout-form .subtitle {
+      color: var(--muted-text);
+      margin-bottom: 2rem;
+    }
+    
+    .form-section {
+      margin-bottom: 2rem;
+    }
+    
+    .form-section h3 {
+      font-size: 1rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .form-section h3 .step {
+      background: var(--gold);
+      color: var(--dark-bg);
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+    
+    .form-group {
+      margin-bottom: 1rem;
+    }
+    
+    .form-group label {
+      display: block;
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      color: var(--muted-text);
+    }
+    
+    .form-group input {
+      width: 100%;
+      padding: 0.875rem 1rem;
+      background: var(--dark-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      color: var(--light-text);
+      font-size: 1rem;
+      transition: border-color 0.2s;
+    }
+    
+    .form-group input:focus {
+      outline: none;
+      border-color: var(--gold);
+    }
+    
+    .form-group input::placeholder {
+      color: var(--muted-text);
+    }
+    
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    
+    /* Stripe Elements */
+    .stripe-element {
+      padding: 0.875rem 1rem;
+      background: var(--dark-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      transition: border-color 0.2s;
+    }
+    
+    .stripe-element.focused {
+      border-color: var(--gold);
+    }
+    
+    .card-errors {
+      color: var(--error);
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+    }
+    
+    /* Submit Button */
+    .submit-btn {
+      width: 100%;
+      padding: 1.25rem;
+      background: var(--gold);
+      color: var(--dark-bg);
+      border: none;
+      border-radius: 8px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    .submit-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+    
+    .submit-btn:disabled {
+      opacity: 0.7;
+      cursor: not-allowed;
+      transform: none;
+    }
+    
+    .submit-btn .spinner {
+      width: 20px;
+      height: 20px;
+      border: 2px solid transparent;
+      border-top-color: var(--dark-bg);
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      display: none;
+    }
+    
+    .submit-btn.loading .spinner {
+      display: block;
+    }
+    
+    .submit-btn.loading .btn-text {
+      display: none;
+    }
+    
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    
+    .secure-note {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted-text);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+    }
+    
+    /* Consultation CTA */
+    .consultation-cta {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: var(--dark-card);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    
+    .consultation-cta h4 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .consultation-cta p {
+      color: var(--muted-text);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    
+    .consultation-cta a {
+      display: inline-block;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .consultation-cta a:hover {
+      text-decoration: underline;
+    }
+    
+    /* Free Tier */
+    .free-tier-message {
+      text-align: center;
+      padding: 3rem 2rem;
+    }
+    
+    .free-tier-message h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .free-tier-message p {
+      color: var(--muted-text);
+      margin-bottom: 2rem;
+    }
+    
+    .free-tier-message .cta-btn {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--dark-bg);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: 700;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .free-tier-message .cta-btn:hover {
+      background: var(--gold-light);
+    }
+    
+    /* Footer */
+    footer {
+      padding: 2rem;
+      text-align: center;
+      border-top: 1px solid var(--border);
+      margin-top: 3rem;
+    }
+    
+    footer p {
+      color: var(--muted-text);
+      font-size: 0.85rem;
+    }
+    
+    footer a {
+      color: var(--muted-text);
+      text-decoration: none;
+    }
+    
+    footer a:hover {
+      color: var(--gold);
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="index.html" class="logo">📚 IvyReader</a>
+      <div class="secure-badge">
+        🔒 Secure Checkout
+      </div>
+    </div>
+  </nav>
+
+  <!-- Checkout Content -->
+  <div id="checkout-content">
+    <!-- Will be populated by JavaScript based on tier -->
+  </div>
+
+  <!-- Footer -->
+  <footer>
+    <p>
+      <a href="index.html">← Back to IvyReader</a> · 
+      <a href="#">Privacy Policy</a> · 
+      <a href="#">Terms of Service</a>
+    </p>
+  </footer>
+
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    // Get tier from URL params
+    const urlParams = new URLSearchParams(window.location.search);
+    const tier = urlParams.get('tier') || 'premium';
+    
+    // Tier configurations
+    const tiers = {
+      free: {
+        name: 'Free',
+        badge: 'STARTER',
+        price: 0,
+        period: 'forever',
+        features: [
+          'Track up to 10 books',
+          'Basic reading stats',
+          'Join the Reader Society',
+          'Browse curated lists'
+        ]
+      },
+      premium: {
+        name: 'Premium',
+        badge: '★ PREMIUM',
+        price: 27,
+        period: '/month',
+        features: [
+          'Unlimited book tracking',
+          'Advanced analytics & insights',
+          'Pomodoro reading sessions',
+          'Personalized reading lists',
+          'Weekly goal reminders',
+          'Priority community access'
+        ]
+      },
+      elite: {
+        name: 'Elite',
+        badge: '👑 ELITE',
+        price: 97,
+        period: '/month',
+        features: [
+          'Everything in Premium',
+          'Accountability Partner matching',
+          'Direct messaging with founders',
+          'AI-powered book recommendations',
+          'Weekly 1-on-1 check-ins',
+          'Exclusive Elite community',
+          'Priority support'
+        ]
+      }
+    };
+    
+    const selectedTier = tiers[tier] || tiers.premium;
+    
+    // Render checkout page
+    function renderCheckout() {
+      const container = document.getElementById('checkout-content');
+      
+      if (tier === 'free') {
+        container.innerHTML = `
+          <div class="free-tier-message">
+            <h2>🎉 Welcome to IvyReader Free!</h2>
+            <p>No payment required. Create your account and start tracking your reading journey today.</p>
+            <a href="manus20260130164246://purchase-complete?tier=free" class="cta-btn">
+              Create Free Account →
+            </a>
+          </div>
+        `;
+        return;
+      }
+      
+      container.innerHTML = `
+        <div class="checkout-container">
+          <!-- Checkout Form -->
+          <div class="checkout-form">
+            <h1>Complete Your Order</h1>
+            <p class="subtitle">You're one step away from transforming your reading habits.</p>
+            
+            <form id="payment-form">
+              <div class="form-section">
+                <h3><span class="step">1</span> Account Information</h3>
+                <div class="form-group">
+                  <label for="email">Email Address</label>
+                  <input type="email" id="email" placeholder="you@example.com" required>
+                </div>
+                <div class="form-group">
+                  <label for="name">Full Name</label>
+                  <input type="text" id="name" placeholder="John Smith" required>
+                </div>
+              </div>
+              
+              <div class="form-section">
+                <h3><span class="step">2</span> Payment Details</h3>
+                <div class="form-group">
+                  <label>Card Information</label>
+                  <div id="card-element" class="stripe-element"></div>
+                  <div id="card-errors" class="card-errors" role="alert"></div>
+                </div>
+              </div>
+              
+              <button type="submit" class="submit-btn" id="submit-btn">
+                <span class="spinner"></span>
+                <span class="btn-text">Start ${selectedTier.name} - $${selectedTier.price}${selectedTier.period}</span>
+              </button>
+              
+              <p class="secure-note">
+                🔒 Secured by Stripe. Your payment info is never stored on our servers.
+              </p>
+            </form>
+            
+            <div class="consultation-cta">
+              <h4>Have questions before you commit?</h4>
+              <p>Book a free 15-minute call with our founders.</p>
+              <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">
+                📞 Schedule Free Consultation →
+              </a>
+            </div>
+          </div>
+          
+          <!-- Order Summary -->
+          <div class="order-summary">
+            <h2>Order Summary</h2>
+            
+            <div class="plan-details">
+              <div class="plan-header">
+                <span class="plan-name">${selectedTier.name}</span>
+                <span class="plan-badge">${selectedTier.badge}</span>
+              </div>
+              <div class="plan-price">$${selectedTier.price}</div>
+              <div class="plan-period">${selectedTier.period}</div>
+              
+              <ul class="plan-features">
+                ${selectedTier.features.map(f => `<li><span class="check">✓</span> ${f}</li>`).join('')}
+              </ul>
+            </div>
+            
+            <div class="total-section">
+              <div class="total-row">
+                <span>Subtotal</span>
+                <span>$${selectedTier.price}</span>
+              </div>
+              <div class="total-row">
+                <span>Tax</span>
+                <span>$0.00</span>
+              </div>
+              <div class="total-row final">
+                <span>Total</span>
+                <span>$${selectedTier.price}${selectedTier.period}</span>
+              </div>
+            </div>
+            
+            <div class="guarantee-box">
+              <h4>✓ 30-Day Money-Back Guarantee</h4>
+              <p>If you're not reading more within 30 days, we'll refund you completely. No questions asked.</p>
+            </div>
+          </div>
+        </div>
+      `;
+      
+      initStripe();
+    }
+    
+    // Initialize Stripe
+    function initStripe() {
+      // Note: Replace with your actual Stripe publishable key
+      const stripePublicKey = 'pk_test_placeholder';
+      
+      // For demo purposes, we'll simulate the payment flow
+      // In production, you'd initialize Stripe Elements here
+      
+      const form = document.getElementById('payment-form');
+      const submitBtn = document.getElementById('submit-btn');
+      const cardElement = document.getElementById('card-element');
+      
+      // Simulate card element
+      cardElement.innerHTML = `
+        <input type="text" placeholder="4242 4242 4242 4242" style="width: 100%; background: transparent; border: none; color: var(--light-text); font-size: 1rem; outline: none;">
+      `;
+      
+      form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const name = document.getElementById('name').value;
+        
+        if (!email || !name) {
+          alert('Please fill in all fields');
+          return;
+        }
+        
+        // Show loading state
+        submitBtn.classList.add('loading');
+        submitBtn.disabled = true;
+        
+        // Simulate payment processing
+        setTimeout(() => {
+          // In production, you'd process the payment with Stripe here
+          // On success, redirect to confirmation page
+          
+          // Deep link to app with tier
+          const deepLink = `manus20260130164246://purchase-complete?tier=${tier}`;
+          const webFallback = `confirmation.html?tier=${tier}&email=${encodeURIComponent(email)}`;
+          
+          // Try deep link first, fallback to web
+          window.location.href = webFallback;
+          
+          // After delay, try deep link for mobile users
+          setTimeout(() => {
+            window.location.href = deepLink;
+          }, 1000);
+          
+        }, 2000);
+      });
+    }
+    
+    // Initialize
+    renderCheckout();
+  </script>
+</body>
+</html>

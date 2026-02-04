@@ -8,6 +8,9 @@
 import React, { useState, useRef, useEffect } from "react";
 import { View, Text, ScrollView, TouchableOpacity, TextInput, Animated, KeyboardAvoidingView, Platform, FlatList, ActivityIndicator, RefreshControl } from "react-native";
 import { router } from "expo-router";
+import * as WebBrowser from "expo-web-browser";
+
+const CALENDLY_URL = "https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders";
 import { ScreenContainer } from "@/components/screen-container";
 import { useColors } from "@/hooks/use-colors";
 import { trpc } from "@/lib/trpc";

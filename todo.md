@@ -904,3 +904,19 @@
 ## Accountability Partner UI
 - [x] Add accountability partner section back to Accountability tab
 - [x] Show partner matching placeholder for Elite users
+
+
+## Calendly Integration
+- [ ] Remove Calendly button from Accountability tab
+- [ ] Update both Premium Services "Book a Discovery Call" buttons in Profile tab to use new Calendly link
+- [ ] Add Calendly CTA to landing page
+
+
+## Landing Page Rebuild (Permanent Storage)
+- [x] Create /home/ubuntu/ivyreader/public/ directory
+- [x] Build landing page with CommitAction structure + Schwartz/Hormozi principles
+- [x] Build checkout page with Stripe integration
+- [x] Build confirmation page linking to app onboarding
+- [x] Integrate Calendly CTA throughout
+- [x] Test complete flow
+- [x] Save checkpoint for permanent backup
