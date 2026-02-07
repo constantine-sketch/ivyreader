@@ -716,16 +716,39 @@
           // Payment method created successfully
           console.log('Payment method created:', paymentMethod.id);
           
-          // In production, you'd send paymentMethod.id to your backend
-          // For now, redirect to confirmation
-          const deepLink = `manus20260130164246://purchase-complete?tier=${tier}`;
-          const webFallback = `confirmation.html?tier=${tier}&email=${encodeURIComponent(email)}&pm=${paymentMethod.id}`;
+          // Call backend to create subscription
+          const apiUrl = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000' 
+            : window.location.origin.replace('8082', '3000');
+          
+          const response = await fetch(`${apiUrl}/api/subscriptions/create`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+              paymentMethodId: paymentMethod.id,
+              email: email,
+              tier: tier
+            })
+          });
+          
+          if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || 'Subscription creation failed');
+          }
+          
+          const result = await response.json();
+          console.log('Subscription created:', result);
           
           // Redirect to confirmation
+          const deepLink = `manus20260130164246://purchase-complete?tier=${tier}`;
+          const webFallback = `confirmation.html?tier=${tier}&email=${encodeURIComponent(email)}&subscriptionId=${result.subscriptionId}`;
+          
           window.location.href = webFallback;
           
         } catch (err) {
-          cardErrors.textContent = 'An unexpected error occurred. Please try again.';
+          cardErrors.textContent = err.message || 'An unexpected error occurred. Please try again.';
           submitBtn.classList.remove('loading');
           submitBtn.disabled = false;
         }

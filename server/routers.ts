@@ -478,6 +478,92 @@ export const appRouter = router({
         return { success: true };
       }),
   }),
+  
+  // Stripe subscription management
+  subscriptions: router({
+    // Create subscription
+    create: publicProcedure
+      .input(z.object({
+        paymentMethodId: z.string(),
+        email: z.string().email(),
+        tier: z.enum(['premium', 'elite'])
+      }))
+      .mutation(async ({ input }) => {
+        const { paymentMethodId, email, tier } = input;
+        
+        // Check if user already exists by email
+        let user = await db.getUserByEmail(email);
+        
+        // If no user exists, create a pending user with temporary openId
+        if (!user) {
+          // Create temporary openId for pre-purchase users
+          const tempOpenId = `pending_${Buffer.from(email).toString('base64').replace(/=/g, '').substring(0, 50)}`;
+          
+          await db.upsertUser({
+            openId: tempOpenId,
+            email,
+            name: email.split('@')[0], // Use email prefix as temporary name
+            subscriptionTier: tier,
+            emailVerified: 0,
+            onboardingCompleted: 0
+          });
+          
+          // Fetch the newly created user
+          user = await db.getUserByEmail(email);
+          
+          if (!user) {
+            throw new Error('Failed to create user account');
+          }
+        }
+        
+        // Create Stripe subscription
+        const { createSubscription } = await import('./lib/stripe.js');
+        const result = await createSubscription({
+          paymentMethodId,
+          email,
+          tier,
+          userId: user.id
+        });
+        
+        // Update user subscription details in database
+        const subscriptionStatus = result.status === 'active' || result.status === 'trialing' 
+          ? result.status 
+          : 'active'; // Default to active for incomplete/other statuses
+        
+        await db.updateUserSubscription(user.id, {
+          stripeCustomerId: result.customerId,
+          stripeSubscriptionId: result.subscriptionId,
+          subscriptionStatus,
+          subscriptionTier: tier
+        });
+        
+        return {
+          success: true,
+          subscriptionId: result.subscriptionId,
+          clientSecret: result.clientSecret,
+          status: result.status,
+          userId: user.id
+        };
+      }),
+    
+    // Cancel subscription
+    cancel: protectedProcedure
+      .mutation(async ({ ctx }) => {
+        if (!ctx.user.stripeSubscriptionId) {
+          throw new Error('No active subscription found');
+        }
+        
+        const { cancelSubscription } = await import('./lib/stripe.js');
+        await cancelSubscription(ctx.user.stripeSubscriptionId);
+        
+        // Update user in database
+        await db.updateUserSubscription(ctx.user.id, {
+          subscriptionStatus: 'canceled'
+        });
+        
+        return { success: true };
+      }),
+  }),
 });
 
 export type AppRouter = typeof appRouter;

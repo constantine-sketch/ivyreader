@@ -51,6 +51,15 @@ async function startServer() {
     next();
   });
 
+  // Stripe webhook needs raw body for signature verification
+  app.post("/api/webhooks/stripe", 
+    express.raw({ type: "application/json" }), 
+    async (req, res) => {
+      const { handleStripeWebhook } = await import("../webhooks/stripe.js");
+      return handleStripeWebhook(req, res);
+    }
+  );
+  
   app.use(express.json({ limit: "50mb" }));
   app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
@@ -58,6 +67,50 @@ async function startServer() {
 
   app.get("/api/health", (_req, res) => {
     res.json({ ok: true, timestamp: Date.now() });
+  });
+
+  // REST endpoint for subscription creation (used by checkout page)
+  app.post("/api/subscriptions/create", async (req, res) => {
+    try {
+      const { paymentMethodId, email, tier } = req.body;
+      const { getUserByEmail, upsertUser, updateUserSubscription } = await import("../db.js");
+      
+      // Check if user exists
+      let user = await getUserByEmail(email);
+      
+      // Create pending user if doesn't exist
+      if (!user) {
+        const tempOpenId = `pending_${Buffer.from(email).toString('base64').replace(/=/g, '').substring(0, 50)}`;
+        await upsertUser({
+          openId: tempOpenId,
+          email,
+          name: email.split('@')[0],
+          subscriptionTier: tier,
+          emailVerified: 0,
+          onboardingCompleted: 0
+        });
+        user = await getUserByEmail(email);
+        if (!user) throw new Error('Failed to create user');
+      }
+      
+      // Create Stripe subscription
+      const { createSubscription } = await import('../lib/stripe.js');
+      const result = await createSubscription({ paymentMethodId, email, tier, userId: user.id });
+      
+      // Update user subscription
+      const status = result.status === 'active' || result.status === 'trialing' ? result.status : 'active';
+      await updateUserSubscription(user.id, {
+        stripeCustomerId: result.customerId,
+        stripeSubscriptionId: result.subscriptionId,
+        subscriptionStatus: status,
+        subscriptionTier: tier
+      });
+      
+      res.json({ success: true, subscriptionId: result.subscriptionId, userId: user.id });
+    } catch (error: any) {
+      console.error('[Subscription] Error:', error);
+      res.status(500).json({ error: error.message || 'Subscription creation failed' });
+    }
   });
 
   app.use(

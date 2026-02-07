@@ -927,3 +927,13 @@
 - [x] Update checkout page to use real Stripe Checkout
 - [x] Test payment flow with test cards
 - [x] Save checkpoint
+
+
+## Backend Payment Processing
+- [x] Create subscriptions database table
+- [x] Build Stripe subscription creation endpoint
+- [x] Build Stripe webhook handler
+- [x] Add Stripe Price IDs to environment variables
+- [x] Update checkout page to call backend
+- [x] Test complete payment flow (REST endpoint working, Stripe subscription created successfully)
+- [x] Save checkpoint

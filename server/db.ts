@@ -967,3 +967,20 @@ export async function markMessagesAsRead(userId: number) {
       eq(accountabilityMessages.senderType, "user")
     ));
 }
+
+
+export async function updateUserSubscription(
+  userId: number,
+  data: {
+    stripeCustomerId?: string;
+    stripeSubscriptionId?: string;
+    subscriptionStatus?: 'active' | 'canceled' | 'past_due' | 'trialing';
+    subscriptionTier?: 'free' | 'premium' | 'elite';
+    subscriptionEndsAt?: Date;
+  }
+) {
+  const db = await getDb();
+  if (!db) return;
+
+  await db.update(users).set(data).where(eq(users.id, userId));
+}
