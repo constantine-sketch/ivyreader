@@ -717,9 +717,15 @@
           console.log('Payment method created:', paymentMethod.id);
           
           // Call backend to create subscription
-          const apiUrl = window.location.hostname === 'localhost' 
-            ? 'http://localhost:3000' 
-            : window.location.origin.replace('8082', '3000');
+          // Build API URL - replace the port prefix in the sandbox domain
+          let apiUrl;
+          if (window.location.hostname === 'localhost') {
+            apiUrl = 'http://localhost:3000';
+          } else {
+            // Sandbox URLs look like: https://PORT-xxx.us1.manus.computer
+            apiUrl = window.location.origin.replace(/^(https?:\/\/)\d+(-)/,'$13000$2');
+          }
+          console.log('API URL:', apiUrl);
           
           const response = await fetch(`${apiUrl}/api/subscriptions/create`, {
             method: 'POST',
@@ -734,8 +740,10 @@
           });
           
           if (!response.ok) {
-            const errorData = await response.json();
-            throw new Error(errorData.error || 'Subscription creation failed');
+            const text = await response.text();
+            let errorMsg = 'Subscription creation failed';
+            try { errorMsg = JSON.parse(text).error || errorMsg; } catch(e) { errorMsg = text || errorMsg; }
+            throw new Error(errorMsg);
           }
           
           const result = await response.json();
