@@ -716,12 +716,8 @@
           // Payment method created successfully
           console.log('Payment method created:', paymentMethod.id);
           
-          // Call backend to create subscription
-          // Use sandbox API URL
-          const apiUrl = 'https://3000-ik4t6s36n3oc5oeaw7m92-88ba9329.us1.manus.computer';
-          console.log('API URL:', apiUrl);
-          
-          const response = await fetch(`${apiUrl}/api/subscriptions/create`, {
+          // Call Vercel serverless function (same domain, permanent)
+          const response = await fetch('/api/create-subscription', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',
