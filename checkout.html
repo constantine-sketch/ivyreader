@@ -4,7 +4,6 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Checkout | IvyReader</title>
-  <script src="https://js.stripe.com/v3/"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -70,330 +69,125 @@
       font-size: 0.9rem;
     }
     
-    /* Main Layout */
-    .checkout-container {
-      max-width: 1000px;
+    /* Redirect Message */
+    .redirect-container {
+      max-width: 600px;
       margin: 0 auto;
-      padding: 3rem 2rem;
-      display: grid;
-      grid-template-columns: 1fr 400px;
-      gap: 3rem;
+      padding: 5rem 2rem;
+      text-align: center;
     }
     
-    @media (max-width: 900px) {
-      .checkout-container {
-        grid-template-columns: 1fr;
-      }
-    }
-    
-    /* Order Summary */
-    .order-summary {
+    .redirect-card {
       background: var(--dark-surface);
       border-radius: 16px;
-      padding: 2rem;
+      padding: 3rem 2rem;
       border: 1px solid var(--border);
-      height: fit-content;
-      position: sticky;
-      top: 2rem;
     }
     
-    .order-summary h2 {
-      font-size: 1.25rem;
-      margin-bottom: 1.5rem;
-      padding-bottom: 1rem;
-      border-bottom: 1px solid var(--border);
-    }
-    
-    .plan-details {
+    .redirect-icon {
+      font-size: 3rem;
       margin-bottom: 1.5rem;
     }
     
-    .plan-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: flex-start;
-      margin-bottom: 0.5rem;
+    .redirect-card h1 {
+      font-size: 1.75rem;
+      margin-bottom: 0.75rem;
     }
     
-    .plan-name {
-      font-size: 1.1rem;
-      font-weight: 600;
+    .redirect-card .subtitle {
+      color: var(--muted-text);
+      margin-bottom: 2rem;
+      font-size: 1rem;
     }
     
-    .plan-badge {
+    .redirect-btn {
+      display: inline-block;
       background: var(--gold);
       color: var(--dark-bg);
-      padding: 0.25rem 0.75rem;
-      border-radius: 50px;
-      font-size: 0.75rem;
+      padding: 1.25rem 2.5rem;
+      border-radius: 8px;
       font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-bottom: 1.5rem;
     }
     
-    .plan-price {
+    .redirect-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    }
+    
+    .redirect-info {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      margin-top: 2rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .redirect-info .info-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+      color: var(--muted-text);
+    }
+    
+    .redirect-info .info-item .check {
+      color: var(--success);
+    }
+    
+    .plan-summary {
+      background: var(--dark-card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      border: 1px solid var(--border);
+    }
+    
+    .plan-summary .plan-name {
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+    
+    .plan-summary .plan-price {
       font-size: 2rem;
       font-weight: 800;
       color: var(--gold);
     }
     
-    .plan-period {
+    .plan-summary .plan-period {
       color: var(--muted-text);
       font-size: 0.9rem;
     }
     
-    .plan-features {
-      list-style: none;
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
+    .spinner-container {
+      margin: 1.5rem 0;
     }
     
-    .plan-features li {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 0.75rem;
-      font-size: 0.9rem;
-      color: var(--muted-text);
-    }
-    
-    .plan-features .check {
-      color: var(--success);
-    }
-    
-    .total-section {
-      margin-top: 1.5rem;
-      padding-top: 1.5rem;
-      border-top: 1px solid var(--border);
-    }
-    
-    .total-row {
-      display: flex;
-      justify-content: space-between;
-      margin-bottom: 0.5rem;
-    }
-    
-    .total-row.final {
-      font-size: 1.25rem;
-      font-weight: 700;
-      margin-top: 1rem;
-      padding-top: 1rem;
-      border-top: 1px solid var(--border);
-    }
-    
-    .guarantee-box {
-      margin-top: 1.5rem;
-      padding: 1rem;
-      background: rgba(78, 205, 196, 0.1);
-      border-radius: 8px;
-      border: 1px solid var(--success);
-    }
-    
-    .guarantee-box h4 {
-      color: var(--success);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .guarantee-box p {
-      color: var(--muted-text);
-      font-size: 0.85rem;
-    }
-    
-    /* Checkout Form */
-    .checkout-form {
-      background: var(--dark-surface);
-      border-radius: 16px;
-      padding: 2rem;
-      border: 1px solid var(--border);
-    }
-    
-    .checkout-form h1 {
-      font-size: 1.5rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .checkout-form .subtitle {
-      color: var(--muted-text);
-      margin-bottom: 2rem;
-    }
-    
-    .form-section {
-      margin-bottom: 2rem;
-    }
-    
-    .form-section h3 {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
-    }
-    
-    .form-section h3 .step {
-      background: var(--gold);
-      color: var(--dark-bg);
-      width: 24px;
-      height: 24px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 0.8rem;
-      font-weight: 700;
-    }
-    
-    .form-group {
-      margin-bottom: 1rem;
-    }
-    
-    .form-group label {
-      display: block;
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
-      color: var(--muted-text);
-    }
-    
-    .form-group input {
-      width: 100%;
-      padding: 0.875rem 1rem;
-      background: var(--dark-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      color: var(--light-text);
-      font-size: 1rem;
-      transition: border-color 0.2s;
-    }
-    
-    .form-group input:focus {
-      outline: none;
-      border-color: var(--gold);
-    }
-    
-    .form-group input::placeholder {
-      color: var(--muted-text);
-    }
-    
-    .form-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 1rem;
-    }
-    
-    /* Stripe Elements */
-    .stripe-element {
-      padding: 0.875rem 1rem;
-      background: var(--dark-bg);
-      border: 1px solid var(--border);
-      border-radius: 8px;
-      transition: border-color 0.2s;
-    }
-    
-    .stripe-element.focused {
-      border-color: var(--gold);
-    }
-    
-    .card-errors {
-      color: var(--error);
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
-    }
-    
-    /* Submit Button */
-    .submit-btn {
-      width: 100%;
-      padding: 1.25rem;
-      background: var(--gold);
-      color: var(--dark-bg);
-      border: none;
-      border-radius: 8px;
-      font-size: 1.1rem;
-      font-weight: 700;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    
-    .submit-btn:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-    }
-    
-    .submit-btn:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-      transform: none;
-    }
-    
-    .submit-btn .spinner {
-      width: 20px;
-      height: 20px;
-      border: 2px solid transparent;
-      border-top-color: var(--dark-bg);
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid var(--border);
+      border-top-color: var(--gold);
       border-radius: 50%;
       animation: spin 1s linear infinite;
-      display: none;
-    }
-    
-    .submit-btn.loading .spinner {
-      display: block;
-    }
-    
-    .submit-btn.loading .btn-text {
-      display: none;
+      margin: 0 auto;
     }
     
     @keyframes spin {
       to { transform: rotate(360deg); }
     }
     
-    .secure-note {
-      text-align: center;
-      margin-top: 1rem;
+    .auto-redirect-text {
       font-size: 0.85rem;
       color: var(--muted-text);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-    }
-    
-    /* Consultation CTA */
-    .consultation-cta {
-      margin-top: 2rem;
-      padding: 1.5rem;
-      background: var(--dark-card);
-      border-radius: 12px;
-      border: 1px solid var(--border);
-      text-align: center;
-    }
-    
-    .consultation-cta h4 {
-      font-size: 1rem;
-      margin-bottom: 0.5rem;
-    }
-    
-    .consultation-cta p {
-      color: var(--muted-text);
-      font-size: 0.9rem;
-      margin-bottom: 1rem;
-    }
-    
-    .consultation-cta a {
-      display: inline-block;
-      color: var(--gold);
-      text-decoration: none;
-      font-weight: 600;
-      font-size: 0.9rem;
-    }
-    
-    .consultation-cta a:hover {
-      text-decoration: underline;
+      margin-top: 1rem;
     }
     
     /* Free Tier */
@@ -425,6 +219,40 @@
     
     .free-tier-message .cta-btn:hover {
       background: var(--gold-light);
+    }
+    
+    /* Consultation CTA */
+    .consultation-cta {
+      max-width: 600px;
+      margin: 2rem auto;
+      padding: 1.5rem 2rem;
+      background: var(--dark-surface);
+      border-radius: 12px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+    
+    .consultation-cta h4 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .consultation-cta p {
+      color: var(--muted-text);
+      font-size: 0.9rem;
+      margin-bottom: 1rem;
+    }
+    
+    .consultation-cta a {
+      display: inline-block;
+      color: var(--gold);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+    
+    .consultation-cta a:hover {
+      text-decoration: underline;
     }
     
     /* Footer */
@@ -466,6 +294,15 @@
     <!-- Will be populated by JavaScript based on tier -->
   </div>
 
+  <!-- Consultation CTA -->
+  <div class="consultation-cta" id="consultation-section">
+    <h4>Have questions before you commit?</h4>
+    <p>Book a free 15-minute call with our founders.</p>
+    <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">
+      📞 Schedule Free Consultation →
+    </a>
+  </div>
+
   <!-- Footer -->
   <footer>
     <p>
@@ -475,11 +312,16 @@
     </p>
   </footer>
 
-  <script src="https://js.stripe.com/v3/"></script>
   <script>
     // Get tier from URL params
     const urlParams = new URLSearchParams(window.location.search);
     const tier = urlParams.get('tier') || 'premium';
+    
+    // Stripe Payment Links - these redirect to Stripe's hosted checkout page
+    const paymentLinks = {
+      premium: 'https://buy.stripe.com/test_5kQ6oB5LQ8lbbdAdBg1VK00',
+      elite: 'https://buy.stripe.com/test_cNidR3eim1WNbdA7cS1VK01'
+    };
     
     // Tier configurations
     const tiers = {
@@ -488,41 +330,21 @@
         badge: 'STARTER',
         price: 0,
         period: 'forever',
-        features: [
-          'Track up to 10 books',
-          'Basic reading stats',
-          'Join the Reader Society',
-          'Browse curated lists'
-        ]
+        icon: '🎉'
       },
       premium: {
         name: 'Premium',
         badge: '★ PREMIUM',
         price: 27,
         period: '/month',
-        features: [
-          'Unlimited book tracking',
-          'Advanced analytics & insights',
-          'Pomodoro reading sessions',
-          'Personalized reading lists',
-          'Weekly goal reminders',
-          'Priority community access'
-        ]
+        icon: '⭐'
       },
       elite: {
         name: 'Elite',
         badge: '👑 ELITE',
         price: 97,
         period: '/month',
-        features: [
-          'Everything in Premium',
-          'Accountability Partner matching',
-          'Direct messaging with founders',
-          'AI-powered book recommendations',
-          'Weekly 1-on-1 check-ins',
-          'Exclusive Elite community',
-          'Priority support'
-        ]
+        icon: '👑'
       }
     };
     
@@ -537,7 +359,7 @@
           <div class="free-tier-message">
             <h2>🎉 Welcome to IvyReader Free!</h2>
             <p>No payment required. Create your account and start tracking your reading journey today.</p>
-            <a href="manus20260130164246://purchase-complete?tier=free" class="cta-btn">
+            <a href="confirmation.html?tier=free" class="cta-btn">
               Create Free Account →
             </a>
           </div>
@@ -545,212 +367,59 @@
         return;
       }
       
+      // For paid tiers, show a brief summary then redirect to Stripe
+      const paymentLink = paymentLinks[tier] || paymentLinks.premium;
+      
       container.innerHTML = `
-        <div class="checkout-container">
-          <!-- Checkout Form -->
-          <div class="checkout-form">
-            <h1>Complete Your Order</h1>
-            <p class="subtitle">You're one step away from transforming your reading habits.</p>
+        <div class="redirect-container">
+          <div class="redirect-card">
+            <div class="redirect-icon">${selectedTier.icon}</div>
+            <h1>Complete Your ${selectedTier.name} Subscription</h1>
+            <p class="subtitle">You'll be redirected to our secure payment page powered by Stripe.</p>
             
-            <form id="payment-form">
-              <div class="form-section">
-                <h3><span class="step">1</span> Account Information</h3>
-                <div class="form-group">
-                  <label for="email">Email Address</label>
-                  <input type="email" id="email" placeholder="you@example.com" required>
-                </div>
-                <div class="form-group">
-                  <label for="name">Full Name</label>
-                  <input type="text" id="name" placeholder="John Smith" required>
-                </div>
-              </div>
-              
-              <div class="form-section">
-                <h3><span class="step">2</span> Payment Details</h3>
-                <div class="form-group">
-                  <label>Card Information</label>
-                  <div id="card-element" class="stripe-element"></div>
-                  <div id="card-errors" class="card-errors" role="alert"></div>
-                </div>
-              </div>
-              
-              <button type="submit" class="submit-btn" id="submit-btn">
-                <span class="spinner"></span>
-                <span class="btn-text">Start ${selectedTier.name} - $${selectedTier.price}${selectedTier.period}</span>
-              </button>
-              
-              <p class="secure-note">
-                🔒 Secured by Stripe. Your payment info is never stored on our servers.
-              </p>
-            </form>
-            
-            <div class="consultation-cta">
-              <h4>Have questions before you commit?</h4>
-              <p>Book a free 15-minute call with our founders.</p>
-              <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">
-                📞 Schedule Free Consultation →
-              </a>
-            </div>
-          </div>
-          
-          <!-- Order Summary -->
-          <div class="order-summary">
-            <h2>Order Summary</h2>
-            
-            <div class="plan-details">
-              <div class="plan-header">
-                <span class="plan-name">${selectedTier.name}</span>
-                <span class="plan-badge">${selectedTier.badge}</span>
-              </div>
+            <div class="plan-summary">
+              <div class="plan-name">IvyReader ${selectedTier.name}</div>
               <div class="plan-price">$${selectedTier.price}</div>
               <div class="plan-period">${selectedTier.period}</div>
-              
-              <ul class="plan-features">
-                ${selectedTier.features.map(f => `<li><span class="check">✓</span> ${f}</li>`).join('')}
-              </ul>
             </div>
             
-            <div class="total-section">
-              <div class="total-row">
-                <span>Subtotal</span>
-                <span>$${selectedTier.price}</span>
-              </div>
-              <div class="total-row">
-                <span>Tax</span>
-                <span>$0.00</span>
-              </div>
-              <div class="total-row final">
-                <span>Total</span>
-                <span>$${selectedTier.price}${selectedTier.period}</span>
-              </div>
+            <a href="${paymentLink}" class="redirect-btn" id="checkout-btn">
+              Proceed to Secure Checkout →
+            </a>
+            
+            <div class="spinner-container" id="spinner-container" style="display: none;">
+              <div class="spinner"></div>
+              <p class="auto-redirect-text">Redirecting you to secure checkout...</p>
             </div>
             
-            <div class="guarantee-box">
-              <h4>✓ 30-Day Money-Back Guarantee</h4>
-              <p>If you're not reading more within 30 days, we'll refund you completely. No questions asked.</p>
+            <div class="redirect-info">
+              <div class="info-item">
+                <span class="check">✓</span> 30-Day Money-Back Guarantee
+              </div>
+              <div class="info-item">
+                <span class="check">✓</span> Cancel anytime, no contract
+              </div>
+              <div class="info-item">
+                <span class="check">✓</span> Secured by Stripe (PCI Compliant)
+              </div>
+              <div class="info-item">
+                <span class="check">✓</span> Card, Apple Pay, Google Pay & more
+              </div>
             </div>
           </div>
         </div>
       `;
       
-      initStripe();
-    }
-    
-    // Initialize Stripe
-    function initStripe() {
-      // Note: Replace with your actual Stripe publishable key
-      const stripePublicKey = 'pk_test_51SvoKy9pQe0qE44RU0uXMk3ylHBdgGWpjZ7iPuTDj0ossTmCm6QJD1xS7nwgz6yH3UtVIrBAs3AKAownG9X0bnCn0099dGUSc8';
-      
-      // Initialize Stripe
-      const stripe = Stripe(stripePublicKey);
-      const elements = stripe.elements();
-      
-      // Create card element with custom styling
-      const cardElement = elements.create('card', {
-        style: {
-          base: {
-            color: '#F5F5F0',
-            fontFamily: 'Inter, sans-serif',
-            fontSize: '16px',
-            '::placeholder': {
-              color: '#A8B8B0'
-            }
-          },
-          invalid: {
-            color: '#E07A5F'
-          }
+      // Auto-redirect after a brief delay so user sees the summary
+      setTimeout(() => {
+        const spinnerContainer = document.getElementById('spinner-container');
+        if (spinnerContainer) {
+          spinnerContainer.style.display = 'block';
         }
-      });
-      
-      const form = document.getElementById('payment-form');
-      const submitBtn = document.getElementById('submit-btn');
-      const cardErrors = document.getElementById('card-errors');
-      
-      // Mount card element
-      cardElement.mount('#card-element');
-      
-      // Handle real-time validation errors
-      cardElement.on('change', (event) => {
-        if (event.error) {
-          cardErrors.textContent = event.error.message;
-        } else {
-          cardErrors.textContent = '';
-        }
-      });
-      
-      form.addEventListener('submit', async (e) => {
-        e.preventDefault();
-        
-        const email = document.getElementById('email').value;
-        const name = document.getElementById('name').value;
-        
-        if (!email || !name) {
-          cardErrors.textContent = 'Please fill in all fields';
-          return;
-        }
-        
-        // Show loading state
-        submitBtn.classList.add('loading');
-        submitBtn.disabled = true;
-        cardErrors.textContent = '';
-        
-        try {
-          // Create payment method with Stripe
-          const {error, paymentMethod} = await stripe.createPaymentMethod({
-            type: 'card',
-            card: cardElement,
-            billing_details: {
-              name: name,
-              email: email
-            }
-          });
-          
-          if (error) {
-            // Show error to customer
-            cardErrors.textContent = error.message;
-            submitBtn.classList.remove('loading');
-            submitBtn.disabled = false;
-            return;
-          }
-          
-          // Payment method created successfully
-          console.log('Payment method created:', paymentMethod.id);
-          
-          // Call Vercel serverless function (same domain, permanent)
-          const response = await fetch('/api/create-subscription', {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              paymentMethodId: paymentMethod.id,
-              email: email,
-              tier: tier
-            })
-          });
-          
-          if (!response.ok) {
-            const text = await response.text();
-            let errorMsg = 'Subscription creation failed';
-            try { errorMsg = JSON.parse(text).error || errorMsg; } catch(e) { errorMsg = text || errorMsg; }
-            throw new Error(errorMsg);
-          }
-          
-          const result = await response.json();
-          console.log('Subscription created:', result);
-          
-          // Redirect to confirmation
-          const deepLink = `manus20260130164246://purchase-complete?tier=${tier}`;
-          const webFallback = `confirmation.html?tier=${tier}&email=${encodeURIComponent(email)}&subscriptionId=${result.subscriptionId}`;
-          
-          window.location.href = webFallback;
-          
-        } catch (err) {
-          cardErrors.textContent = err.message || 'An unexpected error occurred. Please try again.';
-          submitBtn.classList.remove('loading');
-          submitBtn.disabled = false;
-        }
-      });
+        setTimeout(() => {
+          window.location.href = paymentLink;
+        }, 1500);
+      }, 2000);
     }
     
     // Initialize

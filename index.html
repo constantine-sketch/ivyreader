@@ -352,36 +352,6 @@
       font-size: 1.1rem;
     }
     
-    .pricing-toggle {
-      display: flex;
-      justify-content: center;
-      gap: 0.5rem;
-      margin-bottom: 3rem;
-      background: var(--dark-surface);
-      padding: 0.5rem;
-      border-radius: 50px;
-      width: fit-content;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    
-    .toggle-btn {
-      padding: 0.75rem 1.5rem;
-      border-radius: 50px;
-      border: none;
-      background: transparent;
-      color: var(--muted-text);
-      font-size: 0.95rem;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-    
-    .toggle-btn.active {
-      background: var(--gold);
-      color: var(--dark-bg);
-      font-weight: 600;
-    }
-    
     .pricing-cards {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
@@ -948,11 +918,6 @@
         <p>Join thousands of readers who've transformed their habits with IvyReader.</p>
       </div>
       
-      <div class="pricing-toggle">
-        <button class="toggle-btn active" data-period="monthly">Monthly</button>
-        <button class="toggle-btn" data-period="annual">Annual (Save 20%)</button>
-      </div>
-      
       <div class="pricing-cards">
         <!-- Free Tier -->
         <div class="pricing-card">
@@ -984,7 +949,7 @@
           <div class="tier-desc">For serious readers ready to build a habit.</div>
           <div class="price">
             <span class="currency">$</span>
-            <span class="amount" data-monthly="27" data-annual="22">27</span>
+            <span class="amount">27</span>
             <span class="period">/ month</span>
           </div>
           <div class="guarantee-badge">
@@ -998,7 +963,7 @@
             <li><span class="check">✓</span> Weekly goal reminders</li>
             <li><span class="plus">+</span> Priority community access</li>
           </ul>
-          <a href="checkout.html?tier=premium" class="pricing-cta primary">Start Premium →</a>
+          <a href="https://buy.stripe.com/test_5kQ6oB5LQ8lbbdAdBg1VK00" class="pricing-cta primary">Start Premium →</a>
           <p class="no-contract">No contract. Cancel anytime.</p>
         </div>
         
@@ -1009,7 +974,7 @@
           <div class="tier-desc">Maximum accountability for maximum results.</div>
           <div class="price">
             <span class="currency">$</span>
-            <span class="amount" data-monthly="97" data-annual="78">97</span>
+            <span class="amount">97</span>
             <span class="period">/ month</span>
           </div>
           <div class="guarantee-badge">
@@ -1024,7 +989,7 @@
             <li><span class="plus">+</span> Exclusive Elite community</li>
             <li><span class="plus">+</span> Priority support</li>
           </ul>
-          <a href="checkout.html?tier=elite" class="pricing-cta primary">Join Elite →</a>
+          <a href="https://buy.stripe.com/test_cNidR3eim1WNbdA7cS1VK01" class="pricing-cta primary">Join Elite →</a>
           <p class="no-contract">No contract. Cancel anytime.</p>
         </div>
       </div>
@@ -1152,7 +1117,7 @@
     <div class="final-cta-container">
       <h2>Ready to Finally Become a Reader?</h2>
       <p>Join thousands of ambitious professionals who've transformed their reading habits with IvyReader. Start your journey today.</p>
-      <a href="#pricing" class="final-cta-btn">Get Started Now →</a>
+      <a href="https://buy.stripe.com/test_5kQ6oB5LQ8lbbdAdBg1VK00" class="final-cta-btn">Get Started Now →</a>
     </div>
   </section>
 
@@ -1165,7 +1130,7 @@
         <a href="#">Terms of Service</a>
         <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">Contact</a>
       </div>
-      <p class="footer-copy">© 2024 IvyReader. Built by Columbia Law Students.</p>
+      <p class="footer-copy">© 2025 IvyReader. Built by Columbia Law Students.</p>
     </div>
   </footer>
 
@@ -1176,21 +1141,6 @@
         const item = button.parentElement;
         item.classList.toggle('active');
         button.querySelector('span').textContent = item.classList.contains('active') ? '−' : '+';
-      });
-    });
-    
-    // Pricing Toggle
-    document.querySelectorAll('.toggle-btn').forEach(button => {
-      button.addEventListener('click', () => {
-        document.querySelectorAll('.toggle-btn').forEach(b => b.classList.remove('active'));
-        button.classList.add('active');
-        
-        const period = button.dataset.period;
-        document.querySelectorAll('.price .amount').forEach(amount => {
-          if (amount.dataset.monthly && amount.dataset.annual) {
-            amount.textContent = period === 'monthly' ? amount.dataset.monthly : amount.dataset.annual;
-          }
-        });
       });
     });
     
