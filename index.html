@@ -1,0 +1,1159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IvyReader | The Accountability Reading System for Ambitious Professionals</title>
+  <meta name="description" content="Stop buying books you never finish. IvyReader combines Ivy League accountability systems with proven reading habits to help you read 52+ books per year.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #E8C84A;
+      --dark-bg: #0D0D0D;
+      --dark-surface: #1A2F2A;
+      --dark-card: #0A1F1A;
+      --light-text: #F5F5F0;
+      --muted-text: #A8B8B0;
+      --border: #2D4A42;
+      --success: #4ECDC4;
+    }
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+      line-height: 1.6;
+    }
+    
+    .serif {
+      font-family: 'Playfair Display', Georgia, serif;
+    }
+    
+    /* Navigation */
+    nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+    
+    .nav-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--gold);
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+    
+    .nav-links {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+    
+    .nav-links a {
+      color: var(--light-text);
+      text-decoration: none;
+      font-size: 0.9rem;
+      transition: color 0.2s;
+    }
+    
+    .nav-links a:hover {
+      color: var(--gold);
+    }
+    
+    .nav-cta {
+      background: var(--gold);
+      color: var(--dark-bg);
+      padding: 0.6rem 1.2rem;
+      border-radius: 6px;
+      font-weight: 600;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .nav-cta:hover {
+      background: var(--gold-light);
+      transform: translateY(-1px);
+    }
+    
+    /* Hero Section */
+    .hero {
+      padding: 8rem 2rem 4rem;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+    .credibility-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: var(--dark-surface);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      color: var(--gold);
+      margin-bottom: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    
+    .hero h1 {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    
+    .hero h1 .highlight {
+      color: var(--gold);
+    }
+    
+    .hero .subhead {
+      font-size: 1.25rem;
+      color: var(--muted-text);
+      max-width: 700px;
+      margin: 0 auto 2rem;
+    }
+    
+    .hero-cta {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--dark-bg);
+      padding: 1rem 2.5rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+      margin-bottom: 1rem;
+    }
+    
+    .hero-cta:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    }
+    
+    .guarantee-text {
+      font-size: 0.9rem;
+      color: var(--muted-text);
+    }
+    
+    /* Problem Section - Schwartz Awareness */
+    .problem-section {
+      padding: 5rem 2rem;
+      background: var(--dark-surface);
+    }
+    
+    .problem-container {
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .problem-container h2 {
+      font-size: 2.5rem;
+      margin-bottom: 2rem;
+    }
+    
+    .problem-list {
+      text-align: left;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+    
+    .problem-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+      padding: 1rem;
+      background: var(--dark-bg);
+      border-radius: 8px;
+      border-left: 3px solid #E07A5F;
+    }
+    
+    .problem-item .icon {
+      font-size: 1.5rem;
+    }
+    
+    .problem-item p {
+      color: var(--muted-text);
+    }
+    
+    .problem-item strong {
+      color: var(--light-text);
+    }
+    
+    /* Hero's Journey Section */
+    .story-section {
+      padding: 5rem 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .story-section h2 {
+      font-size: 2rem;
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    
+    .story-card {
+      background: var(--dark-surface);
+      border-radius: 12px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+    }
+    
+    .story-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .story-avatar {
+      width: 60px;
+      height: 60px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.5rem;
+    }
+    
+    .story-meta h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.25rem;
+    }
+    
+    .story-meta span {
+      color: var(--gold);
+      font-size: 0.9rem;
+    }
+    
+    .story-content p {
+      color: var(--muted-text);
+      margin-bottom: 1rem;
+    }
+    
+    .story-content p:last-child {
+      color: var(--light-text);
+      font-weight: 500;
+    }
+    
+    /* Solution Section - Unique Mechanism */
+    .solution-section {
+      padding: 5rem 2rem;
+      background: linear-gradient(180deg, var(--dark-bg) 0%, var(--dark-surface) 100%);
+    }
+    
+    .solution-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      text-align: center;
+    }
+    
+    .solution-container h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .solution-container .subhead {
+      color: var(--muted-text);
+      font-size: 1.1rem;
+      max-width: 700px;
+      margin: 0 auto 3rem;
+    }
+    
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1.5rem;
+      text-align: left;
+    }
+    
+    .feature-card {
+      background: var(--dark-card);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+      transition: all 0.2s;
+    }
+    
+    .feature-card:hover {
+      border-color: var(--gold);
+      transform: translateY(-2px);
+    }
+    
+    .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .feature-card h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .feature-card p {
+      color: var(--muted-text);
+      font-size: 0.95rem;
+    }
+    
+    /* Pricing Section - Hormozi Value Stack */
+    .pricing-section {
+      padding: 5rem 2rem;
+    }
+    
+    .pricing-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+    
+    .pricing-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+    
+    .pricing-header h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .pricing-header p {
+      color: var(--muted-text);
+      font-size: 1.1rem;
+    }
+    
+    .pricing-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      gap: 1.5rem;
+      align-items: start;
+    }
+    
+    .pricing-card {
+      background: var(--dark-surface);
+      border-radius: 16px;
+      padding: 2rem;
+      border: 1px solid var(--border);
+      position: relative;
+    }
+    
+    .pricing-card.featured {
+      border-color: var(--gold);
+      transform: scale(1.02);
+    }
+    
+    .pricing-card.featured::before {
+      content: 'MOST POPULAR';
+      position: absolute;
+      top: -12px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--gold);
+      color: var(--dark-bg);
+      padding: 0.25rem 1rem;
+      border-radius: 50px;
+      font-size: 0.75rem;
+      font-weight: 700;
+    }
+    
+    .tier-label {
+      font-size: 0.85rem;
+      color: var(--gold);
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 0.5rem;
+    }
+    
+    .tier-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+    
+    .tier-desc {
+      color: var(--muted-text);
+      font-size: 0.9rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .price {
+      display: flex;
+      align-items: baseline;
+      gap: 0.25rem;
+      margin-bottom: 0.5rem;
+    }
+    
+    .price .currency {
+      font-size: 1.5rem;
+      font-weight: 600;
+    }
+    
+    .price .amount {
+      font-size: 3rem;
+      font-weight: 800;
+    }
+    
+    .price .period {
+      color: var(--muted-text);
+      font-size: 1rem;
+    }
+    
+    .guarantee-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--success);
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+    }
+    
+    .features-list {
+      list-style: none;
+      margin-bottom: 2rem;
+    }
+    
+    .features-list li {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      margin-bottom: 0.75rem;
+      font-size: 0.95rem;
+    }
+    
+    .features-list .check {
+      color: var(--success);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    
+    .features-list .plus {
+      color: var(--gold);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+    
+    .pricing-cta {
+      display: block;
+      width: 100%;
+      padding: 1rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: center;
+      text-decoration: none;
+      transition: all 0.2s;
+      border: none;
+      cursor: pointer;
+    }
+    
+    .pricing-cta.primary {
+      background: var(--gold);
+      color: var(--dark-bg);
+    }
+    
+    .pricing-cta.primary:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+    }
+    
+    .pricing-cta.secondary {
+      background: transparent;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+    }
+    
+    .pricing-cta.secondary:hover {
+      background: var(--gold);
+      color: var(--dark-bg);
+    }
+    
+    .no-contract {
+      text-align: center;
+      margin-top: 1rem;
+      font-size: 0.85rem;
+      color: var(--muted-text);
+    }
+    
+    /* Consultation CTA Section */
+    .consultation-section {
+      padding: 4rem 2rem;
+      background: var(--dark-surface);
+      text-align: center;
+    }
+    
+    .consultation-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .consultation-container h2 {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+    }
+    
+    .consultation-container p {
+      color: var(--muted-text);
+      margin-bottom: 2rem;
+    }
+    
+    .consultation-cta {
+      display: inline-block;
+      background: transparent;
+      border: 2px solid var(--gold);
+      color: var(--gold);
+      padding: 1rem 2rem;
+      border-radius: 8px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .consultation-cta:hover {
+      background: var(--gold);
+      color: var(--dark-bg);
+    }
+    
+    /* Social Proof Section */
+    .social-proof {
+      padding: 5rem 2rem;
+    }
+    
+    .social-proof-container {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    
+    .social-proof h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .testimonials-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+    
+    .testimonial-card {
+      background: var(--dark-surface);
+      border-radius: 12px;
+      padding: 1.5rem;
+      border: 1px solid var(--border);
+    }
+    
+    .testimonial-stars {
+      color: var(--gold);
+      margin-bottom: 1rem;
+    }
+    
+    .testimonial-text {
+      color: var(--muted-text);
+      margin-bottom: 1rem;
+      font-style: italic;
+    }
+    
+    .testimonial-author {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+    }
+    
+    .testimonial-avatar {
+      width: 40px;
+      height: 40px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      color: var(--dark-bg);
+    }
+    
+    .testimonial-meta h4 {
+      font-size: 0.95rem;
+    }
+    
+    .testimonial-meta span {
+      color: var(--muted-text);
+      font-size: 0.85rem;
+    }
+    
+    /* FAQ Section */
+    .faq-section {
+      padding: 5rem 2rem;
+      background: var(--dark-surface);
+    }
+    
+    .faq-container {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+    
+    .faq-container h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 3rem;
+    }
+    
+    .faq-item {
+      background: var(--dark-bg);
+      border-radius: 8px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+    }
+    
+    .faq-question {
+      width: 100%;
+      padding: 1.25rem;
+      background: transparent;
+      border: none;
+      color: var(--light-text);
+      font-size: 1rem;
+      font-weight: 600;
+      text-align: left;
+      cursor: pointer;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    
+    .faq-question:hover {
+      color: var(--gold);
+    }
+    
+    .faq-answer {
+      padding: 0 1.25rem 1.25rem;
+      color: var(--muted-text);
+      display: none;
+    }
+    
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+    
+    /* Final CTA */
+    .final-cta {
+      padding: 5rem 2rem;
+      text-align: center;
+    }
+    
+    .final-cta-container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+    
+    .final-cta h2 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+    
+    .final-cta p {
+      color: var(--muted-text);
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+    }
+    
+    .final-cta-btn {
+      display: inline-block;
+      background: var(--gold);
+      color: var(--dark-bg);
+      padding: 1.25rem 3rem;
+      border-radius: 8px;
+      font-weight: 700;
+      font-size: 1.2rem;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    
+    .final-cta-btn:hover {
+      background: var(--gold-light);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+    }
+    
+    /* Footer */
+    footer {
+      padding: 3rem 2rem;
+      border-top: 1px solid var(--border);
+    }
+    
+    .footer-container {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+    
+    .footer-links {
+      display: flex;
+      gap: 2rem;
+    }
+    
+    .footer-links a {
+      color: var(--muted-text);
+      text-decoration: none;
+      font-size: 0.9rem;
+    }
+    
+    .footer-links a:hover {
+      color: var(--gold);
+    }
+    
+    .footer-copy {
+      color: var(--muted-text);
+      font-size: 0.85rem;
+    }
+    
+    /* Mobile Responsive */
+    @media (max-width: 768px) {
+      .nav-links {
+        display: none;
+      }
+      
+      .hero h1 {
+        font-size: 2.5rem;
+      }
+      
+      .hero .subhead {
+        font-size: 1.1rem;
+      }
+      
+      .pricing-card.featured {
+        transform: none;
+      }
+      
+      .pricing-cards {
+        grid-template-columns: 1fr;
+      }
+      
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">📚 IvyReader</a>
+      <div class="nav-links">
+        <a href="#features">Features</a>
+        <a href="#pricing">Pricing</a>
+        <a href="#testimonials">Success Stories</a>
+        <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">Free Consultation</a>
+        <a href="#pricing" class="nav-cta">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Hero Section -->
+  <section class="hero">
+    <div class="credibility-badge">
+      🎓 Built by Columbia Law Students
+    </div>
+    <h1>
+      Stop Buying Books<br>
+      <span class="highlight">You Never Finish</span>
+    </h1>
+    <p class="subhead">
+      The accountability system that helped Ivy League students read 52+ books per year. 
+      Now available to ambitious professionals who refuse to let another book collect dust.
+    </p>
+    <a href="#pricing" class="hero-cta">Start Reading More Today →</a>
+    <p class="guarantee-text">✓ 30-Day Money-Back Guarantee • No Contract</p>
+  </section>
+
+  <!-- Problem Section - Schwartz Problem-Aware -->
+  <section class="problem-section">
+    <div class="problem-container">
+      <h2>Sound Familiar?</h2>
+      <div class="problem-list">
+        <div class="problem-item">
+          <span class="icon">📚</span>
+          <div>
+            <strong>You buy books with the best intentions...</strong>
+            <p>But they sit on your shelf, unread, while you scroll through your phone instead.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="icon">😤</span>
+          <div>
+            <strong>You start books but never finish them...</strong>
+            <p>Life gets busy, motivation fades, and that book joins the graveyard of abandoned reads.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="icon">🎯</span>
+          <div>
+            <strong>You know reading is the key to success...</strong>
+            <p>Every successful person reads. You know this. But knowing isn't doing.</p>
+          </div>
+        </div>
+        <div class="problem-item">
+          <span class="icon">😔</span>
+          <div>
+            <strong>You've tried reading apps before...</strong>
+            <p>Goodreads, Kindle highlights, reading challenges... nothing sticks because there's no real accountability.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero's Journey Section -->
+  <section class="story-section">
+    <h2>We Were Exactly Where You Are</h2>
+    <div class="story-card">
+      <div class="story-header">
+        <div class="story-avatar">🎓</div>
+        <div class="story-meta">
+          <h3>The IvyReader Story</h3>
+          <span>Columbia Law School, 2024</span>
+        </div>
+      </div>
+      <div class="story-content">
+        <p>
+          When I got into Columbia Law, I thought I was disciplined. I'd read all the "right" books to get there. 
+          But once I arrived, I realized something: <strong>it wasn't intelligence that separated the top performers from everyone else.</strong>
+        </p>
+        <p>
+          It was their systems. Their accountability structures. The way they held each other to impossibly high standards.
+        </p>
+        <p>
+          I started applying these same Ivy League accountability principles to my reading habit. 
+          Weekly check-ins with peers. Progress tracking. Community support. Real consequences for not following through.
+        </p>
+        <p>
+          <strong>The result? I went from reading 5 books a year to 52+. And I built IvyReader to give you the same system.</strong>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Solution Section - Unique Mechanism -->
+  <section class="solution-section" id="features">
+    <div class="solution-container">
+      <h2>The Ivy League Reading System</h2>
+      <p class="subhead">
+        It's not about willpower. It's about having the right structure, community, and accountability—just like the Ivy League.
+      </p>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">📊</div>
+          <h3>Smart Progress Tracking</h3>
+          <p>Track every book, every page, every minute. See your reading habits visualized and watch your library grow.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👥</div>
+          <h3>Reader Society</h3>
+          <p>Join a community of ambitious readers. Share progress, discuss books, and stay motivated together.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🎯</div>
+          <h3>Goal-Based Accountability</h3>
+          <p>Set reading goals and get held accountable. Weekly check-ins ensure you never fall behind.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">📋</div>
+          <h3>Curated Reading Lists</h3>
+          <p>Handpicked book recommendations based on your goals. No more wondering what to read next.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">🤝</div>
+          <h3>Accountability Partner</h3>
+          <p>Get matched with a reading buddy who shares your goals. Check in weekly and hold each other accountable.</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">👑</div>
+          <h3>Founder Access</h3>
+          <p>Elite members get direct messaging with the founders. Personal guidance on your reading journey.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Pricing Section - Hormozi Value Stack -->
+  <section class="pricing-section" id="pricing">
+    <div class="pricing-container">
+      <div class="pricing-header">
+        <h2>Choose Your Reading Journey</h2>
+        <p>Join thousands of readers who've transformed their habits with IvyReader.</p>
+      </div>
+      
+      <div class="pricing-cards">
+        <!-- Free Tier -->
+        <div class="pricing-card">
+          <div class="tier-label">Starter</div>
+          <div class="tier-name">Free</div>
+          <div class="tier-desc">Perfect for casual readers getting started.</div>
+          <div class="price">
+            <span class="currency">$</span>
+            <span class="amount">0</span>
+            <span class="period">/ month</span>
+          </div>
+          <div class="guarantee-badge">
+            <span>✓</span> Free forever
+          </div>
+          <ul class="features-list">
+            <li><span class="check">✓</span> Track up to 10 books</li>
+            <li><span class="check">✓</span> Basic reading stats</li>
+            <li><span class="check">✓</span> Join the Reader Society</li>
+            <li><span class="check">✓</span> Browse curated lists</li>
+          </ul>
+          <a href="checkout.html?tier=free" class="pricing-cta secondary">Get Started Free</a>
+          <p class="no-contract">No credit card required</p>
+        </div>
+        
+        <!-- Premium Tier -->
+        <div class="pricing-card featured">
+          <div class="tier-label">★ Premium</div>
+          <div class="tier-name">Premium</div>
+          <div class="tier-desc">For serious readers ready to build a habit.</div>
+          <div class="price">
+            <span class="currency">$</span>
+            <span class="amount">27</span>
+            <span class="period">/ month</span>
+          </div>
+          <div class="guarantee-badge">
+            <span>✓</span> 30-Day Money-Back Guarantee
+          </div>
+          <ul class="features-list">
+            <li><span class="check">✓</span> <strong>Unlimited</strong> book tracking</li>
+            <li><span class="check">✓</span> Advanced analytics & insights</li>
+            <li><span class="check">✓</span> Pomodoro reading sessions</li>
+            <li><span class="check">✓</span> Personalized reading lists</li>
+            <li><span class="check">✓</span> Weekly goal reminders</li>
+            <li><span class="plus">+</span> Priority community access</li>
+          </ul>
+          <a href="https://buy.stripe.com/test_5kQ6oB5LQ8lbbdAdBg1VK00" class="pricing-cta primary">Start Premium →</a>
+          <p class="no-contract">No contract. Cancel anytime.</p>
+        </div>
+        
+        <!-- Elite Tier -->
+        <div class="pricing-card">
+          <div class="tier-label">👑 Elite</div>
+          <div class="tier-name">Elite</div>
+          <div class="tier-desc">Maximum accountability for maximum results.</div>
+          <div class="price">
+            <span class="currency">$</span>
+            <span class="amount">97</span>
+            <span class="period">/ month</span>
+          </div>
+          <div class="guarantee-badge">
+            <span>✓</span> 30-Day Money-Back Guarantee
+          </div>
+          <ul class="features-list">
+            <li><span class="check">✓</span> Everything in Premium</li>
+            <li><span class="plus">+</span> <strong>Accountability Partner</strong> matching</li>
+            <li><span class="plus">+</span> <strong>Direct messaging</strong> with founders</li>
+            <li><span class="plus">+</span> AI-powered book recommendations</li>
+            <li><span class="plus">+</span> Weekly 1-on-1 check-ins</li>
+            <li><span class="plus">+</span> Exclusive Elite community</li>
+            <li><span class="plus">+</span> Priority support</li>
+          </ul>
+          <a href="https://buy.stripe.com/test_cNidR3eim1WNbdA7cS1VK01" class="pricing-cta primary">Join Elite →</a>
+          <p class="no-contract">No contract. Cancel anytime.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Consultation CTA -->
+  <section class="consultation-section">
+    <div class="consultation-container">
+      <h2>Not Sure Which Plan Is Right For You?</h2>
+      <p>Book a free 15-minute consultation with our founders. We'll help you choose the right plan based on your reading goals and hold you accountable from day one.</p>
+      <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank" class="consultation-cta">
+        📞 Book a Free Consultation
+      </a>
+    </div>
+  </section>
+
+  <!-- Social Proof Section -->
+  <section class="social-proof" id="testimonials">
+    <div class="social-proof-container">
+      <h2>What Our Readers Say</h2>
+      <div class="testimonials-grid">
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "I went from reading 3 books last year to 24 books in 6 months. The accountability partner feature is a game-changer."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">JM</div>
+            <div class="testimonial-meta">
+              <h4>James M.</h4>
+              <span>Startup Founder</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "Finally, a reading app that actually holds me accountable. The weekly check-ins with my reading buddy keep me on track."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">SK</div>
+            <div class="testimonial-meta">
+              <h4>Sarah K.</h4>
+              <span>Marketing Director</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "The Ivy League approach to reading is exactly what I needed. Structure, community, and real accountability."
+          </p>
+          <div class="testimonial-author">
+            <div class="testimonial-avatar">DL</div>
+            <div class="testimonial-meta">
+              <h4>David L.</h4>
+              <span>Management Consultant</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FAQ Section -->
+  <section class="faq-section">
+    <div class="faq-container">
+      <h2>Frequently Asked Questions</h2>
+      
+      <div class="faq-item">
+        <button class="faq-question">
+          How is IvyReader different from Goodreads?
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          Goodreads is great for cataloging books, but it doesn't hold you accountable. IvyReader combines tracking with real accountability—weekly check-ins, accountability partners, and direct access to founders who care about your progress.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question">
+          What if I don't finish a book?
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          That's exactly why we exist! Our accountability system is designed to help you finish what you start. Your accountability partner and weekly check-ins will keep you on track. And if a book isn't working for you, we'll help you decide whether to push through or move on.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question">
+          Can I cancel anytime?
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          Absolutely. There are no contracts or commitments. Cancel anytime with one click. Plus, we offer a 30-day money-back guarantee—if you're not reading more within 30 days, we'll refund you completely.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question">
+          How does the accountability partner matching work?
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          Elite members get matched with a reading buddy based on their reading goals, preferred genres, and schedule. You'll have weekly check-ins to share progress, discuss books, and hold each other accountable.
+        </div>
+      </div>
+      
+      <div class="faq-item">
+        <button class="faq-question">
+          What does "direct messaging with founders" mean?
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          Elite members can message us directly through the app. We'll respond within 24 hours with personalized guidance on your reading journey, book recommendations, and accountability support. It's like having a personal reading coach.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Final CTA -->
+  <section class="final-cta">
+    <div class="final-cta-container">
+      <h2>Ready to Finally Become a Reader?</h2>
+      <p>Join thousands of ambitious professionals who've transformed their reading habits with IvyReader. Start your journey today.</p>
+      <a href="https://buy.stripe.com/test_5kQ6oB5LQ8lbbdAdBg1VK00" class="final-cta-btn">Get Started Now →</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-container">
+      <div class="footer-links">
+        <a href="#">About Us</a>
+        <a href="#">Privacy Policy</a>
+        <a href="#">Terms of Service</a>
+        <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">Contact</a>
+      </div>
+      <p class="footer-copy">© 2025 IvyReader. Built by Columbia Law Students.</p>
+    </div>
+  </footer>
+
+  <script>
+    // FAQ Toggle
+    document.querySelectorAll('.faq-question').forEach(button => {
+      button.addEventListener('click', () => {
+        const item = button.parentElement;
+        item.classList.toggle('active');
+        button.querySelector('span').textContent = item.classList.contains('active') ? '−' : '+';
+      });
+    });
+    
+    // Smooth scroll for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function(e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      });
+    });
+  </script>
+</body>
+</html>
