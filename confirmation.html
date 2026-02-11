@@ -429,20 +429,21 @@
     document.getElementById('welcome-subtitle').textContent = config.subtitle;
     document.getElementById('user-email').textContent = decodeURIComponent(email);
     
-    // Set app deep link
+    // Set app link - uses the Manus-published web app URL
+    // UPDATE THIS URL after publishing via Manus UI
+    const publishedAppUrl = `https://ivyreader.manus.space/purchase-complete?tier=${tier}`;
     const deepLink = `manus20260130164246://purchase-complete?tier=${tier}`;
-    const webAppLink = `https://8081-izc228vfaytopk80owte6-ded450e1.us1.manus.computer/purchase-complete?tier=${tier}`;
     
-    document.getElementById('app-link').href = webAppLink;
+    document.getElementById('app-link').href = publishedAppUrl;
     document.getElementById('app-link').addEventListener('click', function(e) {
-      // Try deep link first for mobile
+      // Try deep link first for mobile (when iOS app is available)
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         e.preventDefault();
         window.location.href = deepLink;
         
-        // Fallback to web after delay
+        // Fallback to web app after delay
         setTimeout(() => {
-          window.location.href = webAppLink;
+          window.location.href = publishedAppUrl;
         }, 1500);
       }
     });
