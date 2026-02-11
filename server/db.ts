@@ -1,17 +1,41 @@
 import { eq } from "drizzle-orm";
-import { drizzle } from "drizzle-orm/mysql2";
 import { InsertUser, users } from "../drizzle/schema";
 import { ENV } from "./_core/env";
 
-let _db: ReturnType<typeof drizzle> | null = null;
+let _db: any | null = null;
+let _currentDsn: string | null = null;
 
 // Lazily create the drizzle instance so local tooling can run without a DB.
 export async function getDb() {
   const dsn = process.env.DATABASE_URL || process.env.DATABASE_DSN;
+  
+  // Reinitialize if DSN changed (e.g., switched from MySQL to PostgreSQL)
+  if (_db && _currentDsn && dsn && _currentDsn !== dsn) {
+    console.log("[Database] DSN changed, reinitializing connection");
+    _db = null;
+    _currentDsn = null;
+  }
+  
   if (!_db && dsn) {
     try {
       console.log("[Database] Connecting with DSN:", dsn.substring(0, 20) + "...");
-      _db = drizzle(dsn);
+      
+      // Detect database type from connection string
+      if (dsn.startsWith('postgresql://') || dsn.startsWith('postgres://')) {
+        // PostgreSQL
+        const { drizzle } = await import("drizzle-orm/postgres-js");
+        const { default: postgres } = await import("postgres");
+        const client = postgres(dsn);
+        _db = drizzle(client);
+        _currentDsn = dsn;
+        console.log("[Database] Using PostgreSQL driver");
+      } else {
+        // MySQL
+        const { drizzle } = await import("drizzle-orm/mysql2");
+        _db = drizzle(dsn);
+        _currentDsn = dsn;
+        console.log("[Database] Using MySQL driver");
+      }
     } catch (error) {
       console.warn("[Database] Failed to connect:", error);
       _db = null;

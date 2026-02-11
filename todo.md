@@ -937,3 +937,22 @@
 - [x] Update checkout page to call backend
 - [x] Test complete payment flow (REST endpoint working, Stripe subscription created successfully)
 - [x] Save checkpoint
+
+## Production Deployment
+- [x] Deploy backend API to Railway with stable URL
+- [x] Update landing pages to use Railway API endpoint  
+- [ ] Configure Vercel for theivyreader.com domain (DNS records needed from user)
+- [ ] Set up api.theivyreader.com subdomain for backend (DNS records needed from user)
+
+## Vercel Serverless Migration
+- [ ] Create api/create-subscription.js serverless function
+- [ ] Update checkout.html to use relative /api/create-subscription URL
+- [ ] Push to GitHub repo
+- [ ] Add Stripe keys to Vercel environment variables
+- [ ] Test checkout end-to-end on Vercel
+
+## Web App Deployment via Manus Publish
+- [x] Save checkpoint for Manus Publish
+- [ ] Fix confirmation page on landing site to link to published web app URL
+- [ ] Deploy updated confirmation page to Vercel
+- [ ] Verify full user flow: landing → payment → confirmation → web app

@@ -1,68 +1,12 @@
 {
   "version": "7",
-  "dialect": "mysql",
+  "dialect": "postgresql",
   "entries": [
     {
       "idx": 0,
       "version": "5",
-      "when": 1763372440610,
-      "tag": "0000_elite_eternals",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1769810948240,
-      "tag": "0001_public_iron_lad",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1769989506744,
-      "tag": "0002_lucky_saracen",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "5",
-      "when": 1769995017717,
-      "tag": "0003_right_terror",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "5",
-      "when": 1769996221567,
-      "tag": "0004_wandering_joshua_kane",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "5",
-      "when": 1770007276480,
-      "tag": "0005_exotic_james_howlett",
-      "breakpoints": true
-    },
-    {
-      "idx": 6,
-      "version": "5",
-      "when": 1770008357989,
-      "tag": "0006_fantastic_sentinels",
-      "breakpoints": true
-    },
-    {
-      "idx": 7,
-      "version": "5",
-      "when": 1770089307913,
-      "tag": "0007_early_ultimo",
-      "breakpoints": true
-    },
-    {
-      "idx": 8,
-      "version": "5",
-      "when": 1770151217615,
-      "tag": "0008_old_namora",
+      "when": 1770776756877,
+      "tag": "0000_yielding_fat_cobra",
       "breakpoints": true
     }
   ]
