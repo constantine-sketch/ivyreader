@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Privacy Policy | IvyReader</title>
+  <meta name="description" content="IvyReader Privacy Policy — how we collect, use, and protect your personal information.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --gold: #D4AF37;
+      --gold-light: #E8C84A;
+      --dark-bg: #0D0D0D;
+      --dark-surface: #1A2F2A;
+      --dark-card: #0A1F1A;
+      --light-text: #F5F5F0;
+      --muted-text: #A8B8B0;
+      --border: #2D4A42;
+      --success: #4ECDC4;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--dark-bg);
+      color: var(--light-text);
+      line-height: 1.7;
+    }
+
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+    nav {
+      position: fixed; top: 0; left: 0; right: 0;
+      background: rgba(13, 13, 13, 0.95);
+      backdrop-filter: blur(10px);
+      z-index: 1000;
+      padding: 1rem 2rem;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .nav-container {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem; font-weight: 700; color: var(--gold);
+      text-decoration: none; display: flex; align-items: center; gap: 0.5rem;
+    }
+
+    .nav-links { display: flex; gap: 2rem; align-items: center; }
+    .nav-links a { color: var(--light-text); text-decoration: none; font-size: 0.9rem; transition: color 0.2s; }
+    .nav-links a:hover { color: var(--gold); }
+
+    .nav-cta {
+      background: var(--gold); color: var(--dark-bg); padding: 0.6rem 1.2rem;
+      border-radius: 6px; font-weight: 600; text-decoration: none; transition: all 0.2s;
+    }
+    .nav-cta:hover { background: var(--gold-light); transform: translateY(-1px); }
+
+    .legal-hero {
+      padding: 8rem 2rem 3rem;
+      text-align: center;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .legal-hero h1 {
+      font-size: 3rem; font-weight: 800; margin-bottom: 0.75rem;
+    }
+
+    .legal-hero h1 .highlight { color: var(--gold); }
+
+    .legal-hero .effective-date {
+      color: var(--muted-text); font-size: 1rem;
+    }
+
+    .legal-content {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem 2rem 5rem;
+    }
+
+    .legal-content h2 {
+      font-size: 1.5rem; font-weight: 700; margin-top: 2.5rem; margin-bottom: 1rem;
+      color: var(--gold); border-bottom: 1px solid var(--border); padding-bottom: 0.5rem;
+    }
+
+    .legal-content h3 {
+      font-size: 1.15rem; font-weight: 600; margin-top: 1.5rem; margin-bottom: 0.75rem;
+    }
+
+    .legal-content p {
+      color: var(--muted-text); margin-bottom: 1rem; font-size: 0.95rem;
+    }
+
+    .legal-content ul {
+      color: var(--muted-text); margin-bottom: 1rem; padding-left: 1.5rem; font-size: 0.95rem;
+    }
+
+    .legal-content ul li { margin-bottom: 0.5rem; }
+
+    .legal-content strong { color: var(--light-text); }
+
+    .legal-content a { color: var(--gold); text-decoration: underline; }
+    .legal-content a:hover { color: var(--gold-light); }
+
+    .legal-card {
+      background: var(--dark-surface); border-radius: 12px; padding: 1.5rem;
+      border: 1px solid var(--border); margin: 1.5rem 0;
+    }
+
+    .legal-card p { margin-bottom: 0.5rem; }
+    .legal-card p:last-child { margin-bottom: 0; }
+
+    .data-table {
+      width: 100%; border-collapse: collapse; margin: 1rem 0 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .data-table th {
+      background: var(--dark-surface); color: var(--gold); text-align: left;
+      padding: 0.75rem 1rem; border-bottom: 2px solid var(--border);
+      font-weight: 600;
+    }
+
+    .data-table td {
+      padding: 0.75rem 1rem; border-bottom: 1px solid var(--border);
+      color: var(--muted-text);
+    }
+
+    .data-table tr:hover td { background: rgba(26, 47, 42, 0.5); }
+
+    footer {
+      padding: 3rem 2rem; border-top: 1px solid var(--border);
+    }
+
+    .footer-container {
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: space-between; align-items: center;
+      flex-wrap: wrap; gap: 1rem;
+    }
+
+    .footer-links { display: flex; gap: 2rem; }
+    .footer-links a { color: var(--muted-text); text-decoration: none; font-size: 0.9rem; }
+    .footer-links a:hover { color: var(--gold); }
+    .footer-copy { color: var(--muted-text); font-size: 0.85rem; }
+
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .legal-hero h1 { font-size: 2.2rem; }
+      .footer-container { flex-direction: column; text-align: center; }
+      .data-table { font-size: 0.8rem; }
+      .data-table th, .data-table td { padding: 0.5rem; }
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <div class="nav-container">
+      <a href="/" class="logo">📚 IvyReader</a>
+      <div class="nav-links">
+        <a href="/">Home</a>
+        <a href="/#features">Features</a>
+        <a href="/#pricing">Pricing</a>
+        <a href="/#pricing" class="nav-cta">Get Started</a>
+      </div>
+    </div>
+  </nav>
+
+  <section class="legal-hero">
+    <h1><span class="highlight">Privacy</span> Policy</h1>
+    <p class="effective-date">Effective Date: February 13, 2026 &middot; Last Updated: February 13, 2026</p>
+  </section>
+
+  <div class="legal-content">
+
+    <div class="legal-card">
+      <p><strong>Your privacy matters to us.</strong> This Privacy Policy explains how IvyReader ("we," "us," or "our") collects, uses, shares, and protects your personal information when you use our website at <a href="https://theivyreader.com">theivyreader.com</a>, our mobile applications, and all related services (collectively, the "Service").</p>
+    </div>
+
+    <h2>1. Information We Collect</h2>
+
+    <h3>1.1 Information You Provide</h3>
+    <p>We collect information that you voluntarily provide when using the Service:</p>
+    <ul>
+      <li><strong>Account Information:</strong> Name, email address, and profile details when you create an account.</li>
+      <li><strong>Payment Information:</strong> Billing details processed securely through Stripe, Inc. We do not store your full credit card number on our servers.</li>
+      <li><strong>Reading Data:</strong> Books you add, reading sessions, pages read, notes, highlights, and reading goals.</li>
+      <li><strong>Social Content:</strong> Posts, comments, likes, and messages you share through the Service.</li>
+      <li><strong>Communications:</strong> Messages you send to us, including support requests and founder messaging (Elite tier).</li>
+    </ul>
+
+    <h3>1.2 Information Collected Automatically</h3>
+    <p>When you use the Service, we automatically collect certain technical information:</p>
+    <ul>
+      <li><strong>Device Information:</strong> Device type, operating system, browser type, and unique device identifiers.</li>
+      <li><strong>Usage Data:</strong> Pages visited, features used, session duration, and interaction patterns.</li>
+      <li><strong>Log Data:</strong> IP address, access times, referring URLs, and error logs.</li>
+      <li><strong>Cookies and Similar Technologies:</strong> We use cookies, local storage, and similar technologies to maintain your session and improve the Service.</li>
+    </ul>
+
+    <h2>2. How We Use Your Information</h2>
+    <p>We use the information we collect for the following purposes:</p>
+
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th>Purpose</th>
+          <th>Data Used</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Provide the Service</strong></td>
+          <td>Account info, reading data, social content</td>
+        </tr>
+        <tr>
+          <td><strong>Process Payments</strong></td>
+          <td>Payment information (via Stripe)</td>
+        </tr>
+        <tr>
+          <td><strong>Personalize Experience</strong></td>
+          <td>Reading data, usage patterns, preferences</td>
+        </tr>
+        <tr>
+          <td><strong>Send Communications</strong></td>
+          <td>Email address (account updates, reading reminders)</td>
+        </tr>
+        <tr>
+          <td><strong>Improve the Service</strong></td>
+          <td>Usage data, feedback, error logs</td>
+        </tr>
+        <tr>
+          <td><strong>Ensure Security</strong></td>
+          <td>Device info, log data, IP addresses</td>
+        </tr>
+        <tr>
+          <td><strong>Comply with Law</strong></td>
+          <td>Any data as required by legal obligations</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3. How We Share Your Information</h2>
+    <p>We do not sell your personal information. We may share your information in the following limited circumstances:</p>
+    <ul>
+      <li><strong>Service Providers:</strong> We share data with trusted third-party providers who help us operate the Service, including Stripe (payments), cloud hosting providers, and analytics services. These providers are contractually obligated to protect your data.</li>
+      <li><strong>Community Features:</strong> Information you share through social features (posts, reading lists, profile) is visible to other users as intended by the feature's design.</li>
+      <li><strong>Legal Requirements:</strong> We may disclose information if required by law, legal process, or government request.</li>
+      <li><strong>Business Transfers:</strong> In the event of a merger, acquisition, or sale of assets, your information may be transferred as part of that transaction.</li>
+      <li><strong>With Your Consent:</strong> We may share information for other purposes with your explicit consent.</li>
+    </ul>
+
+    <h2>4. Data Security</h2>
+    <p>We implement industry-standard security measures to protect your personal information, including:</p>
+    <ul>
+      <li>Encryption of data in transit (TLS/SSL) and at rest.</li>
+      <li>Secure authentication via OAuth protocols.</li>
+      <li>Regular security assessments and monitoring.</li>
+      <li>Access controls limiting employee access to personal data.</li>
+    </ul>
+    <p>While we strive to protect your information, no method of electronic transmission or storage is 100% secure. We cannot guarantee absolute security.</p>
+
+    <h2>5. Data Retention</h2>
+    <p>We retain your personal information for as long as your account is active or as needed to provide the Service. If you delete your account, we will delete or anonymize your personal data within 30 days, except where retention is required by law or for legitimate business purposes (such as resolving disputes or enforcing our Terms).</p>
+
+    <h2>6. Your Rights and Choices</h2>
+    <p>Depending on your location, you may have the following rights regarding your personal information:</p>
+    <ul>
+      <li><strong>Access:</strong> Request a copy of the personal data we hold about you.</li>
+      <li><strong>Correction:</strong> Request correction of inaccurate or incomplete data.</li>
+      <li><strong>Deletion:</strong> Request deletion of your personal data ("right to be forgotten").</li>
+      <li><strong>Portability:</strong> Request a portable copy of your data in a structured format.</li>
+      <li><strong>Opt-Out:</strong> Unsubscribe from marketing communications at any time.</li>
+      <li><strong>Restrict Processing:</strong> Request that we limit how we use your data.</li>
+    </ul>
+    <p>To exercise any of these rights, contact us at <a href="mailto:privacy@theivyreader.com">privacy@theivyreader.com</a>. We will respond within 30 days.</p>
+
+    <h2>7. Cookies and Tracking Technologies</h2>
+    <p>We use the following types of cookies:</p>
+    <ul>
+      <li><strong>Essential Cookies:</strong> Required for the Service to function (authentication, security). Cannot be disabled.</li>
+      <li><strong>Analytics Cookies:</strong> Help us understand how users interact with the Service to improve performance and features.</li>
+      <li><strong>Preference Cookies:</strong> Remember your settings and preferences (theme, reading display options).</li>
+    </ul>
+    <p>You can manage cookie preferences through your browser settings. Note that disabling certain cookies may affect the functionality of the Service.</p>
+
+    <h2>8. Children's Privacy</h2>
+    <p>The Service is not directed to children under the age of 13. We do not knowingly collect personal information from children under 13. If we become aware that we have collected data from a child under 13, we will take steps to delete that information promptly. If you believe a child under 13 has provided us with personal information, please contact us at <a href="mailto:privacy@theivyreader.com">privacy@theivyreader.com</a>.</p>
+
+    <h2>9. International Data Transfers</h2>
+    <p>Your information may be transferred to and processed in countries other than your country of residence, including the United States. These countries may have data protection laws that differ from those in your jurisdiction. By using the Service, you consent to such transfers. We take appropriate safeguards to ensure your data is protected in accordance with this Privacy Policy.</p>
+
+    <h2>10. California Privacy Rights (CCPA)</h2>
+    <p>If you are a California resident, you have additional rights under the California Consumer Privacy Act (CCPA):</p>
+    <ul>
+      <li>The right to know what personal information we collect, use, and disclose.</li>
+      <li>The right to request deletion of your personal information.</li>
+      <li>The right to opt out of the sale of personal information. <strong>We do not sell personal information.</strong></li>
+      <li>The right to non-discrimination for exercising your privacy rights.</li>
+    </ul>
+
+    <h2>11. European Privacy Rights (GDPR)</h2>
+    <p>If you are located in the European Economic Area (EEA), United Kingdom, or Switzerland, you have rights under the General Data Protection Regulation (GDPR). Our legal bases for processing your data include:</p>
+    <ul>
+      <li><strong>Contract Performance:</strong> Processing necessary to provide the Service you requested.</li>
+      <li><strong>Legitimate Interests:</strong> Processing for our legitimate business interests (improving the Service, security).</li>
+      <li><strong>Consent:</strong> Processing based on your explicit consent (marketing communications).</li>
+      <li><strong>Legal Obligation:</strong> Processing required to comply with applicable laws.</li>
+    </ul>
+
+    <h2>12. Third-Party Links</h2>
+    <p>The Service may contain links to third-party websites or services. We are not responsible for the privacy practices of these third parties. We encourage you to review their privacy policies before providing any personal information.</p>
+
+    <h2>13. Changes to This Privacy Policy</h2>
+    <p>We may update this Privacy Policy from time to time. When we make material changes, we will notify you by email or through the Service and update the "Last Updated" date at the top of this page. Your continued use of the Service after such changes constitutes your acceptance of the updated Privacy Policy.</p>
+
+    <h2>14. Contact Us</h2>
+    <div class="legal-card">
+      <p><strong>IvyReader — Privacy Team</strong></p>
+      <p>Email: <a href="mailto:privacy@theivyreader.com">privacy@theivyreader.com</a></p>
+      <p>General Support: <a href="mailto:support@theivyreader.com">support@theivyreader.com</a></p>
+      <p>Website: <a href="https://theivyreader.com">theivyreader.com</a></p>
+    </div>
+
+  </div>
+
+  <footer>
+    <div class="footer-container">
+      <div class="footer-links">
+        <a href="/">Home</a>
+        <a href="/privacy.html">Privacy Policy</a>
+        <a href="/terms.html">Terms of Service</a>
+        <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">Contact</a>
+      </div>
+      <p class="footer-copy">&copy; 2026 IvyReader. Built by Columbia Law Students.</p>
+    </div>
+  </footer>
+</body>
+</html>
