@@ -40,3 +40,6 @@
 [2026-02-14T04:19:37.827Z] [0] 11:19:37 PM [tsx] change in ./server/db.ts Restarting...
 [2026-02-14T04:19:41.652Z] [0] c[OAuth] Initialized with baseURL: https://api.manus.im
 [2026-02-14T04:19:41.808Z] [0] [api] server listening on port 3000
+[2026-02-14T06:44:09.579Z] [0] 1:44:09 AM [tsx] change in ./server/_core/index.ts Restarting...
+[2026-02-14T06:44:11.077Z] [0] c[OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-14T06:44:11.132Z] [0] [api] server listening on port 3000
