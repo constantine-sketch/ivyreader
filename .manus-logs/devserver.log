@@ -43,3 +43,229 @@
 [2026-02-14T06:44:09.579Z] [0] 1:44:09 AM [tsx] change in ./server/_core/index.ts Restarting...
 [2026-02-14T06:44:11.077Z] [0] c[OAuth] Initialized with baseURL: https://api.manus.im
 [2026-02-14T06:44:11.132Z] [0] [api] server listening on port 3000
+[2026-02-14T07:10:51.818Z] [0] 2:10:51 AM [tsx] Previous process hasn't exited yet. Force killing...
+[2026-02-14T07:10:51.820Z] ELIFECYCLE  Command failed.
+[2026-02-14T07:10:51.815Z] Dev server process group stopped
+[2026-02-14T07:10:51.837Z] [0]  ELIFECYCLE  Command failed.
+[2026-02-14T07:10:51.837Z] [1]  ELIFECYCLE  Command failed.
+[2026-02-14T07:10:51.848Z] [0] pnpm dev:server exited with code SIGTERM
+[2026-02-14T07:10:51.849Z] --> Sending SIGTERM to other processes..
+[2026-02-14T07:10:51.884Z] [1] pnpm dev:metro exited with code SIGTERM
+[2026-02-14T07:10:51.890Z] Dev server exited with code -15
+[2026-02-14T07:10:54.836Z] Starting dev server with command: pnpm run dev
+[2026-02-14T07:10:56.025Z] 
+[2026-02-14T07:10:56.026Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-14T07:10:56.027Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-14T07:10:56.027Z] 
+[2026-02-14T07:10:56.966Z] [1]
+[2026-02-14T07:10:56.967Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-14T07:10:56.967Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-14T07:10:56.967Z] [1]
+[2026-02-14T07:10:56.996Z] [0]
+[2026-02-14T07:10:56.997Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-14T07:10:56.998Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-14T07:10:56.998Z] [0]
+[2026-02-14T07:10:57.798Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-14T07:10:58.400Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:10:58.496Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:10:58.496Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:10:58.497Z] [1]     at /home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:102:20
+[2026-02-14T07:10:58.497Z] [1]     at Array.reduce (<anonymous>)
+[2026-02-14T07:10:58.497Z] [1]     at mergeConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:97:18)
+[2026-02-14T07:10:58.498Z] [1]     at loadMetroConfigFromDisk (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:177:10)
+[2026-02-14T07:10:58.498Z] [1]     at loadConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:228:25)
+[2026-02-14T07:10:58.498Z] [1]     at loadMetroConfigAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:99:9)
+[2026-02-14T07:10:58.499Z] [1]     at instantiateMetroAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:203:7)
+[2026-02-14T07:10:58.499Z] [1]     at MetroBundlerDevServer.startImplementationAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/MetroBundlerDevServer.ts:1054:69)
+[2026-02-14T07:10:58.499Z] [1]     at MetroBundlerDevServer.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/BundlerDevServer.ts:160:18)
+[2026-02-14T07:10:58.500Z] [1]     at DevServerManager.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/DevServerManager.ts:184:7)
+[2026-02-14T07:10:58.521Z] [1]  ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:10:58.550Z] [1] pnpm dev:metro exited with code 1
+[2026-02-14T07:10:58.551Z] --> Sending SIGTERM to other processes..
+[2026-02-14T07:10:58.614Z] [0] [OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-14T07:10:58.623Z] [0]  ELIFECYCLE  Command failed.
+[2026-02-14T07:10:58.673Z] [0] [api] server listening on port 3000
+[2026-02-14T07:10:58.739Z] [0] 2:10:58 AM [tsx] Previous process hasn't exited yet. Force killing...
+[2026-02-14T07:10:58.754Z] [0] pnpm dev:server exited with code SIGTERM
+[2026-02-14T07:10:58.762Z] ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:10:58.803Z] Dev server exited with code 1
+[2026-02-14T07:11:33.095Z] Starting dev server with command: pnpm run dev
+[2026-02-14T07:11:34.083Z] 
+[2026-02-14T07:11:34.084Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-14T07:11:34.084Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-14T07:11:34.084Z] 
+[2026-02-14T07:11:34.961Z] [0]
+[2026-02-14T07:11:34.962Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-14T07:11:34.962Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-14T07:11:34.963Z] [0]
+[2026-02-14T07:11:35.001Z] [1]
+[2026-02-14T07:11:35.002Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-14T07:11:35.002Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-14T07:11:35.003Z] [1]
+[2026-02-14T07:11:35.756Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-14T07:11:36.353Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:11:36.451Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:11:36.452Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:11:36.453Z] [1]     at /home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:102:20
+[2026-02-14T07:11:36.453Z] [1]     at Array.reduce (<anonymous>)
+[2026-02-14T07:11:36.454Z] [1]     at mergeConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:97:18)
+[2026-02-14T07:11:36.454Z] [1]     at loadMetroConfigFromDisk (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:177:10)
+[2026-02-14T07:11:36.455Z] [1]     at loadConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:228:25)
+[2026-02-14T07:11:36.455Z] [1]     at loadMetroConfigAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:99:9)
+[2026-02-14T07:11:36.455Z] [1]     at instantiateMetroAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:203:7)
+[2026-02-14T07:11:36.456Z] [1]     at MetroBundlerDevServer.startImplementationAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/MetroBundlerDevServer.ts:1054:69)
+[2026-02-14T07:11:36.456Z] [1]     at MetroBundlerDevServer.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/BundlerDevServer.ts:160:18)
+[2026-02-14T07:11:36.457Z] [1]     at DevServerManager.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/DevServerManager.ts:184:7)
+[2026-02-14T07:11:36.483Z] [1]  ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:11:36.512Z] [1] pnpm dev:metro exited with code 1
+[2026-02-14T07:11:36.513Z] --> Sending SIGTERM to other processes..
+[2026-02-14T07:11:36.596Z] [0]  ELIFECYCLE  Command failed.
+[2026-02-14T07:11:36.625Z] [0] 2:11:36 AM [tsx] Previous process hasn't exited yet. Force killing...
+[2026-02-14T07:11:36.649Z] [0] pnpm dev:server exited with code SIGTERM
+[2026-02-14T07:11:36.658Z] ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:11:36.699Z] Dev server exited with code 1
+[2026-02-14T07:11:55.122Z] Starting dev server with command: pnpm run dev
+[2026-02-14T07:11:56.161Z] 
+[2026-02-14T07:11:56.162Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-14T07:11:56.163Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-14T07:11:56.163Z] 
+[2026-02-14T07:11:56.947Z] [1]
+[2026-02-14T07:11:56.948Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-14T07:11:56.949Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-14T07:11:56.949Z] [1]
+[2026-02-14T07:11:56.998Z] [0]
+[2026-02-14T07:11:56.999Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-14T07:11:57.000Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-14T07:11:57.000Z] [0]
+[2026-02-14T07:11:57.659Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-14T07:11:58.227Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:11:58.323Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:11:58.324Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:11:58.324Z] [1]     at /home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:102:20
+[2026-02-14T07:11:58.324Z] [1]     at Array.reduce (<anonymous>)
+[2026-02-14T07:11:58.325Z] [1]     at mergeConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:97:18)
+[2026-02-14T07:11:58.325Z] [1]     at loadMetroConfigFromDisk (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:177:10)
+[2026-02-14T07:11:58.325Z] [1]     at loadConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:228:25)
+[2026-02-14T07:11:58.326Z] [1]     at loadMetroConfigAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:99:9)
+[2026-02-14T07:11:58.326Z] [1]     at instantiateMetroAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:203:7)
+[2026-02-14T07:11:58.326Z] [1]     at MetroBundlerDevServer.startImplementationAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/MetroBundlerDevServer.ts:1054:69)
+[2026-02-14T07:11:58.327Z] [1]     at MetroBundlerDevServer.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/BundlerDevServer.ts:160:18)
+[2026-02-14T07:11:58.327Z] [1]     at DevServerManager.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/DevServerManager.ts:184:7)
+[2026-02-14T07:11:58.352Z] [1]  ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:11:58.383Z] [1] pnpm dev:metro exited with code 1
+[2026-02-14T07:11:58.384Z] --> Sending SIGTERM to other processes..
+[2026-02-14T07:11:58.460Z] [0]  ELIFECYCLE  Command failed.
+[2026-02-14T07:11:58.461Z] [0] [OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-14T07:11:58.481Z] [0] 2:11:58 AM [tsx] Previous process hasn't exited yet. Force killing...
+[2026-02-14T07:11:58.502Z] [0] pnpm dev:server exited with code SIGTERM
+[2026-02-14T07:11:58.512Z] ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:11:58.546Z] Dev server exited with code 1
+[2026-02-14T07:13:13.052Z] Starting dev server with command: pnpm run dev
+[2026-02-14T07:13:14.153Z] 
+[2026-02-14T07:13:14.154Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-14T07:13:14.154Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-14T07:13:14.155Z] 
+[2026-02-14T07:13:14.943Z] [1]
+[2026-02-14T07:13:14.944Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-14T07:13:14.944Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-14T07:13:14.944Z] [1]
+[2026-02-14T07:13:14.958Z] [0]
+[2026-02-14T07:13:14.959Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-14T07:13:14.960Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-14T07:13:14.960Z] [0]
+[2026-02-14T07:13:15.700Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-14T07:13:16.268Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:13:16.366Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:13:16.367Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:13:16.367Z] [1]     at /home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:102:20
+[2026-02-14T07:13:16.368Z] [1]     at Array.reduce (<anonymous>)
+[2026-02-14T07:13:16.368Z] [1]     at mergeConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:97:18)
+[2026-02-14T07:13:16.368Z] [1]     at loadMetroConfigFromDisk (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:177:10)
+[2026-02-14T07:13:16.369Z] [1]     at loadConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:228:25)
+[2026-02-14T07:13:16.369Z] [1]     at loadMetroConfigAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:99:9)
+[2026-02-14T07:13:16.369Z] [1]     at instantiateMetroAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:203:7)
+[2026-02-14T07:13:16.370Z] [1]     at MetroBundlerDevServer.startImplementationAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/MetroBundlerDevServer.ts:1054:69)
+[2026-02-14T07:13:16.370Z] [1]     at MetroBundlerDevServer.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/BundlerDevServer.ts:160:18)
+[2026-02-14T07:13:16.371Z] [1]     at DevServerManager.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/DevServerManager.ts:184:7)
+[2026-02-14T07:13:16.394Z] [1]  ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:13:16.426Z] [1] pnpm dev:metro exited with code 1
+[2026-02-14T07:13:16.427Z] --> Sending SIGTERM to other processes..
+[2026-02-14T07:13:16.515Z] [0]  ELIFECYCLE  Command failed.
+[2026-02-14T07:13:16.572Z] [0] [OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-14T07:13:16.620Z] [0] [api] server listening on port 3000
+[2026-02-14T07:13:16.654Z] [0] pnpm dev:server exited with code SIGTERM
+[2026-02-14T07:13:16.665Z] ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:13:16.703Z] Dev server exited with code 1
+[2026-02-14T07:13:42.511Z] Starting dev server with command: pnpm run dev
+[2026-02-14T07:13:43.678Z] 
+[2026-02-14T07:13:43.679Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-14T07:13:43.679Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-14T07:13:43.680Z] 
+[2026-02-14T07:13:44.468Z] [0]
+[2026-02-14T07:13:44.469Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-14T07:13:44.470Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-14T07:13:44.470Z] [0]
+[2026-02-14T07:13:44.480Z] [1]
+[2026-02-14T07:13:44.481Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-14T07:13:44.481Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-14T07:13:44.482Z] [1]
+[2026-02-14T07:13:45.268Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-14T07:13:45.834Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:13:45.945Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:13:45.946Z] [1] TypeError: Cannot read properties of undefined (reading 'cacheStores')
+[2026-02-14T07:13:45.946Z] [1]     at /home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:102:20
+[2026-02-14T07:13:45.947Z] [1]     at Array.reduce (<anonymous>)
+[2026-02-14T07:13:45.947Z] [1]     at mergeConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:97:18)
+[2026-02-14T07:13:45.947Z] [1]     at loadMetroConfigFromDisk (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:177:10)
+[2026-02-14T07:13:45.948Z] [1]     at loadConfig (/home/ubuntu/ivyreader/node_modules/metro-config/src/loadConfig.js:228:25)
+[2026-02-14T07:13:45.948Z] [1]     at loadMetroConfigAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:99:9)
+[2026-02-14T07:13:45.948Z] [1]     at instantiateMetroAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/instantiateMetro.ts:203:7)
+[2026-02-14T07:13:45.949Z] [1]     at MetroBundlerDevServer.startImplementationAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/metro/MetroBundlerDevServer.ts:1054:69)
+[2026-02-14T07:13:45.949Z] [1]     at MetroBundlerDevServer.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/BundlerDevServer.ts:160:18)
+[2026-02-14T07:13:45.949Z] [1]     at DevServerManager.startAsync (/home/ubuntu/ivyreader/node_modules/@expo/cli/src/start/server/DevServerManager.ts:184:7)
+[2026-02-14T07:13:45.980Z] [1]  ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:13:46.009Z] [1] pnpm dev:metro exited with code 1
+[2026-02-14T07:13:46.010Z] --> Sending SIGTERM to other processes..
+[2026-02-14T07:13:46.032Z] [0] [OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-14T07:13:46.092Z] [0]  ELIFECYCLE  Command failed.
+[2026-02-14T07:13:46.094Z] [0] [api] server listening on port 3000
+[2026-02-14T07:13:46.115Z] [0] 2:13:46 AM [tsx] Previous process hasn't exited yet. Force killing...
+[2026-02-14T07:13:46.127Z] [0] pnpm dev:server exited with code SIGTERM
+[2026-02-14T07:13:46.138Z] ELIFECYCLE  Command failed with exit code 1.
+[2026-02-14T07:13:46.181Z] Dev server exited with code 1
+[2026-02-14T07:15:18.109Z] Starting dev server with command: pnpm run dev
+[2026-02-14T07:15:19.102Z] 
+[2026-02-14T07:15:19.103Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-14T07:15:19.104Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-14T07:15:19.104Z] 
+[2026-02-14T07:15:19.872Z] [0]
+[2026-02-14T07:15:19.873Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-14T07:15:19.874Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-14T07:15:19.874Z] [0]
+[2026-02-14T07:15:19.884Z] [1]
+[2026-02-14T07:15:19.885Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-14T07:15:19.885Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-14T07:15:19.885Z] [1]
+[2026-02-14T07:15:20.600Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-14T07:15:21.164Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:15:21.594Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:15:21.595Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:15:21.596Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:15:21.915Z] [1] React Compiler enabled
+[2026-02-14T07:15:22.090Z] [1] Starting Metro Bundler
+[2026-02-14T07:15:22.141Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-14T07:15:24.016Z] [0] [OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-14T07:15:24.204Z] [0] [api] server listening on port 3000
+[2026-02-14T07:15:31.698Z] [1] The following packages should be updated for best compatibility with the installed expo version:
+[2026-02-14T07:15:31.699Z] [1]   expo@54.0.29 - expected version: ~54.0.33
+[2026-02-14T07:15:31.700Z] [1]   expo-audio@1.1.0 - expected version: ~1.1.1
+[2026-02-14T07:15:31.700Z] [1]   expo-constants@18.0.12 - expected version: ~18.0.13
+[2026-02-14T07:15:31.700Z] [1]   expo-font@14.0.10 - expected version: ~14.0.11
+[2026-02-14T07:15:31.701Z] [1]   expo-linking@8.0.10 - expected version: ~8.0.11
+[2026-02-14T07:15:31.701Z] [1]   expo-notifications@0.32.15 - expected version: ~0.32.16
+[2026-02-14T07:15:31.701Z] [1]   expo-router@6.0.19 - expected version: ~6.0.23
+[2026-02-14T07:15:31.702Z] [1]   expo-splash-screen@31.0.12 - expected version: ~31.0.13
+[2026-02-14T07:15:31.702Z] [1]   expo-video@3.0.15 - expected version: ~3.0.16
+[2026-02-14T07:15:31.702Z] [1] Your project may not work correctly until you install the expected versions of the packages.
+[2026-02-14T07:15:31.708Z] [1] Waiting on http://localhost:8081
+[2026-02-14T07:15:31.710Z] [1] Logs for your project will appear below.
