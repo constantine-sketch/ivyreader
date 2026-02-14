@@ -46,8 +46,8 @@ export default function BookDetailScreen() {
   
   const progressPercentage = Math.round((book.currentPage / book.totalPages) * 100);
   const totalSessions = sessions.length;
-  const totalPagesRead = sessions.reduce((sum, s) => sum + (s.endPage - s.startPage), 0);
-  const totalMinutes = sessions.reduce((sum, s) => sum + s.durationMinutes, 0);
+  const totalPagesRead = sessions.reduce((sum: number, s: any) => sum + (s.endPage - s.startPage), 0);
+  const totalMinutes = sessions.reduce((sum: number, s: any) => sum + s.durationMinutes, 0);
   const totalHours = Math.floor(totalMinutes / 60);
   const remainingMinutes = totalMinutes % 60;
   
@@ -169,7 +169,7 @@ export default function BookDetailScreen() {
                 </Text>
               </View>
             ) : (
-              sessions.map((session) => {
+              sessions.map((session: any) => {
                 const pagesRead = session.endPage - session.startPage;
                 const sessionDate = new Date(session.createdAt);
                 
@@ -211,7 +211,7 @@ export default function BookDetailScreen() {
                 </Text>
               </View>
             ) : (
-              notes.map((note) => {
+              notes.map((note: any) => {
                 const noteDate = new Date(note.createdAt);
                 
                 return (

@@ -34,7 +34,7 @@ export default function ReadingSessionScreen() {
 
   // Fetch book details
   const { data: books } = trpc.books.list.useQuery();
-  const book = books?.find((b) => b.id === Number(bookId));
+  const book = books?.find((b: any) => b.id === Number(bookId));
 
 
 

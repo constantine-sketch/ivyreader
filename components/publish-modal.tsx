@@ -34,7 +34,7 @@ export function PublishModal({ visible, onClose, preselectedBookId }: PublishMod
   const createPost = trpc.social.createPost.useMutation();
   const utils = trpc.useUtils();
 
-  const selectedBook = books?.find(b => b.id === selectedBookId);
+  const selectedBook = books?.find((b: any) => b.id === selectedBookId);
 
   const handlePublish = async () => {
     if (!content.trim()) {
@@ -231,7 +231,7 @@ export function PublishModal({ visible, onClose, preselectedBookId }: PublishMod
                     }}
                   >
                     <ScrollView>
-                      {books?.map((book) => (
+                      {books?.map((book: any) => (
                         <Pressable
                           key={book.id}
                           onPress={() => {

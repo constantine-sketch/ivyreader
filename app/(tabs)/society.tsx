@@ -401,7 +401,7 @@ export default function SocietyScreen() {
           {/* Social Feed */}
           <View className="px-6 pb-8">
             <Text className="text-lg font-bold mb-3" style={{ color: textColor }}>Feed</Text>
-            {posts?.map((item) => (
+            {posts?.map((item: any) => (
               <Pressable
                 key={item.post.id}
                 onLongPress={() => handleDeletePost(item.post.id, item.post.userId)}

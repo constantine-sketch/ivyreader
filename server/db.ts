@@ -248,10 +248,10 @@ export async function calculateUserStats(userId: number) {
   const db = await getDb();
   if (!db) return null;
   const sessions = await getUserSessions(userId);
-  const totalMinutesRead = sessions.reduce((sum, s) => sum + s.durationMinutes, 0);
-  const totalPagesRead = sessions.reduce((sum, s) => sum + (s.endPage - s.startPage), 0);
+  const totalMinutesRead = sessions.reduce((sum: number, s: any) => sum + s.durationMinutes, 0);
+  const totalPagesRead = sessions.reduce((sum: number, s: any) => sum + (s.endPage - s.startPage), 0);
   const userBooks = await getUserBooks(userId);
-  const booksCompleted = userBooks.filter(b => b.status === 'completed').length;
+  const booksCompleted = userBooks.filter((b: any) => b.status === 'completed').length;
   
   const today = new Date();
   today.setHours(0, 0, 0, 0);
@@ -262,7 +262,7 @@ export async function calculateUserStats(userId: number) {
     const dayStart = new Date(checkDate);
     const dayEnd = new Date(checkDate);
     dayEnd.setHours(23, 59, 59, 999);
-    const daySessions = sessions.filter(s => {
+    const daySessions = sessions.filter((s: any) => {
       const sessionDate = new Date(s.createdAt);
       return sessionDate >= dayStart && sessionDate <= dayEnd;
     });
@@ -298,14 +298,14 @@ export async function getSocialPosts(userId?: number, limit: number = 20, follow
     .limit(limit * 3); // Fetch more to filter
   
   if (userId) {
-    postsResult = postsResult.filter(item => item.post.userId === userId);
+    postsResult = postsResult.filter((item: any) => item.post.userId === userId);
   }
   
   // Filter by following if requested
   if (followingOnly && currentUserId) {
     const following = await db.select().from(userFollows).where(eq(userFollows.followerId, currentUserId));
-    const followingIds = following.map(f => f.followingId);
-    postsResult = postsResult.filter(item => followingIds.includes(item.post.userId));
+    const followingIds = following.map((f: any) => f.followingId);
+    postsResult = postsResult.filter((item: any) => followingIds.includes(item.post.userId));
   }
   
   // Limit after filtering
@@ -317,7 +317,7 @@ export async function getSocialPosts(userId?: number, limit: number = 20, follow
   
   // Add comment counts to each post
   const postsWithComments = await Promise.all(
-    postsResult.map(async (item) => {
+    postsResult.map(async (item: any) => {
       const commentCount = await db.select({ count: sql`COUNT(*)` })
         .from(postComments)
         .where(eq(postComments.postId, item.post.id));
@@ -762,9 +762,9 @@ export async function getUserCount() {
   
   return {
     total: allUsers.length,
-    premium: allUsers.filter(u => u.subscriptionTier === "premium").length,
-    elite: allUsers.filter(u => u.subscriptionTier === "elite").length,
-    verified: allUsers.filter(u => u.emailVerified === 1).length,
+    premium: allUsers.filter((u: any) => u.subscriptionTier === "premium").length,
+    elite: allUsers.filter((u: any) => u.subscriptionTier === "elite").length,
+    verified: allUsers.filter((u: any) => u.emailVerified === 1).length,
   };
 }
 
@@ -796,7 +796,7 @@ export async function getEngagementMetrics() {
   const activeWeek = await db.select().from(users)
     .where(gte(users.lastSignedIn, oneWeekAgo));
 
-  const totalPagesRead = allStats.reduce((sum, s) => sum + (s.totalPagesRead || 0), 0);
+  const totalPagesRead = allStats.reduce((sum: number, s: any) => sum + (s.totalPagesRead || 0), 0);
 
   return {
     totalBooks: allBooks.length,
