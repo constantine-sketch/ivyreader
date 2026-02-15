@@ -107,19 +107,33 @@
       text-align: center;
       max-width: 900px;
       margin: 0 auto;
+      position: relative;
+    }
+    
+    .hero-bg {
+      position: absolute;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100vw;
+      height: 100%;
+      background: linear-gradient(180deg, rgba(13,13,13,0.3) 0%, rgba(13,13,13,0.85) 60%, var(--dark-bg) 100%),
+                  url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/pvDlFrPbnNCEwVlQ.jpg') center/cover no-repeat;
+      z-index: -1;
     }
     
     .credibility-badge {
       display: inline-flex;
       align-items: center;
       gap: 0.5rem;
-      background: var(--dark-surface);
+      background: rgba(26, 47, 42, 0.9);
       padding: 0.5rem 1rem;
       border-radius: 50px;
       font-size: 0.85rem;
       color: var(--gold);
       margin-bottom: 1.5rem;
       border: 1px solid var(--border);
+      backdrop-filter: blur(10px);
     }
     
     .hero h1 {
@@ -162,6 +176,39 @@
     .guarantee-text {
       font-size: 0.9rem;
       color: var(--muted-text);
+    }
+
+    /* Social Proof Strip */
+    .social-proof-strip {
+      padding: 2.5rem 2rem;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .strip-container {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: center;
+      gap: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .strip-stat {
+      text-align: center;
+    }
+
+    .strip-stat .number {
+      font-size: 2rem;
+      font-weight: 800;
+      color: var(--gold);
+      display: block;
+    }
+
+    .strip-stat .label {
+      font-size: 0.85rem;
+      color: var(--muted-text);
+      margin-top: 0.25rem;
     }
     
     /* Problem Section - Schwartz Awareness */
@@ -213,7 +260,7 @@
     /* Hero's Journey Section */
     .story-section {
       padding: 5rem 2rem;
-      max-width: 800px;
+      max-width: 900px;
       margin: 0 auto;
     }
     
@@ -228,6 +275,22 @@
       border-radius: 12px;
       padding: 2rem;
       border: 1px solid var(--border);
+      display: flex;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+
+    .story-image {
+      flex-shrink: 0;
+      width: 180px;
+      height: 240px;
+      border-radius: 12px;
+      object-fit: cover;
+      border: 2px solid var(--border);
+    }
+
+    .story-right {
+      flex: 1;
     }
     
     .story-header {
@@ -240,12 +303,9 @@
     .story-avatar {
       width: 60px;
       height: 60px;
-      background: var(--gold);
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.5rem;
+      object-fit: cover;
+      border: 2px solid var(--gold);
     }
     
     .story-meta h3 {
@@ -265,6 +325,70 @@
     
     .story-content p:last-child {
       color: var(--light-text);
+      font-weight: 500;
+    }
+
+    /* Lifestyle Grid */
+    .lifestyle-section {
+      padding: 4rem 2rem;
+      background: var(--dark-surface);
+    }
+
+    .lifestyle-container {
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .lifestyle-container h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .lifestyle-subtitle {
+      text-align: center;
+      color: var(--muted-text);
+      margin-bottom: 2.5rem;
+      font-size: 1.05rem;
+    }
+
+    .lifestyle-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 200px 200px;
+      gap: 1rem;
+    }
+
+    .lifestyle-grid .lg-item {
+      border-radius: 12px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .lifestyle-grid .lg-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.3s;
+    }
+
+    .lifestyle-grid .lg-item:hover img {
+      transform: scale(1.05);
+    }
+
+    .lifestyle-grid .lg-item.span-2 {
+      grid-column: span 2;
+    }
+
+    .lg-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1rem;
+      background: linear-gradient(transparent, rgba(0,0,0,0.7));
+      color: var(--light-text);
+      font-size: 0.85rem;
       font-weight: 500;
     }
     
@@ -326,10 +450,94 @@
       color: var(--muted-text);
       font-size: 0.95rem;
     }
+
+    /* Comparison Table */
+    .comparison-section {
+      padding: 5rem 2rem;
+    }
+
+    .comparison-container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .comparison-container h2 {
+      text-align: center;
+      font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .comparison-subtitle {
+      text-align: center;
+      color: var(--muted-text);
+      margin-bottom: 2.5rem;
+      font-size: 1.05rem;
+    }
+
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .comparison-table thead th {
+      background: var(--dark-surface);
+      padding: 1rem;
+      text-align: center;
+      font-size: 0.95rem;
+      border-bottom: 2px solid var(--border);
+    }
+
+    .comparison-table thead th:first-child {
+      text-align: left;
+    }
+
+    .comparison-table thead th.highlight-col {
+      background: var(--gold);
+      color: var(--dark-bg);
+      font-weight: 700;
+    }
+
+    .comparison-table tbody td {
+      padding: 0.85rem 1rem;
+      border-bottom: 1px solid var(--border);
+      text-align: center;
+      font-size: 0.9rem;
+      color: var(--muted-text);
+    }
+
+    .comparison-table tbody td:first-child {
+      text-align: left;
+      color: var(--light-text);
+      font-weight: 500;
+    }
+
+    .comparison-table tbody td.highlight-col {
+      background: rgba(212, 175, 55, 0.05);
+      color: var(--light-text);
+      font-weight: 500;
+    }
+
+    .comparison-table .check-yes {
+      color: var(--success);
+      font-size: 1.2rem;
+    }
+
+    .comparison-table .check-no {
+      color: #666;
+      font-size: 1.2rem;
+    }
+
+    .comparison-table .check-partial {
+      color: var(--gold);
+      font-size: 0.85rem;
+    }
     
     /* Pricing Section - Hormozi Value Stack */
     .pricing-section {
       padding: 5rem 2rem;
+      background: var(--dark-surface);
     }
     
     .pricing-container {
@@ -351,13 +559,13 @@
       color: var(--muted-text);
       font-size: 1.1rem;
     }
-    
+
     .pricing-toggle {
       display: flex;
       justify-content: center;
       gap: 0.5rem;
       margin-bottom: 3rem;
-      background: var(--dark-surface);
+      background: var(--dark-bg);
       padding: 0.5rem;
       border-radius: 50px;
       width: fit-content;
@@ -390,7 +598,7 @@
     }
     
     .pricing-card {
-      background: var(--dark-surface);
+      background: var(--dark-card);
       border-radius: 16px;
       padding: 2rem;
       border: 1px solid var(--border);
@@ -537,13 +745,27 @@
     /* Consultation CTA Section */
     .consultation-section {
       padding: 4rem 2rem;
-      background: var(--dark-surface);
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .consultation-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(rgba(13,13,13,0.85), rgba(13,13,13,0.85)),
+                  url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/ZVuzCqAjwrLsvRsh.jpg') center/cover no-repeat;
+      z-index: 0;
     }
     
     .consultation-container {
       max-width: 700px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
     
     .consultation-container h2 {
@@ -574,33 +796,45 @@
       color: var(--dark-bg);
     }
     
-    /* Social Proof Section */
+    /* Social Proof / Testimonials Section */
     .social-proof {
       padding: 5rem 2rem;
+      background: var(--dark-surface);
     }
     
     .social-proof-container {
-      max-width: 1000px;
+      max-width: 1100px;
       margin: 0 auto;
     }
     
     .social-proof h2 {
       text-align: center;
       font-size: 2rem;
+      margin-bottom: 0.75rem;
+    }
+
+    .social-proof-subtitle {
+      text-align: center;
+      color: var(--muted-text);
       margin-bottom: 3rem;
+      font-size: 1.05rem;
     }
     
     .testimonials-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
       gap: 1.5rem;
     }
     
     .testimonial-card {
-      background: var(--dark-surface);
+      background: var(--dark-card);
       border-radius: 12px;
       padding: 1.5rem;
       border: 1px solid var(--border);
+    }
+
+    .testimonial-card.featured-testimonial {
+      border-color: var(--gold);
     }
     
     .testimonial-stars {
@@ -612,6 +846,18 @@
       color: var(--muted-text);
       margin-bottom: 1rem;
       font-style: italic;
+      line-height: 1.7;
+    }
+
+    .testimonial-result {
+      background: rgba(78, 205, 196, 0.1);
+      border-left: 3px solid var(--success);
+      padding: 0.5rem 0.75rem;
+      margin-bottom: 1rem;
+      border-radius: 0 6px 6px 0;
+      font-size: 0.85rem;
+      color: var(--success);
+      font-weight: 600;
     }
     
     .testimonial-author {
@@ -621,8 +867,16 @@
     }
     
     .testimonial-avatar {
-      width: 40px;
-      height: 40px;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--border);
+    }
+
+    .testimonial-avatar-placeholder {
+      width: 48px;
+      height: 48px;
       background: var(--gold);
       border-radius: 50%;
       display: flex;
@@ -630,6 +884,7 @@
       justify-content: center;
       font-weight: 600;
       color: var(--dark-bg);
+      font-size: 1rem;
     }
     
     .testimonial-meta h4 {
@@ -639,6 +894,38 @@
     .testimonial-meta span {
       color: var(--muted-text);
       font-size: 0.85rem;
+    }
+
+    /* Guarantee Section */
+    .guarantee-section {
+      padding: 4rem 2rem;
+      text-align: center;
+    }
+
+    .guarantee-container {
+      max-width: 700px;
+      margin: 0 auto;
+      background: var(--dark-surface);
+      border: 2px solid var(--success);
+      border-radius: 16px;
+      padding: 2.5rem;
+    }
+
+    .guarantee-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .guarantee-container h2 {
+      font-size: 1.75rem;
+      margin-bottom: 1rem;
+      color: var(--success);
+    }
+
+    .guarantee-container p {
+      color: var(--muted-text);
+      font-size: 1rem;
+      line-height: 1.7;
     }
     
     /* FAQ Section */
@@ -698,11 +985,26 @@
     .final-cta {
       padding: 5rem 2rem;
       text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .final-cta-bg {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(rgba(13,13,13,0.8), rgba(13,13,13,0.9)),
+                  url('https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/TKYlxhNZYLZjOuTN.jpg') center/cover no-repeat;
+      z-index: 0;
     }
     
     .final-cta-container {
       max-width: 700px;
       margin: 0 auto;
+      position: relative;
+      z-index: 1;
     }
     
     .final-cta h2 {
@@ -783,6 +1085,42 @@
       .hero .subhead {
         font-size: 1.1rem;
       }
+
+      .strip-container {
+        gap: 1.5rem;
+      }
+
+      .strip-stat .number {
+        font-size: 1.5rem;
+      }
+
+      .story-card {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .story-image {
+        width: 100%;
+        height: 200px;
+      }
+
+      .lifestyle-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: 150px 150px 150px;
+      }
+
+      .lifestyle-grid .lg-item.span-2 {
+        grid-column: span 2;
+      }
+
+      .comparison-table {
+        font-size: 0.8rem;
+      }
+
+      .comparison-table thead th,
+      .comparison-table tbody td {
+        padding: 0.6rem 0.5rem;
+      }
       
       .pricing-card.featured {
         transform: none;
@@ -814,8 +1152,9 @@
     </div>
   </nav>
 
-  <!-- Hero Section -->
+  <!-- Hero Section with Background Image -->
   <section class="hero">
+    <div class="hero-bg"></div>
     <div class="credibility-badge">
       🎓 Built by Columbia Law Students
     </div>
@@ -828,7 +1167,29 @@
       Now available to ambitious professionals who refuse to let another book collect dust.
     </p>
     <a href="#pricing" class="hero-cta">Start Reading More Today →</a>
-    <p class="guarantee-text">✓ 30-Day Money-Back Guarantee • No Contract</p>
+    <p class="guarantee-text">✓ 30-Day Money-Back Guarantee &bull; No Contract</p>
+  </section>
+
+  <!-- Social Proof Stats Strip -->
+  <section class="social-proof-strip">
+    <div class="strip-container">
+      <div class="strip-stat">
+        <span class="number">52+</span>
+        <span class="label">Books/Year Average</span>
+      </div>
+      <div class="strip-stat">
+        <span class="number">93%</span>
+        <span class="label">Finish Rate</span>
+      </div>
+      <div class="strip-stat">
+        <span class="number">4.9★</span>
+        <span class="label">Member Rating</span>
+      </div>
+      <div class="strip-stat">
+        <span class="number">Columbia</span>
+        <span class="label">Built at Ivy League</span>
+      </div>
+    </div>
   </section>
 
   <!-- Problem Section - Schwartz Problem-Aware -->
@@ -868,32 +1229,65 @@
     </div>
   </section>
 
-  <!-- Hero's Journey Section -->
+  <!-- Hero's Journey Section with Founder Photo -->
   <section class="story-section">
     <h2>We Were Exactly Where You Are</h2>
     <div class="story-card">
-      <div class="story-header">
-        <div class="story-avatar">🎓</div>
-        <div class="story-meta">
-          <h3>The IvyReader Story</h3>
-          <span>Columbia Law School, 2024</span>
+      <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/RXlwfcmRpGbmHauK.jpg" alt="Founder in Columbia Law Library" class="story-image" loading="lazy">
+      <div class="story-right">
+        <div class="story-header">
+          <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/xNDNpjBoCszBAarN.jpg" alt="Founder" class="story-avatar">
+          <div class="story-meta">
+            <h3>The IvyReader Story</h3>
+            <span>Columbia Law School, 2024</span>
+          </div>
+        </div>
+        <div class="story-content">
+          <p>
+            When I got into Columbia Law, I thought I was disciplined. I'd read all the "right" books to get there. 
+            But once I arrived, I realized something: <strong>it wasn't intelligence that separated the top performers from everyone else.</strong>
+          </p>
+          <p>
+            It was their systems. Their accountability structures. The way they held each other to impossibly high standards.
+          </p>
+          <p>
+            <strong>The result? I went from reading 5 books a year to 52+. And I built IvyReader to give you the same system.</strong>
+          </p>
         </div>
       </div>
-      <div class="story-content">
-        <p>
-          When I got into Columbia Law, I thought I was disciplined. I'd read all the "right" books to get there. 
-          But once I arrived, I realized something: <strong>it wasn't intelligence that separated the top performers from everyone else.</strong>
-        </p>
-        <p>
-          It was their systems. Their accountability structures. The way they held each other to impossibly high standards.
-        </p>
-        <p>
-          I started applying these same Ivy League accountability principles to my reading habit. 
-          Weekly check-ins with peers. Progress tracking. Community support. Real consequences for not following through.
-        </p>
-        <p>
-          <strong>The result? I went from reading 5 books a year to 52+. And I built IvyReader to give you the same system.</strong>
-        </p>
+    </div>
+  </section>
+
+  <!-- Lifestyle Image Grid -->
+  <section class="lifestyle-section">
+    <div class="lifestyle-container">
+      <h2>The IvyReader Experience</h2>
+      <p class="lifestyle-subtitle">Where Ivy League discipline meets your reading goals</p>
+      <div class="lifestyle-grid">
+        <div class="lg-item span-2">
+          <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/pvDlFrPbnNCEwVlQ.jpg" alt="Columbia University Library" loading="lazy">
+          <div class="lg-overlay">Columbia University Library</div>
+        </div>
+        <div class="lg-item">
+          <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/EWGxzkHBDgvAqiiP.jpg" alt="Focused reading session" loading="lazy">
+          <div class="lg-overlay">Deep Focus</div>
+        </div>
+        <div class="lg-item">
+          <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/dfASNmTUnLpBfTXk.jpg" alt="IvyReader app" loading="lazy">
+          <div class="lg-overlay">Track Progress</div>
+        </div>
+        <div class="lg-item">
+          <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/ZVuzCqAjwrLsvRsh.jpg" alt="1-on-1 accountability coaching" loading="lazy">
+          <div class="lg-overlay">Personal Coaching</div>
+        </div>
+        <div class="lg-item">
+          <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/FOiAeSxfDHwZlSZE.jpg" alt="Community reading" loading="lazy">
+          <div class="lg-overlay">Community</div>
+        </div>
+        <div class="lg-item span-2">
+          <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/TKYlxhNZYLZjOuTN.jpg" alt="Columbia campus" loading="lazy">
+          <div class="lg-overlay">Built at Columbia University</div>
+        </div>
       </div>
     </div>
   </section>
@@ -940,12 +1334,89 @@
     </div>
   </section>
 
+  <!-- Comparison Table -->
+  <section class="comparison-section">
+    <div class="comparison-container">
+      <h2>Why IvyReader Wins</h2>
+      <p class="comparison-subtitle">See how we compare to what you've tried before</p>
+      <table class="comparison-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Reading Alone</th>
+            <th>Goodreads</th>
+            <th>Book Clubs</th>
+            <th class="highlight-col">IvyReader</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Progress Tracking</td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight-col"><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Real Accountability</td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-partial">Weak</span></td>
+            <td class="highlight-col"><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>1-on-1 Coaching</td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight-col"><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Accountability Partner</td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-partial">Informal</span></td>
+            <td class="highlight-col"><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Curated Reading Lists</td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-partial">Generic</span></td>
+            <td><span class="check-partial">Limited</span></td>
+            <td class="highlight-col"><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Community & Discussion</td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-partial">Basic</span></td>
+            <td><span class="check-yes">✓</span></td>
+            <td class="highlight-col"><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Pomodoro Sessions</td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight-col"><span class="check-yes">✓</span></td>
+          </tr>
+          <tr>
+            <td>Money-Back Guarantee</td>
+            <td>—</td>
+            <td>—</td>
+            <td><span class="check-no">✗</span></td>
+            <td class="highlight-col"><span class="check-yes">30 Days</span></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
   <!-- Pricing Section - Hormozi Value Stack -->
   <section class="pricing-section" id="pricing">
     <div class="pricing-container">
       <div class="pricing-header">
         <h2>Choose Your Reading Journey</h2>
-        <p>Join thousands of readers who've transformed their habits with IvyReader.</p>
+        <p>Join ambitious professionals who've transformed their reading habits with IvyReader.</p>
       </div>
       
       <div class="pricing-toggle">
@@ -1031,8 +1502,9 @@
     </div>
   </section>
 
-  <!-- Consultation CTA -->
+  <!-- Consultation CTA with Background Image -->
   <section class="consultation-section">
+    <div class="consultation-bg"></div>
     <div class="consultation-container">
       <h2>Not Sure Which Plan Is Right For You?</h2>
       <p>Book a free 15-minute consultation with our founders. We'll help you choose the right plan based on your reading goals and hold you accountable from day one.</p>
@@ -1042,31 +1514,34 @@
     </div>
   </section>
 
-  <!-- Social Proof Section -->
+  <!-- Social Proof / Testimonials Section -->
   <section class="social-proof" id="testimonials">
     <div class="social-proof-container">
-      <h2>What Our Readers Say</h2>
+      <h2>Real Results From Real Readers</h2>
+      <p class="social-proof-subtitle">See what our members are saying about their reading transformation</p>
       <div class="testimonials-grid">
-        <div class="testimonial-card">
+        <div class="testimonial-card featured-testimonial">
           <div class="testimonial-stars">★★★★★</div>
           <p class="testimonial-text">
-            "I went from reading 3 books last year to 24 books in 6 months. The accountability partner feature is a game-changer."
+            "I went from reading 3 books last year to 24 books in 6 months. The accountability partner feature is a game-changer. Having someone check in on my progress weekly made all the difference."
           </p>
+          <div class="testimonial-result">📈 3 → 24 books in 6 months</div>
           <div class="testimonial-author">
-            <div class="testimonial-avatar">JM</div>
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/instwjAKNfvvnpuq.jpg" alt="James M." class="testimonial-avatar" loading="lazy">
             <div class="testimonial-meta">
               <h4>James M.</h4>
-              <span>Startup Founder</span>
+              <span>Startup Founder, NYC</span>
             </div>
           </div>
         </div>
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
           <p class="testimonial-text">
-            "Finally, a reading app that actually holds me accountable. The weekly check-ins with my reading buddy keep me on track."
+            "Finally, a reading app that actually holds me accountable. The weekly check-ins with my reading buddy keep me on track even during my busiest weeks."
           </p>
+          <div class="testimonial-result">📚 Now reads 1 book/week consistently</div>
           <div class="testimonial-author">
-            <div class="testimonial-avatar">SK</div>
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/jjGhEzBzliCCLwkB.jpg" alt="Sarah K." class="testimonial-avatar" loading="lazy">
             <div class="testimonial-meta">
               <h4>Sarah K.</h4>
               <span>Marketing Director</span>
@@ -1076,17 +1551,73 @@
         <div class="testimonial-card">
           <div class="testimonial-stars">★★★★★</div>
           <p class="testimonial-text">
-            "The Ivy League approach to reading is exactly what I needed. Structure, community, and real accountability."
+            "The Ivy League approach to reading is exactly what I needed. Structure, community, and real accountability. I've read more in 3 months than in the past 2 years."
           </p>
+          <div class="testimonial-result">🏆 47 books read in first year</div>
           <div class="testimonial-author">
-            <div class="testimonial-avatar">DL</div>
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/hIzdKYSZYoiHGdFR.jpg" alt="David L." class="testimonial-avatar" loading="lazy">
             <div class="testimonial-meta">
               <h4>David L.</h4>
               <span>Management Consultant</span>
             </div>
           </div>
         </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "The Elite tier is worth every penny. Having direct access to the founders and a personal accountability partner transformed my reading habit completely."
+          </p>
+          <div class="testimonial-result">👑 Elite member for 8 months</div>
+          <div class="testimonial-author">
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/RvMPyRNEeOwLRtUf.jpg" alt="Michelle R." class="testimonial-avatar" loading="lazy">
+            <div class="testimonial-meta">
+              <h4>Michelle R.</h4>
+              <span>Attorney, Chicago</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "I was skeptical at first—another reading app? But the accountability system is genuinely different. The Pomodoro sessions helped me build a daily reading habit."
+          </p>
+          <div class="testimonial-result">⏱️ Reads 45 min/day now (was 0)</div>
+          <div class="testimonial-author">
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/mHCHrWytydWrmyqV.jpg" alt="Alex T." class="testimonial-avatar" loading="lazy">
+            <div class="testimonial-meta">
+              <h4>Alex T.</h4>
+              <span>Product Manager, SF</span>
+            </div>
+          </div>
+        </div>
+        <div class="testimonial-card">
+          <div class="testimonial-stars">★★★★★</div>
+          <p class="testimonial-text">
+            "The community aspect is incredible. Discussing books with other ambitious professionals keeps me motivated and gives me perspectives I'd never get reading alone."
+          </p>
+          <div class="testimonial-result">👥 Active in Reader Society daily</div>
+          <div class="testimonial-author">
+            <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/IaYsGjHNbicDWDFS.jpg" alt="Priya S." class="testimonial-avatar" loading="lazy">
+            <div class="testimonial-meta">
+              <h4>Priya S.</h4>
+              <span>Finance Analyst, Boston</span>
+            </div>
+          </div>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- 30-Day Guarantee Section -->
+  <section class="guarantee-section">
+    <div class="guarantee-container">
+      <div class="guarantee-icon">🛡️</div>
+      <h2>30-Day Money-Back Guarantee</h2>
+      <p>
+        We're so confident IvyReader will transform your reading habit that we offer a full 30-day money-back guarantee. 
+        If you don't read more books in your first month, we'll refund you completely—no questions asked. 
+        You have nothing to lose and a lifetime of reading to gain.
+      </p>
     </div>
   </section>
 
@@ -1144,14 +1675,25 @@
           Elite members can message us directly through the app. We'll respond within 24 hours with personalized guidance on your reading journey, book recommendations, and accountability support. It's like having a personal reading coach.
         </div>
       </div>
+
+      <div class="faq-item">
+        <button class="faq-question">
+          Is this just another reading tracker?
+          <span>+</span>
+        </button>
+        <div class="faq-answer">
+          No. Reading trackers tell you what you've read. IvyReader makes sure you actually read. The difference is accountability—real humans checking in on your progress, an accountability partner who cares, and a system built on Ivy League principles that actually works.
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- Final CTA -->
+  <!-- Final CTA with Background Image -->
   <section class="final-cta">
+    <div class="final-cta-bg"></div>
     <div class="final-cta-container">
       <h2>Ready to Finally Become a Reader?</h2>
-      <p>Join thousands of ambitious professionals who've transformed their reading habits with IvyReader. Start your journey today.</p>
+      <p>Join ambitious professionals who've transformed their reading habits with IvyReader. Start your journey today.</p>
       <a href="#pricing" class="final-cta-btn">Get Started Now →</a>
     </div>
   </section>
