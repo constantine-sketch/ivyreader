@@ -269,3 +269,127 @@
 [2026-02-14T07:15:31.702Z] [1] Your project may not work correctly until you install the expected versions of the packages.
 [2026-02-14T07:15:31.708Z] [1] Waiting on http://localhost:8081
 [2026-02-14T07:15:31.710Z] [1] Logs for your project will appear below.
+[2026-02-15T13:07:20.075Z] Starting dev server with command: pnpm run dev
+[2026-02-15T13:07:20.991Z] 
+[2026-02-15T13:07:20.992Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-15T13:07:20.993Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-15T13:07:20.993Z] 
+[2026-02-15T13:07:21.806Z] [1]
+[2026-02-15T13:07:21.807Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-15T13:07:21.808Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-15T13:07:21.808Z] [1]
+[2026-02-15T13:07:21.918Z] [0]
+[2026-02-15T13:07:21.919Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-15T13:07:21.920Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-15T13:07:21.920Z] [0]
+[2026-02-15T13:07:22.913Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-15T13:07:23.448Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:07:23.953Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:07:23.954Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:07:23.955Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:07:24.268Z] [1] React Compiler enabled
+[2026-02-15T13:07:24.458Z] [1] Starting Metro Bundler
+[2026-02-15T13:07:24.510Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:07:25.956Z] [0] [OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-15T13:07:26.354Z] [0] [api] server listening on port 3000
+[2026-02-15T13:07:34.339Z] [1] The following packages should be updated for best compatibility with the installed expo version:
+[2026-02-15T13:07:34.340Z] [1]   expo@54.0.29 - expected version: ~54.0.33
+[2026-02-15T13:07:34.340Z] [1]   expo-audio@1.1.0 - expected version: ~1.1.1
+[2026-02-15T13:07:34.340Z] [1]   expo-constants@18.0.12 - expected version: ~18.0.13
+[2026-02-15T13:07:34.341Z] [1]   expo-font@14.0.10 - expected version: ~14.0.11
+[2026-02-15T13:07:34.341Z] [1]   expo-linking@8.0.10 - expected version: ~8.0.11
+[2026-02-15T13:07:34.341Z] [1]   expo-notifications@0.32.15 - expected version: ~0.32.16
+[2026-02-15T13:07:34.341Z] [1]   expo-router@6.0.19 - expected version: ~6.0.23
+[2026-02-15T13:07:34.342Z] [1]   expo-splash-screen@31.0.12 - expected version: ~31.0.13
+[2026-02-15T13:07:34.342Z] [1]   expo-video@3.0.15 - expected version: ~3.0.16
+[2026-02-15T13:07:34.342Z] [1] Your project may not work correctly until you install the expected versions of the packages.
+[2026-02-15T13:07:34.348Z] [1] Waiting on http://localhost:8081
+[2026-02-15T13:07:34.349Z] [1] Logs for your project will appear below.
+[2026-02-15T13:14:35.904Z] Dev server process group stopped
+[2026-02-15T13:14:35.911Z] ELIFECYCLE  Command failed.
+[2026-02-15T13:14:35.916Z] [0]  ELIFECYCLE  Command failed.
+[2026-02-15T13:14:35.917Z] [1]  ELIFECYCLE  Command failed.
+[2026-02-15T13:14:35.935Z] [0] pnpm dev:server exited with code SIGTERM
+[2026-02-15T13:14:35.936Z] --> Sending SIGTERM to other processes..
+[2026-02-15T13:14:35.945Z] [1] pnpm dev:metro exited with code SIGTERM
+[2026-02-15T13:14:35.950Z] Dev server exited with code -15
+[2026-02-15T13:14:38.916Z] Starting dev server with command: pnpm run dev
+[2026-02-15T13:14:39.868Z] 
+[2026-02-15T13:14:39.869Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-15T13:14:39.870Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-15T13:14:39.870Z] 
+[2026-02-15T13:14:40.624Z] [0]
+[2026-02-15T13:14:40.625Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-15T13:14:40.626Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-15T13:14:40.626Z] [0]
+[2026-02-15T13:14:40.651Z] [1]
+[2026-02-15T13:14:40.651Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-15T13:14:40.652Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-15T13:14:40.652Z] [1]
+[2026-02-15T13:14:41.438Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-15T13:14:41.971Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:14:42.375Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:14:42.376Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:14:42.377Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:14:42.661Z] [1] React Compiler enabled
+[2026-02-15T13:14:42.807Z] [1] Starting Metro Bundler
+[2026-02-15T13:14:42.853Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T13:14:44.104Z] [0] [OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-15T13:14:44.275Z] [0] [api] server listening on port 3000
+[2026-02-15T13:14:50.437Z] [1] The following packages should be updated for best compatibility with the installed expo version:
+[2026-02-15T13:14:50.438Z] [1]   expo@54.0.29 - expected version: ~54.0.33
+[2026-02-15T13:14:50.438Z] [1]   expo-audio@1.1.0 - expected version: ~1.1.1
+[2026-02-15T13:14:50.439Z] [1]   expo-constants@18.0.12 - expected version: ~18.0.13
+[2026-02-15T13:14:50.439Z] [1]   expo-font@14.0.10 - expected version: ~14.0.11
+[2026-02-15T13:14:50.439Z] [1]   expo-linking@8.0.10 - expected version: ~8.0.11
+[2026-02-15T13:14:50.439Z] [1]   expo-notifications@0.32.15 - expected version: ~0.32.16
+[2026-02-15T13:14:50.440Z] [1]   expo-router@6.0.19 - expected version: ~6.0.23
+[2026-02-15T13:14:50.440Z] [1]   expo-splash-screen@31.0.12 - expected version: ~31.0.13
+[2026-02-15T13:14:50.440Z] [1]   expo-video@3.0.15 - expected version: ~3.0.16
+[2026-02-15T13:14:50.440Z] [1] Your project may not work correctly until you install the expected versions of the packages.
+[2026-02-15T13:14:50.446Z] [1] Waiting on http://localhost:8081
+[2026-02-15T13:14:50.447Z] [1] Logs for your project will appear below.
+[2026-02-15T14:14:47.201Z] Dev server process group stopped
+[2026-02-15T14:14:47.213Z] ELIFECYCLE  Command failed.
+[2026-02-15T14:14:47.237Z] [1]  ELIFECYCLE  Command failed.
+[2026-02-15T14:14:47.239Z] [0]  ELIFECYCLE  Command failed.
+[2026-02-15T14:14:47.241Z] [0] pnpm dev:server exited with code SIGTERM
+[2026-02-15T14:14:47.241Z] --> Sending SIGTERM to other processes..
+[2026-02-15T14:14:47.254Z] [1] pnpm dev:metro exited with code SIGTERM
+[2026-02-15T14:14:47.259Z] Dev server exited with code -15
+[2026-02-15T14:14:50.215Z] Starting dev server with command: pnpm run dev
+[2026-02-15T14:14:51.247Z] 
+[2026-02-15T14:14:51.248Z] > app-template@1.0.0 dev /home/ubuntu/ivyreader
+[2026-02-15T14:14:51.248Z] > concurrently -k "pnpm dev:server" "pnpm dev:metro"
+[2026-02-15T14:14:51.249Z] 
+[2026-02-15T14:14:52.102Z] [1]
+[2026-02-15T14:14:52.103Z] [1] > app-template@1.0.0 dev:metro /home/ubuntu/ivyreader
+[2026-02-15T14:14:52.104Z] [1] > cross-env EXPO_USE_METRO_WORKSPACE_ROOT=1 npx expo start --web --port ${EXPO_PORT:-8081}
+[2026-02-15T14:14:52.104Z] [1]
+[2026-02-15T14:14:52.142Z] [0]
+[2026-02-15T14:14:52.143Z] [0] > app-template@1.0.0 dev:server /home/ubuntu/ivyreader
+[2026-02-15T14:14:52.143Z] [0] > cross-env NODE_ENV=development tsx watch server/_core/index.ts
+[2026-02-15T14:14:52.144Z] [0]
+[2026-02-15T14:14:53.275Z] [1] Starting project at /home/ubuntu/ivyreader
+[2026-02-15T14:14:54.075Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T14:14:54.810Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T14:14:54.811Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T14:14:54.812Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T14:14:55.178Z] [1] React Compiler enabled
+[2026-02-15T14:14:55.469Z] [1] Starting Metro Bundler
+[2026-02-15T14:14:55.523Z] [1] EXPO_USE_METRO_WORKSPACE_ROOT is enabled by default, use EXPO_NO_METRO_WORKSPACE_ROOT instead to disable.
+[2026-02-15T14:14:56.090Z] [0] [OAuth] Initialized with baseURL: https://api.manus.im
+[2026-02-15T14:14:56.318Z] [0] [api] server listening on port 3000
+[2026-02-15T14:15:04.864Z] [1] The following packages should be updated for best compatibility with the installed expo version:
+[2026-02-15T14:15:04.866Z] [1]   expo@54.0.29 - expected version: ~54.0.33
+[2026-02-15T14:15:04.866Z] [1]   expo-audio@1.1.0 - expected version: ~1.1.1
+[2026-02-15T14:15:04.867Z] [1]   expo-constants@18.0.12 - expected version: ~18.0.13
+[2026-02-15T14:15:04.867Z] [1]   expo-font@14.0.10 - expected version: ~14.0.11
+[2026-02-15T14:15:04.867Z] [1]   expo-linking@8.0.10 - expected version: ~8.0.11
+[2026-02-15T14:15:04.868Z] [1]   expo-notifications@0.32.15 - expected version: ~0.32.16
+[2026-02-15T14:15:04.868Z] [1]   expo-router@6.0.19 - expected version: ~6.0.23
+[2026-02-15T14:15:04.868Z] [1]   expo-splash-screen@31.0.12 - expected version: ~31.0.13
+[2026-02-15T14:15:04.869Z] [1]   expo-video@3.0.15 - expected version: ~3.0.16
+[2026-02-15T14:15:04.869Z] [1] Your project may not work correctly until you install the expected versions of the packages.
+[2026-02-15T14:15:04.876Z] [1] Waiting on http://localhost:8081
+[2026-02-15T14:15:04.877Z] [1] Logs for your project will appear below.

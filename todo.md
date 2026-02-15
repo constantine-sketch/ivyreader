@@ -956,3 +956,22 @@
 - [ ] Fix confirmation page on landing site to link to published web app URL
 - [ ] Deploy updated confirmation page to Vercel
 - [ ] Verify full user flow: landing → payment → confirmation → web app
+
+
+## Landing Page / Login Screen Content (Competitor Research Based)
+
+- [x] Download and optimize images from Google Drive (ivypics, ivyclips, IvyAI Fillers)
+- [x] Create conversion-optimized login screen with hero section
+- [x] Add social proof strip (stats: books/year, active readers, rating)
+- [x] Add problem/agitation section ("You Know What to Read. You Just Don't Finish.")
+- [x] Add product showcase with phone mockup image
+- [x] Add feature cards (Track, Streaks, Curated Lists, Society)
+- [x] Add lifestyle image grid (library, study, campus photos)
+- [x] Add testimonial carousel with influencer images
+- [x] Add Elite tier upsell section with coaching imagery
+- [x] Add founder credibility section with real headshot
+- [x] Add comparison table (Reading Alone vs. Reading Accountably)
+- [x] Add 30-day money-back guarantee section
+- [x] Add final CTA section
+- [ ] Push updated code to GitHub
+- [ ] Verify Railway deployment with new login screen
