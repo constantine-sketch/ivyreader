@@ -3,10 +3,10 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Welcome to IvyReader! | Payment Confirmed</title>
+  <title>You're In | IvyReader</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
   <style>
     :root {
       --gold: #D4AF37;
@@ -18,13 +18,10 @@
       --muted-text: #A8B8B0;
       --border: #2D4A42;
       --success: #4ECDC4;
+      --error: #E07A5F;
     }
     
-    * {
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
     
     body {
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
@@ -32,444 +29,460 @@
       color: var(--light-text);
       line-height: 1.6;
       min-height: 100vh;
-      display: flex;
-      flex-direction: column;
+      overflow-x: hidden;
     }
     
-    /* Navigation */
+    .serif { font-family: 'Playfair Display', Georgia, serif; }
+
+    /* Confetti */
+    .confetti {
+      position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+      pointer-events: none; overflow: hidden; z-index: 1000;
+    }
+    .confetti-piece {
+      position: absolute; width: 10px; height: 10px;
+      animation: confetti-fall 3s ease-out forwards;
+    }
+    @keyframes confetti-fall {
+      0% { transform: translateY(-100px) rotate(0deg); opacity: 1; }
+      100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+    }
+
+    /* Nav */
     nav {
       background: rgba(13, 13, 13, 0.95);
       backdrop-filter: blur(10px);
       padding: 1rem 2rem;
       border-bottom: 1px solid var(--border);
     }
-    
     .nav-container {
-      max-width: 1200px;
-      margin: 0 auto;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      max-width: 1200px; margin: 0 auto;
+      display: flex; justify-content: center; align-items: center;
     }
-    
     .logo {
-      font-size: 1.5rem;
-      font-weight: 700;
-      color: var(--gold);
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.5rem;
+      font-size: 1.5rem; font-weight: 700; color: var(--gold);
+      text-decoration: none; display: flex; align-items: center; gap: 0.5rem;
     }
-    
-    /* Main Content */
-    main {
-      flex: 1;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 2rem;
+
+    /* Hero celebration */
+    .hero {
+      text-align: center; padding: 4rem 2rem 2rem;
+      background: radial-gradient(ellipse at center top, rgba(212, 175, 55, 0.08) 0%, transparent 60%);
     }
-    
-    .confirmation-card {
-      background: var(--dark-surface);
-      border-radius: 24px;
-      padding: 3rem;
-      max-width: 500px;
-      width: 100%;
-      text-align: center;
-      border: 1px solid var(--border);
-    }
-    
     .success-icon {
-      width: 80px;
-      height: 80px;
+      width: 100px; height: 100px;
       background: linear-gradient(135deg, var(--success), #3CB4A8);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto 1.5rem;
-      font-size: 2.5rem;
-      animation: scaleIn 0.5s ease-out;
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.5rem; font-size: 3rem;
+      animation: scaleIn 0.6s ease-out, glow 2s ease-in-out infinite alternate;
     }
-    
     @keyframes scaleIn {
       0% { transform: scale(0); opacity: 0; }
-      50% { transform: scale(1.1); }
+      50% { transform: scale(1.15); }
       100% { transform: scale(1); opacity: 1; }
     }
-    
+    @keyframes glow {
+      from { box-shadow: 0 0 20px rgba(78, 205, 196, 0.3); }
+      to { box-shadow: 0 0 40px rgba(78, 205, 196, 0.6); }
+    }
     .tier-badge {
-      display: inline-block;
-      background: var(--gold);
-      color: var(--dark-bg);
-      padding: 0.5rem 1.25rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 700;
-      margin-bottom: 1rem;
+      display: inline-block; padding: 0.5rem 1.5rem; border-radius: 50px;
+      font-size: 0.85rem; font-weight: 700; margin-bottom: 1.5rem;
+      letter-spacing: 0.05em;
     }
-    
-    .tier-badge.elite {
-      background: linear-gradient(135deg, var(--gold), #C5A028);
+    .tier-badge.premium { background: var(--gold); color: var(--dark-bg); }
+    .tier-badge.elite { background: linear-gradient(135deg, var(--gold), #C5A028); color: var(--dark-bg); }
+    .tier-badge.free { background: var(--success); color: var(--dark-bg); }
+    .hero h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 2.5rem; margin-bottom: 1rem; line-height: 1.2;
     }
-    
-    .tier-badge.premium {
-      background: var(--gold);
+    .hero h1 span { color: var(--gold); }
+    .hero .subtitle {
+      color: var(--muted-text); font-size: 1.15rem; max-width: 600px; margin: 0 auto;
     }
-    
-    .tier-badge.free {
-      background: var(--success);
+
+    /* Content sections */
+    .content { max-width: 700px; margin: 0 auto; padding: 0 2rem 3rem; }
+
+    /* Value recap */
+    .value-section {
+      background: var(--dark-surface); border-radius: 16px; padding: 2rem;
+      border: 1px solid var(--border); margin-bottom: 2rem;
     }
-    
-    h1 {
-      font-size: 2rem;
-      margin-bottom: 0.75rem;
+    .value-section h2 {
+      font-size: 1.25rem; margin-bottom: 1.5rem; color: var(--gold);
+      display: flex; align-items: center; gap: 0.5rem;
     }
-    
-    .subtitle {
-      color: var(--muted-text);
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
+    .value-item {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 0.75rem 0; border-bottom: 1px solid rgba(45, 74, 66, 0.5);
     }
-    
-    .email-sent {
-      background: var(--dark-card);
-      border-radius: 12px;
-      padding: 1.25rem;
-      margin-bottom: 2rem;
-      border: 1px solid var(--border);
+    .value-item:last-child { border-bottom: none; }
+    .value-check {
+      width: 24px; height: 24px; background: rgba(78, 205, 196, 0.15);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      color: var(--success); font-size: 0.8rem; flex-shrink: 0; margin-top: 2px;
     }
-    
-    .email-sent p {
-      color: var(--muted-text);
-      font-size: 0.9rem;
+    .value-text strong { color: var(--light-text); }
+    .value-text span { color: var(--muted-text); font-size: 0.9rem; }
+
+    /* CTA section */
+    .cta-section {
+      background: var(--dark-surface); border-radius: 16px; padding: 2rem;
+      border: 1px solid var(--gold); margin-bottom: 2rem;
     }
-    
-    .email-sent strong {
-      color: var(--light-text);
+    .cta-section h2 {
+      font-size: 1.25rem; margin-bottom: 0.5rem; text-align: center;
     }
-    
-    .next-steps {
-      text-align: left;
-      margin-bottom: 2rem;
+    .cta-section .cta-subtitle {
+      color: var(--muted-text); text-align: center; margin-bottom: 1.5rem; font-size: 0.95rem;
     }
-    
-    .next-steps h3 {
-      font-size: 1rem;
-      margin-bottom: 1rem;
-      color: var(--gold);
-    }
-    
-    .step-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 1rem;
-      margin-bottom: 1rem;
-      padding: 1rem;
-      background: var(--dark-card);
-      border-radius: 8px;
-    }
-    
-    .step-number {
-      width: 28px;
-      height: 28px;
-      background: var(--gold);
-      color: var(--dark-bg);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 0.85rem;
-      flex-shrink: 0;
-    }
-    
-    .step-content h4 {
-      font-size: 0.95rem;
-      margin-bottom: 0.25rem;
-    }
-    
-    .step-content p {
-      color: var(--muted-text);
-      font-size: 0.85rem;
-    }
-    
-    .cta-buttons {
-      display: flex;
-      flex-direction: column;
-      gap: 1rem;
-    }
-    
+    .cta-buttons { display: flex; flex-direction: column; gap: 1rem; }
     .primary-cta {
-      display: block;
-      background: var(--gold);
-      color: var(--dark-bg);
-      padding: 1.25rem;
-      border-radius: 12px;
-      font-weight: 700;
-      font-size: 1.1rem;
-      text-decoration: none;
-      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      background: var(--gold); color: var(--dark-bg); padding: 1.25rem 2rem;
+      border-radius: 12px; font-weight: 700; font-size: 1.1rem;
+      text-decoration: none; transition: all 0.2s;
     }
-    
-    .primary-cta:hover {
-      background: var(--gold-light);
-      transform: translateY(-2px);
-    }
-    
+    .primary-cta:hover { background: var(--gold-light); transform: translateY(-2px); }
+    .primary-cta .icon { font-size: 1.3rem; }
     .secondary-cta {
-      display: block;
-      background: transparent;
-      border: 2px solid var(--border);
-      color: var(--light-text);
-      padding: 1rem;
-      border-radius: 12px;
-      font-weight: 600;
-      font-size: 0.95rem;
-      text-decoration: none;
-      transition: all 0.2s;
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+      background: transparent; border: 2px solid var(--border); color: var(--light-text);
+      padding: 1rem 2rem; border-radius: 12px; font-weight: 600; font-size: 1rem;
+      text-decoration: none; transition: all 0.2s;
     }
-    
-    .secondary-cta:hover {
-      border-color: var(--gold);
-      color: var(--gold);
+    .secondary-cta:hover { border-color: var(--gold); color: var(--gold); }
+    .cta-note {
+      text-align: center; color: var(--muted-text); font-size: 0.8rem; margin-top: 0.75rem;
     }
-    
-    .consultation-link {
-      margin-top: 2rem;
-      padding-top: 2rem;
-      border-top: 1px solid var(--border);
+
+    /* Onboarding steps */
+    .onboarding-section {
+      background: var(--dark-surface); border-radius: 16px; padding: 2rem;
+      border: 1px solid var(--border); margin-bottom: 2rem;
     }
-    
-    .consultation-link p {
-      color: var(--muted-text);
-      font-size: 0.9rem;
-      margin-bottom: 0.5rem;
+    .onboarding-section h2 {
+      font-size: 1.25rem; margin-bottom: 1.5rem; text-align: center;
     }
-    
-    .consultation-link a {
-      color: var(--gold);
-      text-decoration: none;
-      font-weight: 600;
+    .onboarding-steps { display: flex; flex-direction: column; gap: 1rem; }
+    .onboarding-step {
+      display: flex; align-items: flex-start; gap: 1rem;
+      padding: 1.25rem; background: var(--dark-card); border-radius: 12px;
     }
-    
-    .consultation-link a:hover {
-      text-decoration: underline;
+    .step-number {
+      width: 36px; height: 36px; background: var(--gold); color: var(--dark-bg);
+      border-radius: 50%; display: flex; align-items: center; justify-content: center;
+      font-weight: 800; font-size: 1rem; flex-shrink: 0;
     }
-    
-    /* Confetti Animation */
-    .confetti {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
-      pointer-events: none;
-      overflow: hidden;
-      z-index: 1000;
+    .step-content h4 { font-size: 1rem; margin-bottom: 0.25rem; }
+    .step-content p { color: var(--muted-text); font-size: 0.9rem; }
+
+    /* Elite coaching section */
+    .elite-section {
+      background: linear-gradient(135deg, rgba(212, 175, 55, 0.1), rgba(10, 31, 26, 0.8));
+      border-radius: 16px; padding: 2rem; border: 1px solid var(--gold);
+      margin-bottom: 2rem; text-align: center;
     }
-    
-    .confetti-piece {
-      position: absolute;
-      width: 10px;
-      height: 10px;
-      background: var(--gold);
-      animation: confetti-fall 3s ease-out forwards;
+    .elite-section h2 {
+      font-size: 1.25rem; color: var(--gold); margin-bottom: 0.75rem;
     }
-    
-    @keyframes confetti-fall {
-      0% {
-        transform: translateY(-100px) rotate(0deg);
-        opacity: 1;
-      }
-      100% {
-        transform: translateY(100vh) rotate(720deg);
-        opacity: 0;
-      }
+    .elite-section p {
+      color: var(--muted-text); font-size: 0.95rem; margin-bottom: 1.5rem;
     }
-    
+    .elite-section .coach-card {
+      display: flex; align-items: center; gap: 1rem;
+      background: var(--dark-card); border-radius: 12px; padding: 1.25rem;
+      margin-bottom: 1.5rem; text-align: left;
+    }
+    .coach-card img {
+      width: 60px; height: 60px; border-radius: 50%; object-fit: cover;
+      border: 2px solid var(--gold);
+    }
+    .coach-card .coach-info h4 { font-size: 0.95rem; }
+    .coach-card .coach-info p { font-size: 0.85rem; margin-bottom: 0; }
+    .elite-section .calendly-btn {
+      display: inline-block; background: var(--gold); color: var(--dark-bg);
+      padding: 0.875rem 2rem; border-radius: 8px; font-weight: 700;
+      text-decoration: none; transition: all 0.2s;
+    }
+    .elite-section .calendly-btn:hover { background: var(--gold-light); }
+
+    /* Testimonial */
+    .testimonial-section {
+      background: var(--dark-surface); border-radius: 16px; padding: 2rem;
+      border: 1px solid var(--border); margin-bottom: 2rem; text-align: center;
+    }
+    .testimonial-quote {
+      font-style: italic; font-size: 1.05rem; color: var(--light-text);
+      margin-bottom: 1rem; line-height: 1.7;
+    }
+    .testimonial-author {
+      display: flex; align-items: center; justify-content: center; gap: 0.75rem;
+    }
+    .testimonial-author img {
+      width: 40px; height: 40px; border-radius: 50%; object-fit: cover;
+    }
+    .testimonial-author .author-info { text-align: left; }
+    .testimonial-author .author-info strong { font-size: 0.9rem; }
+    .testimonial-author .author-info span { color: var(--muted-text); font-size: 0.8rem; display: block; }
+
+    /* Email confirmation */
+    .email-box {
+      background: var(--dark-card); border-radius: 12px; padding: 1.25rem;
+      margin-bottom: 2rem; border: 1px solid var(--border); text-align: center;
+    }
+    .email-box p { color: var(--muted-text); font-size: 0.9rem; }
+    .email-box strong { color: var(--light-text); }
+
     /* Footer */
     footer {
-      padding: 2rem;
-      text-align: center;
-      border-top: 1px solid var(--border);
+      padding: 2rem; text-align: center; border-top: 1px solid var(--border);
     }
-    
-    footer p {
-      color: var(--muted-text);
-      font-size: 0.85rem;
-    }
-    
-    footer a {
-      color: var(--muted-text);
-      text-decoration: none;
-    }
-    
-    footer a:hover {
-      color: var(--gold);
+    footer p { color: var(--muted-text); font-size: 0.85rem; }
+    footer a { color: var(--muted-text); text-decoration: none; }
+    footer a:hover { color: var(--gold); }
+
+    @media (max-width: 600px) {
+      .hero h1 { font-size: 1.75rem; }
+      .hero { padding: 3rem 1.5rem 1.5rem; }
+      .content { padding: 0 1.5rem 2rem; }
     }
   </style>
 </head>
 <body>
-  <!-- Confetti -->
   <div class="confetti" id="confetti"></div>
-  
-  <!-- Navigation -->
+
   <nav>
     <div class="nav-container">
       <a href="index.html" class="logo">📚 IvyReader</a>
     </div>
   </nav>
 
-  <!-- Main Content -->
-  <main>
-    <div class="confirmation-card">
-      <div class="success-icon">✓</div>
-      
-      <div class="tier-badge" id="tier-badge">PREMIUM</div>
-      
-      <h1 id="welcome-title">Welcome to IvyReader!</h1>
-      <p class="subtitle" id="welcome-subtitle">Your payment was successful. You're ready to start your reading journey.</p>
-      
-      <div class="email-sent">
-        <p>A confirmation email has been sent to <strong id="user-email">your email</strong></p>
-      </div>
-      
-      <div class="next-steps">
-        <h3>What's Next?</h3>
-        
-        <div class="step-item">
-          <span class="step-number">1</span>
-          <div class="step-content">
-            <h4>Open the IvyReader App</h4>
-            <p>Click the button below to open the app and complete your profile setup.</p>
-          </div>
-        </div>
-        
-        <div class="step-item">
-          <span class="step-number">2</span>
-          <div class="step-content">
-            <h4>Set Your Reading Goals</h4>
-            <p>Tell us how many books you want to read and we'll create a personalized plan.</p>
-          </div>
-        </div>
-        
-        <div class="step-item">
-          <span class="step-number">3</span>
-          <div class="step-content">
-            <h4>Add Your First Book</h4>
-            <p>Start tracking your reading and watch your progress grow.</p>
-          </div>
-        </div>
-      </div>
-      
-      <div class="cta-buttons">
-        <a href="#" id="app-link" class="primary-cta">
-          Open IvyReader App →
-        </a>
-        <a href="index.html" class="secondary-cta">
-          Back to Homepage
-        </a>
-      </div>
-      
-      <div class="consultation-link">
-        <p>Want personalized guidance on your reading journey?</p>
-        <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">
-          📞 Book a Free Consultation with Founders
-        </a>
+  <!-- Hero -->
+  <section class="hero">
+    <div class="success-icon">✓</div>
+    <div class="tier-badge" id="tier-badge">PREMIUM</div>
+    <h1 id="hero-title">You just joined the <span>top 3%</span> of readers.</h1>
+    <p class="subtitle" id="hero-subtitle">While most people buy books they never finish, you just invested in a system that guarantees you won't be one of them.</p>
+  </section>
+
+  <div class="content">
+    <!-- Email confirmation -->
+    <div class="email-box">
+      <p>Confirmation sent to <strong id="user-email">your email</strong></p>
+    </div>
+
+    <!-- Value recap -->
+    <div class="value-section">
+      <h2>🔓 What You Just Unlocked</h2>
+      <div id="value-list">
+        <!-- Populated by JS -->
       </div>
     </div>
-  </main>
 
-  <!-- Footer -->
+    <!-- CTA: Get into the app -->
+    <div class="cta-section">
+      <h2>Your Next Step</h2>
+      <p class="cta-subtitle">Open the app and set your first reading goal. Takes 60 seconds.</p>
+      <div class="cta-buttons">
+        <a href="#" id="webapp-link" class="primary-cta">
+          <span class="icon">🌐</span> Open IvyReader Web App
+        </a>
+        <a href="#" id="mobile-link" class="secondary-cta">
+          <span class="icon">📱</span> Download the Mobile App
+        </a>
+      </div>
+      <p class="cta-note">Web app works instantly. Mobile app available on iOS &amp; Android.</p>
+    </div>
+
+    <!-- Onboarding preview -->
+    <div class="onboarding-section">
+      <h2>Here's What Happens Next</h2>
+      <div class="onboarding-steps">
+        <div class="onboarding-step">
+          <span class="step-number">1</span>
+          <div class="step-content">
+            <h4>Set Your Reading Goal</h4>
+            <p>Tell us how many books you want to read this year. We'll break it into a weekly plan you can actually stick to.</p>
+          </div>
+        </div>
+        <div class="onboarding-step">
+          <span class="step-number">2</span>
+          <div class="step-content">
+            <h4>Add Your First Book</h4>
+            <p>Search our database of 10M+ titles or add manually. We'll track every page and every session.</p>
+          </div>
+        </div>
+        <div class="onboarding-step">
+          <span class="step-number">3</span>
+          <div class="step-content">
+            <h4>Start Your First Session</h4>
+            <p>Hit "Read" and our Pomodoro timer keeps you focused. Your streak starts today.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Elite coaching (hidden by default) -->
+    <div class="elite-section" id="elite-section" style="display: none;">
+      <h2>👑 Your Accountability Coach</h2>
+      <p>As an Elite member, you get a dedicated accountability partner. Here's what's happening now:</p>
+      <div class="coach-card">
+        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/xNDNpjBoCszBAarN.jpg" alt="Founder">
+        <div class="coach-info">
+          <h4>Constantine — Founder</h4>
+          <p>Your first message will arrive within 24 hours. We'll set your personalized reading plan together.</p>
+        </div>
+      </div>
+      <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank" class="calendly-btn">
+        📞 Book Your Onboarding Call
+      </a>
+    </div>
+
+    <!-- Social proof -->
+    <div class="testimonial-section">
+      <p class="testimonial-quote">"I went from reading 3 books a year to finishing one every week. The accountability system is what made the difference — it's like having a personal trainer for your mind."</p>
+      <div class="testimonial-author">
+        <img src="https://files.manuscdn.com/user_upload_by_module/session_file/310519663326298723/instwjAKNfvvnpuq.jpg" alt="James M.">
+        <div class="author-info">
+          <strong>James M.</strong>
+          <span>Premium Member · 47 books this year</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <footer>
     <p>
       Questions? <a href="https://calendly.com/d/ctmv-k59-8g6/ivyreader-free-consultation-with-founders" target="_blank">Contact us</a> · 
-      <a href="#">Privacy Policy</a> · 
-      <a href="#">Terms of Service</a>
+      <a href="privacy.html">Privacy Policy</a> · 
+      <a href="terms.html">Terms of Service</a>
     </p>
   </footer>
 
   <script>
-    // Get params from URL
     const urlParams = new URLSearchParams(window.location.search);
     const tier = urlParams.get('tier') || 'premium';
-    const email = urlParams.get('email') || 'your email';
-    
-    // Tier configurations
+    const email = urlParams.get('email') || '';
+    const subscriptionId = urlParams.get('subscriptionId') || '';
+
+    // Tier-specific content
     const tierConfig = {
       free: {
         badge: 'FREE',
         badgeClass: 'free',
-        title: 'Welcome to IvyReader!',
-        subtitle: 'Your free account is ready. Start tracking your reading journey today.'
+        title: 'Welcome to <span>IvyReader</span>.',
+        subtitle: 'Your free account is ready. Start building the reading habit that changes everything.',
+        values: [
+          { bold: 'Track up to 10 books', desc: 'with full reading session logging' },
+          { bold: 'Daily streak tracking', desc: 'to build consistency that sticks' },
+          { bold: 'Join the Reader Society', desc: 'connect with 2,000+ ambitious readers' },
+          { bold: 'Browse curated reading lists', desc: 'hand-picked by Ivy League readers' },
+        ]
       },
       premium: {
         badge: '★ PREMIUM',
         badgeClass: 'premium',
-        title: 'Welcome to Premium!',
-        subtitle: 'Your Premium membership is now active. Time to transform your reading habits.'
+        title: 'You just joined the <span>top 3%</span> of readers.',
+        subtitle: 'While most people buy books they never finish, you just invested in a system that guarantees you won\'t be one of them.',
+        values: [
+          { bold: 'Unlimited book tracking', desc: 'with advanced analytics on your reading patterns' },
+          { bold: '52+ books/year system', desc: 'vs. the average American\'s 4 books' },
+          { bold: 'Pomodoro reading sessions', desc: 'scientifically-proven focus technique built in' },
+          { bold: 'Personalized reading plans', desc: 'tailored to your goals and schedule' },
+          { bold: 'Weekly goal reminders', desc: 'so you never fall off track' },
+          { bold: 'Priority Society access', desc: 'join the inner circle of 2,000+ ambitious readers' },
+        ]
       },
       elite: {
         badge: '👑 ELITE',
         badgeClass: 'elite',
-        title: 'Welcome to Elite!',
-        subtitle: 'You now have full access to accountability partners, founder messaging, and more.'
+        title: 'Welcome to the <span>inner circle</span>.',
+        subtitle: 'You now have a personal accountability partner dedicated to making sure you hit your reading goals. No more excuses.',
+        values: [
+          { bold: 'Everything in Premium', desc: 'unlimited tracking, analytics, Pomodoro, and more' },
+          { bold: '1-on-1 accountability coaching', desc: 'your personal reading coach, assigned within 24 hours' },
+          { bold: 'Direct messaging with founders', desc: 'text us anytime, we respond within hours' },
+          { bold: 'Weekly check-in calls', desc: 'stay on track with structured progress reviews' },
+          { bold: 'AI-powered book recommendations', desc: 'personalized to your interests and goals' },
+          { bold: 'Exclusive Elite community', desc: 'network with top performers who read 50+ books/year' },
+          { bold: 'Priority support', desc: 'you\'re never waiting — we\'re here for you' },
+        ]
       }
     };
-    
+
     const config = tierConfig[tier] || tierConfig.premium;
-    
-    // Update page content
+
+    // Update hero
     document.getElementById('tier-badge').textContent = config.badge;
-    document.getElementById('tier-badge').className = `tier-badge ${config.badgeClass}`;
-    document.getElementById('welcome-title').textContent = config.title;
-    document.getElementById('welcome-subtitle').textContent = config.subtitle;
-    document.getElementById('user-email').textContent = decodeURIComponent(email);
+    document.getElementById('tier-badge').className = 'tier-badge ' + config.badgeClass;
+    document.getElementById('hero-title').innerHTML = config.title;
+    document.getElementById('hero-subtitle').textContent = config.subtitle;
+
+    // Update email
+    if (email) {
+      document.getElementById('user-email').textContent = decodeURIComponent(email);
+    }
+
+    // Populate value list
+    const valueList = document.getElementById('value-list');
+    config.values.forEach(v => {
+      valueList.innerHTML += `
+        <div class="value-item">
+          <div class="value-check">✓</div>
+          <div class="value-text">
+            <strong>${v.bold}</strong><br>
+            <span>${v.desc}</span>
+          </div>
+        </div>
+      `;
+    });
+
+    // Show Elite section
+    if (tier === 'elite') {
+      document.getElementById('elite-section').style.display = 'block';
+    }
+
+    // Set app links
+    // Web app — use the Manus published URL (update after publishing)
+    const webAppUrl = window.location.origin;
+    document.getElementById('webapp-link').href = webAppUrl;
+
+    // Mobile app — deep link for native, fallback for web
+    const deepLink = 'manus20260130164246://purchase-complete?tier=' + tier;
+    const mobileLink = document.getElementById('mobile-link');
     
-    // Set app link - uses the Manus-published web app URL
-    // UPDATE THIS URL after publishing via Manus UI
-    const publishedAppUrl = `https://ivyreader.manus.space/purchase-complete?tier=${tier}`;
-    const deepLink = `manus20260130164246://purchase-complete?tier=${tier}`;
-    
-    document.getElementById('app-link').href = publishedAppUrl;
-    document.getElementById('app-link').addEventListener('click', function(e) {
-      // Try deep link first for mobile (when iOS app is available)
+    // For now, link to Expo Go instructions or app store (update when published)
+    mobileLink.href = '#';
+    mobileLink.addEventListener('click', function(e) {
+      e.preventDefault();
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-        e.preventDefault();
         window.location.href = deepLink;
-        
-        // Fallback to web app after delay
-        setTimeout(() => {
-          window.location.href = publishedAppUrl;
-        }, 1500);
+      } else {
+        alert('Download IvyReader from the App Store or Google Play. Coming soon!');
       }
     });
-    
-    // Confetti animation
+
+    // Confetti
     function createConfetti() {
-      const confettiContainer = document.getElementById('confetti');
+      const container = document.getElementById('confetti');
       const colors = ['#D4AF37', '#E8C84A', '#4ECDC4', '#F5F5F0', '#A8B8B0'];
-      
-      for (let i = 0; i < 50; i++) {
+      for (let i = 0; i < 60; i++) {
         const piece = document.createElement('div');
         piece.className = 'confetti-piece';
         piece.style.left = Math.random() * 100 + '%';
         piece.style.background = colors[Math.floor(Math.random() * colors.length)];
         piece.style.animationDelay = Math.random() * 2 + 's';
         piece.style.animationDuration = (Math.random() * 2 + 2) + 's';
-        confettiContainer.appendChild(piece);
+        piece.style.width = (Math.random() * 8 + 6) + 'px';
+        piece.style.height = (Math.random() * 8 + 6) + 'px';
+        piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+        container.appendChild(piece);
       }
-      
-      // Remove confetti after animation
-      setTimeout(() => {
-        confettiContainer.innerHTML = '';
-      }, 5000);
+      setTimeout(() => { container.innerHTML = ''; }, 5000);
     }
-    
-    // Trigger confetti on load
     createConfetti();
   </script>
 </body>
