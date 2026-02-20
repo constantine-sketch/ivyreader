@@ -1,4 +1,10 @@
 import "dotenv/config";
+// Polyfill Web Crypto API for Node.js < 19 (required by Better Auth for password hashing)
+import { webcrypto } from "node:crypto";
+if (!globalThis.crypto) {
+  // @ts-ignore — Node.js < 19 does not expose crypto globally
+  globalThis.crypto = webcrypto;
+}
 import express from "express";
 import { createServer } from "http";
 import net from "net";
