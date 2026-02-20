@@ -10,6 +10,11 @@
  *
  * The Railway database is PostgreSQL — we use the postgres-js driver here,
  * consistent with the rest of the server (server/db.ts).
+ *
+ * IMPORTANT: The web app (app.theivyreader.com) and the API (railway.app) are
+ * on different domains. For the session cookie to be sent cross-origin, it must
+ * have SameSite=None; Secure. Better Auth handles this automatically when
+ * useSecureCookies is true and the request comes from a trusted origin.
  */
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
@@ -47,7 +52,6 @@ export const auth = betterAuth({
   },
 
   session: {
-    cookieName: "app_session_id",
     expiresIn: 60 * 60 * 24 * 365, // 1 year in seconds
     updateAge: 60 * 60 * 24, // Refresh session if older than 1 day
     cookieCache: {
@@ -56,6 +60,8 @@ export const auth = betterAuth({
     },
   },
 
+  // Trusted origins for CORS and cookie validation.
+  // The web app is on a different domain than the API, so we must list it here.
   trustedOrigins: [
     "https://app.theivyreader.com",
     "https://ivyreader-webapp.vercel.app",
@@ -63,17 +69,15 @@ export const auth = betterAuth({
     "exp://",
     "ivyreader://",
     ...(process.env.NODE_ENV !== "production"
-      ? ["http://localhost:3000", "http://localhost:8081", "exp://**"]
+      ? ["http://localhost:3000", "http://localhost:8081"]
       : []),
   ],
 
   advanced: {
-    crossSubdomainCookies: {
-      enabled: true,
-      domain: ".theivyreader.com",
-    },
-    useSecureCookies: process.env.NODE_ENV === "production",
+    // Use secure cookies in production (SameSite=None; Secure for cross-origin)
+    useSecureCookies: true,
     generateId: () => crypto.randomUUID(),
+    // Do NOT use crossSubdomainCookies — the API is on railway.app, not theivyreader.com
   },
 });
 
