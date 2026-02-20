@@ -11,8 +11,8 @@ export const users = mysqlTable("users", {
    * Use this for relations between tables.
    */
   id: int("id").autoincrement().primaryKey(),
-  /** Manus OAuth identifier (openId) returned from the OAuth callback. Unique per user. */
-  openId: varchar("openId", { length: 64 }).notNull().unique(),
+  /** Better Auth user ID (UUID). Replaces Manus OAuth openId. Nullable for migration compatibility. */
+  openId: varchar("openId", { length: 64 }).unique(),
   name: text("name"),
   username: varchar("username", { length: 50 }),
   avatar: varchar("avatar", { length: 10 }), // Emoji avatar
