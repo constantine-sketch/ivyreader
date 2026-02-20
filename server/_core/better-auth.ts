@@ -7,11 +7,14 @@
  * the Better Auth user ID).
  *
  * Auth endpoints are mounted at /api/auth/* by the Express handler.
+ *
+ * The Railway database is PostgreSQL — we use the postgres-js driver here,
+ * consistent with the rest of the server (server/db.ts).
  */
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { drizzle } from "drizzle-orm/mysql2";
-import mysql from "mysql2/promise";
+import { drizzle } from "drizzle-orm/postgres-js";
+import postgres from "postgres";
 import * as authSchema from "./auth-schema";
 
 // Synchronous Drizzle instance for Better Auth only.
@@ -21,8 +24,8 @@ function createBetterAuthDb() {
   if (!dsn) {
     throw new Error("[BetterAuth] DATABASE_URL is not set");
   }
-  const pool = mysql.createPool(dsn);
-  return drizzle(pool, { schema: authSchema, mode: "default" });
+  const client = postgres(dsn);
+  return drizzle(client, { schema: authSchema });
 }
 
 const db = createBetterAuthDb();
@@ -33,7 +36,7 @@ export const auth = betterAuth({
   basePath: "/api/auth",
 
   database: drizzleAdapter(db, {
-    provider: "mysql",
+    provider: "pg",
     schema: authSchema,
   }),
 
