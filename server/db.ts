@@ -1008,3 +1008,67 @@ export async function updateUserSubscription(
 
   await db.update(users).set(data).where(eq(users.id, userId));
 }
+
+// ========== IDENTITY BRIDGE ==========
+
+/**
+ * Find a pending user (created during checkout) by email.
+ * Pending users have openId starting with 'pending_'.
+ */
+export async function getPendingUserByEmail(email: string) {
+  const db = await getDb();
+  if (!db) return null;
+
+  const result = await db.select().from(users)
+    .where(and(
+      eq(users.email, email),
+      sql`${users.openId} LIKE 'pending_%'`
+    ))
+    .limit(1);
+
+  return result.length > 0 ? result[0] : null;
+}
+
+/**
+ * Merge a pending checkout user's subscription into the OAuth user.
+ * Called after OAuth login when the user's email matches a pending user.
+ * Transfers Stripe subscription data and deletes the pending row.
+ */
+export async function reconcilePendingSubscription(oauthUserId: number, email: string): Promise<boolean> {
+  const pendingUser = await getPendingUserByEmail(email);
+  if (!pendingUser) return false;
+  if (!pendingUser.stripeSubscriptionId) return false;
+
+  console.log(`[Identity Bridge] Merging pending user ${pendingUser.id} (${email}) into OAuth user ${oauthUserId}`);
+
+  // Transfer subscription to OAuth user
+  await updateUserSubscription(oauthUserId, {
+    stripeCustomerId: pendingUser.stripeCustomerId ?? undefined,
+    stripeSubscriptionId: pendingUser.stripeSubscriptionId ?? undefined,
+    subscriptionStatus: (pendingUser.subscriptionStatus as 'active' | 'canceled' | 'past_due' | 'trialing') ?? 'active',
+    subscriptionTier: (pendingUser.subscriptionTier as 'free' | 'premium' | 'elite') ?? 'free',
+    subscriptionEndsAt: pendingUser.subscriptionEndsAt ?? undefined,
+  });
+
+  // Update Stripe subscription metadata to point to the real user ID
+  try {
+    const { getStripe } = await import('./lib/stripe.js');
+    const stripe = getStripe();
+    await stripe.subscriptions.update(pendingUser.stripeSubscriptionId, {
+      metadata: { userId: String(oauthUserId) }
+    });
+    console.log(`[Identity Bridge] Updated Stripe subscription metadata for user ${oauthUserId}`);
+  } catch (err) {
+    console.error('[Identity Bridge] Failed to update Stripe metadata:', err);
+    // Non-fatal — subscription data is already transferred in DB
+  }
+
+  // Delete the pending user row (no related data to clean up since they never used the app)
+  const db = await getDb();
+  if (db) {
+    await db.delete(users).where(eq(users.id, pendingUser.id));
+    console.log(`[Identity Bridge] Deleted pending user ${pendingUser.id}`);
+  }
+
+  return true;
+}

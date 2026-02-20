@@ -1,6 +1,6 @@
 import { COOKIE_NAME, ONE_YEAR_MS } from "../../shared/const.js";
 import type { Express, Request, Response } from "express";
-import { getUserByOpenId, upsertUser } from "../db";
+import { getUserByOpenId, upsertUser, reconcilePendingSubscription } from "../db";
 import { getSessionCookieOptions } from "./cookies";
 import { sdk } from "./sdk";
 
@@ -29,6 +29,21 @@ async function syncUser(userInfo: {
     lastSignedIn,
   });
   const saved = await getUserByOpenId(userInfo.openId);
+  
+  // Identity bridge: if this OAuth user has a matching pending checkout user, merge the subscription
+  if (saved && saved.email && saved.subscriptionTier === 'free') {
+    try {
+      const merged = await reconcilePendingSubscription(saved.id, saved.email);
+      if (merged) {
+        // Re-fetch user to get updated subscription data
+        const updated = await getUserByOpenId(userInfo.openId);
+        return updated ?? saved;
+      }
+    } catch (err) {
+      console.error('[OAuth] Identity bridge error:', err);
+    }
+  }
+  
   return (
     saved ?? {
       openId: userInfo.openId,

@@ -975,3 +975,13 @@
 - [x] Add final CTA section
 - [ ] Push updated code to GitHub
 - [ ] Verify Railway deployment with new login screen
+
+## Landing Page → App Integration
+- [x] Fix checkout.html API URL to Railway production URL
+- [x] Fix confirmation.html app links to real URLs
+- [x] Add identity bridge: merge pending_* users with OAuth users on login
+- [x] Build hype confirmation page with value recap, app download links, onboarding preview
+- [x] Configure Stripe webhook endpoint in Stripe Dashboard
+- [x] Add STRIPE_WEBHOOK_SECRET to Railway environment
+- [ ] Push all changes to GitHub repos
+- [ ] Test complete flow: landing → checkout → confirmation → app
