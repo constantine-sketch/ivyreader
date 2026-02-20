@@ -1052,7 +1052,7 @@ export async function reconcilePendingSubscription(oauthUserId: number, email: s
 
   // Update Stripe subscription metadata to point to the real user ID
   try {
-    const { getStripe } = await import('./lib/stripe.js');
+    const { getStripe } = await import('./lib/stripe');
     const stripe = getStripe();
     await stripe.subscriptions.update(pendingUser.stripeSubscriptionId, {
       metadata: { userId: String(oauthUserId) }

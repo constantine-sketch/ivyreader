@@ -19,7 +19,7 @@ describe('Stripe Configuration', () => {
   });
   
   it('should have Stripe Secret Key configured', () => {
-    const secretKey = process.env.STRIPE_SECRET_KEY;
+    const secretKey = process.env.STRIPE_SECRET_KEY || process.env.STRIPE_SK;
     
     expect(secretKey).toBeDefined();
     expect(secretKey).toMatch(/^sk_(test|live)_/);
