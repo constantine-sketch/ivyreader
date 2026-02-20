@@ -38,7 +38,7 @@ describe('Identity Bridge', () => {
     const checkoutHtml = await import('fs').then(fs =>
       fs.readFileSync('./public/checkout.html', 'utf-8')
     );
-    expect(checkoutHtml).toContain('ivyreader-production.up.railway.app');
+    expect(checkoutHtml).toContain('ivyreader-api-production.up.railway.app');
     expect(checkoutHtml).not.toContain('3000-ik4t6s36n3oc5oeaw7m92');
   });
 
